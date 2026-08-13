@@ -188,8 +188,6 @@ export async function deletePost(postId: number, authorId: number): Promise<Post
 		[postId, authorId],
 	);
 
-	// if (result.rowCount !== 1) translatePostgresError("deleteUser", undefined, { notFound: true });
-
 	const post = result.rows[0];
 	if (!post) translatePostgresError("deletePost", undefined, { notFound: true });
 	return post;

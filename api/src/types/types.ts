@@ -15,7 +15,7 @@ const TrinketType = {
 
 export type TrinketType = (typeof TrinketType)[keyof typeof TrinketType];
 
-const FriendshipStatus = {
+export const FriendshipStatus = {
 	pending: "pending",
 	friends: "friends",
 } as const;
@@ -53,7 +53,13 @@ const TrinketVisibility = {
 
 export type TrinketVisibility = (typeof TrinketVisibility)[keyof typeof TrinketVisibility];
 
-type JSONValue = string | number | boolean | null | JSONValue[] | { [key: string]: JSONValue };
+export type JSONValue =
+	| string
+	| number
+	| boolean
+	| null
+	| JSONValue[]
+	| { [key: string]: JSONValue };
 
 // ==================== User ====================
 
@@ -170,6 +176,7 @@ export interface PostBubble {
 export interface TrinketRow {
 	id: number;
 	user_id: number;
+	trinket_visibility: TrinketVisibility;
 	trinket_type: TrinketType;
 	featured: boolean;
 	title: string;
