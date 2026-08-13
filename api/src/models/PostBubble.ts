@@ -43,8 +43,8 @@ export async function sharePostToBubbles(
 		const queryValues = bubbleIds.map((_, index) => `($1, $${index + 2})`).join(", ");
 		const result = await pool.query<PostBubble>(
 			`INSERT INTO post_bubbles(post_id, bubble_id)
-         VALUES ${queryValues}
-         RETURNING *`,
+        	 VALUES ${queryValues}
+        	 RETURNING *`,
 			[postId, ...bubbleIds],
 		);
 

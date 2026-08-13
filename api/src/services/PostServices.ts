@@ -25,37 +25,45 @@ import type {
 } from "../types/types.ts";
 import { requireBubbleMembership } from "./BubbleServices.ts";
 import { deleteFromR2Service } from "./CloudflareServices.ts";
+import { requireFriendship } from "./FriendshipServices.ts";
 
 // ====================== COMPOSE ============================
 
-namespace Compose {
-	export async function composePostService(
-		authorId: number,
-		input: ComposePostInput,
-	): Promise<PostRow> {
-		await requirePostFields(authorId, input);
+export async function composePostService(
+	authorId: number,
+	input: ComposePostInput,
+): Promise<PostRow> {
+	await requirePostFields(authorId, input);
 
-		const post = await createPost(
-			authorId,
-			input.post_visibility,
-			input.post_type,
-			input.body_text,
-			input.media_url,
-			input.file_size_bytes,
-		);
+	const post = await createPost(
+		authorId,
+		input.post_visibility,
+		input.post_type,
+		input.body_text,
+		input.media_url,
+		input.file_size_bytes,
+	);
 
-		if (input.post_visibility === "bubble") {
-			await sharePostToBubbles(post.id, input.post_bubbles!);
-		}
-
-		if (input.file_size_bytes > 0) await incrementUserStorage(authorId, input.file_size_bytes);
-
-		const createdPost = await getPostById(post.id);
-		if (!createdPost)
-			throw new ServerError(ServerErrorCode.DATABASE_FAILURE, "composePostService");
-
-		return createdPost;
+	if (input.post_visibility === "bubble") {
+		await sharePostToBubbles(post.id, input.post_bubbles!);
 	}
+
+	if (input.file_size_bytes > 0) await incrementUserStorage(authorId, input.file_size_bytes);
+
+	const createdPost = await getPostById(post.id);
+	if (!createdPost) throw new ServerError(ServerErrorCode.DATABASE_FAILURE, "composePostService");
+
+	return createdPost;
+}
+
+// =========================== EDIT ==========================
+
+export async function getPostService(userId: number, postId: number): Promise<PostRow> {
+	const post = await getPostById(postId);
+	if (post.user_id === userId) return post;
+
+	await requirePostAccess(userId, post);
+	return post;
 }
 
 // =========================== EDIT ==========================
@@ -161,7 +169,7 @@ async function removePostFromBubbles(
 export async function deletePostService(authorId: number, postId: number): Promise<PostRow> {
 	await requirePostAuthorship(authorId, postId);
 
-	const post = await deletePost(postId);
+	const post = await deletePost(postId, authorId);
 	await unsharePostFromBubbles(postId);
 	if (post.media_url) {
 		await deleteFromR2Service(post.media_url);
@@ -309,4 +317,23 @@ function requireEditPostOptions(options: EditPostOptions[]): EditPostOptions[] {
 	if (!options || options.length === 0)
 		throw new ServerError(ServerErrorCode.MISSING_FIELD, "requireEditPostOptions");
 	return options;
+}
+
+async function requirePostAccess(userId: number, post: PostRow) {
+	switch (post.post_visibility) {
+		case "self":
+			if (post.user_id !== userId)
+				throw new ServerError(ServerErrorCode.ACCESS_DENIED, "editPostService");
+			break;
+		case "bubble":
+			const postBubbles = await getAllBubblesByPostId(post.id);
+			const bubbleIds = postBubbles.map((postBubble) => postBubble.bubble_id);
+			await requireBubbleMembership(userId, bubbleIds);
+			break;
+		case "friends":
+			await requireFriendship(userId, post.user_id);
+			break;
+		default:
+			throw new ServerError(ServerErrorCode.INVALID_INPUT, "requireDifferentPostBody");
+	}
 }

@@ -22,6 +22,8 @@ export const ServerErrorCode = {
 	INVALID_INPUT: "INVALID_INPUT",
 	VALUE_TOO_LONG: "VALUE_TOO_LONG",
 
+	ACCESS_DENIED: "ACCESS_DENIED",
+
 	NOT_FOUND: "NOT_FOUND",
 
 	INSUFFICIENT_STORAGE: "INSUFFICIENT_STORAGE",
@@ -43,7 +45,7 @@ export const ServerErrorStatus: Record<ServerErrorCode, number> = {
 	[ServerErrorCode.MISSING_TOKEN]: 401,
 	[ServerErrorCode.INVALID_TOKEN]: 401,
 
-	//403 forbidden for visibility
+	[ServerErrorCode.ACCESS_DENIED]: 403,
 
 	//413 content too large
 

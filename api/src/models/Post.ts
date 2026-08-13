@@ -57,7 +57,7 @@ export async function getPostById(postId: number): Promise<PostRow> {
 	const result = await pool.query<PostRow>(
 		`SELECT *
          FROM posts
-         WHERE id = $`,
+         WHERE id = $1`,
 		[postId],
 	);
 
@@ -83,7 +83,7 @@ export async function getPostsFromUser(
 	const result = await pool.query<PostRow>(
 		`SELECT *
          FROM posts
-         WHERE user_id = $ AND created_at <= $2
+         WHERE user_id = $1 AND created_at <= $2
          ORDER BY created_at DESC
          LIMIT $3`,
 		[userId, timestamp, limit],
@@ -179,15 +179,16 @@ export async function deletePostBody(postId: number): Promise<PostRow> {
  * @returns The deleted post row.
  */
 
-export async function deletePost(postId: number): Promise<PostRow> {
+export async function deletePost(postId: number, authorId: number): Promise<PostRow> {
 	const result = await pool.query(
 		`DELETE FROM posts
 		 WHERE id = $1
+		 AND user_id = $2
 		 RETURNING *`,
-		[postId],
+		[postId, authorId],
 	);
 
-	if (result.rowCount !== 1) translatePostgresError("deleteUser", undefined, { notFound: true });
+	// if (result.rowCount !== 1) translatePostgresError("deleteUser", undefined, { notFound: true });
 
 	const post = result.rows[0];
 	if (!post) translatePostgresError("deletePost", undefined, { notFound: true });
