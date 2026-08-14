@@ -38,13 +38,6 @@ export function translatePostgresError(
 	throw new ServerError(errorCode, src);
 }
 
-export const TranslateReason = {
-	NOT_FOUND: "NOT_FOUND",
-	BAD_PARAMETER: "BAD_PARAMETER",
-	INVALID_OPERATION: "INVALID_OPERATION",
-} as const;
-export type TranslateReason = (typeof TranslateReason)[keyof typeof TranslateReason];
-
 export const PostgresErrorCode = {
 	NOT_NULL_VIOLATION: 23502,
 	FOREIGN_KEY_VIOLATION: 23503,

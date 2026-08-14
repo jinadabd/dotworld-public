@@ -56,7 +56,7 @@ export async function composePostService(
 	return createdPost;
 }
 
-// =========================== EDIT ==========================
+// =========================== GET ==========================
 
 export async function getPostService(userId: number, postId: number): Promise<PostRow> {
 	const post = await getPostById(postId);
@@ -323,7 +323,7 @@ async function requirePostAccess(userId: number, post: PostRow) {
 	switch (post.post_visibility) {
 		case "self":
 			if (post.user_id !== userId)
-				throw new ServerError(ServerErrorCode.ACCESS_DENIED, "editPostService");
+				throw new ServerError(ServerErrorCode.ACCESS_DENIED, "requirePostAccess");
 			break;
 		case "bubble":
 			const postBubbles = await getAllBubblesByPostId(post.id);
@@ -334,6 +334,6 @@ async function requirePostAccess(userId: number, post: PostRow) {
 			await requireFriendship(userId, post.user_id);
 			break;
 		default:
-			throw new ServerError(ServerErrorCode.INVALID_INPUT, "requireDifferentPostBody");
+			throw new ServerError(ServerErrorCode.ACCESS_DENIED, "requirePostAccess");
 	}
 }

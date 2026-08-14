@@ -47,7 +47,7 @@ export type PostVisibility = (typeof PostVisibility)[keyof typeof PostVisibility
 const TrinketVisibility = {
 	world: "world",
 	friends: "friends",
-	bubble: "bubble",
+	// bubble: "bubble",
 	self: "self",
 } as const;
 
@@ -186,6 +186,41 @@ export interface TrinketRow {
 	created_at: Date;
 }
 
+export interface CreateTrinketInput {
+	trinket_visibility: TrinketVisibility;
+	trinket_type: TrinketType;
+	title: string;
+	description?: string;
+	cover_url?: string;
+	// trinket_bubbles?: number[];
+	metadata: JSONValue;
+}
+
+export interface EditTrinketInput {
+	trinket_id: number;
+	options: EditTrinketOptions[];
+	visibility: TrinketVisibility;
+	title?: string;
+	description?: string;
+	cover_url?: string;
+	metadata?: string;
+}
+
+export const EditTrinketOptions = {
+	change_visibility: "change_visibility",
+	change_title: "change_title",
+	feature: "feature",
+	unfeature: "unfeature",
+	change_description: "change_description",
+	delete_description: "delete_description",
+	change_cover: "change_cover",
+	delete_cover: "delete_cover",
+	change_metadata: "change_metadata",
+	delete_metadata: "delete_metadata",
+} as const;
+
+export type EditTrinketOptions = (typeof EditTrinketOptions)[keyof typeof EditTrinketOptions];
+
 export interface TrinketWithAuthor extends Omit<TrinketRow, "user_id"> {
 	user: PublicUser;
 }
@@ -203,13 +238,18 @@ export interface TrinketItemRow {
 	id: number;
 	trinket_id: number;
 	item_type: PostType;
-	order: number;
+	item_order: number;
+	file_size_bytes: number;
 	title?: string;
 	description?: string;
 	media_url?: string;
-	file_size_bytes: number;
-	metadata: JSONValue;
+	metadata?: JSONValue;
 	created_at: Date;
+}
+
+export interface TrinketItemReorder {
+	item_id: number;
+	item_order: number;
 }
 
 // ==================== Friendship ====================

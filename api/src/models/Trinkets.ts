@@ -25,7 +25,7 @@ export async function createTrinket(
 				title,
 				description ?? "",
 				coverURL ?? "",
-				metadata ?? JSON.parse("{}"),
+				metadata,
 			],
 		);
 
@@ -39,7 +39,7 @@ export async function createTrinket(
 
 // ==================== READ ====================
 
-export async function getTrinket(trinketId: number): Promise<TrinketRow> {
+export async function getTrinketById(trinketId: number): Promise<TrinketRow> {
 	const result = await pool.query<TrinketRow>(
 		`SELECT *
          FROM trinkets
@@ -48,7 +48,7 @@ export async function getTrinket(trinketId: number): Promise<TrinketRow> {
 	);
 
 	const trinket = result.rows[0];
-	if (!trinket) translatePostgresError("getTrinket");
+	if (!trinket) translatePostgresError("getTrinket", undefined, { notFound: true });
 	return trinket;
 }
 
@@ -61,7 +61,6 @@ export async function getAllTrinketsByUserId(userId: number): Promise<TrinketRow
 	);
 
 	const trinket = result.rows;
-	if (trinket.length === 0) translatePostgresError("getAllTrinketsByUserId");
 	return trinket;
 }
 
@@ -146,7 +145,19 @@ export async function changeTrinketDescription(
 export async function changeTrinketCoverURL(
 	trinketId: number,
 	coverURL: string,
-): Promise<TrinketRow> {
+): Promise<{ trinket: TrinketRow; oldCoverURL: string | null }> {
+	const before = await pool.query<TrinketRow>(
+		`SELECT cover_url
+		 FROM trinkets
+		 WHERE id = $1`,
+		[trinketId],
+	);
+
+	const beforeColumn = before.rows[0];
+	if (!beforeColumn)
+		translatePostgresError("changeTrinketCoverURL", undefined, { notFound: true });
+	const oldCoverURL = beforeColumn.cover_url ?? null;
+
 	const result = await pool.query<TrinketRow>(
 		`UPDATE trinkets
          SET cover_url = $1
@@ -157,13 +168,25 @@ export async function changeTrinketCoverURL(
 
 	const trinket = result.rows[0];
 	if (!trinket) translatePostgresError("changeTrinketCoverURL", undefined, { notFound: true });
-	return trinket;
+	return { trinket, oldCoverURL };
 }
 
 export async function changeTrinketMetadata(
 	trinketId: number,
-	metadata: string,
-): Promise<TrinketRow> {
+	metadata: JSONValue,
+): Promise<{ trinket: TrinketRow; oldMetadata: JSONValue }> {
+	const before = await pool.query<TrinketRow>(
+		`SELECT metadata
+		 FROM trinkets
+		 WHERE id = $1`,
+		[trinketId],
+	);
+
+	const beforeColumn = before.rows[0];
+	if (!beforeColumn)
+		translatePostgresError("changeTrinketMetadata", undefined, { notFound: true });
+	const oldMetadata = beforeColumn.metadata ?? null;
+
 	const result = await pool.query<TrinketRow>(
 		`UPDATE trinkets
          SET metadata = $1
@@ -174,7 +197,7 @@ export async function changeTrinketMetadata(
 
 	const trinket = result.rows[0];
 	if (!trinket) translatePostgresError("changeTrinketMetadata", undefined, { notFound: true });
-	return trinket;
+	return { trinket, oldMetadata };
 }
 
 // ==================== DELETE ====================
@@ -183,12 +206,16 @@ export async function deleteTrinketDescription(trinketId: number): Promise<Trink
 	return await changeTrinketDescription(trinketId, "");
 }
 
-export async function deleteTrinketCoverURL(trinketId: number): Promise<TrinketRow> {
+export async function deleteTrinketCoverURL(
+	trinketId: number,
+): Promise<{ trinket: TrinketRow; oldCoverURL: string | null }> {
 	return await changeTrinketCoverURL(trinketId, "");
 }
 
-export async function deleteTrinketMetadata(trinketId: number): Promise<TrinketRow> {
-	return await changeTrinketMetadata(trinketId, JSON.parse("{}"));
+export async function deleteTrinketMetadata(
+	trinketId: number,
+): Promise<{ trinket: TrinketRow; oldMetadata: JSONValue }> {
+	return await changeTrinketMetadata(trinketId, null);
 }
 
 export async function deleteTrinket(trinketId: number): Promise<TrinketRow> {
