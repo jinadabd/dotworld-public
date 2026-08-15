@@ -66,6 +66,19 @@ export async function getAllTrinketsByUserId(userId: number): Promise<TrinketRow
 	return trinket;
 }
 
+export async function getAllFeaturedTrinkets(userId: number): Promise<TrinketRow[]> {
+	const result = await pool.query<TrinketRow>(
+		`SELECT *
+         FROM trinkets
+         WHERE user_id = $1
+		 AND featured = true`,
+		[userId],
+	);
+
+	const trinket = result.rows;
+	return trinket;
+}
+
 // ==================== UPDATE ====================
 
 export async function changeTrinketVisibility(

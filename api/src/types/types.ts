@@ -121,6 +121,38 @@ export interface IslandWithContent extends Omit<IslandRow, "user_id"> {
 	featured_posts: PostWithAuthor[];
 }
 
+export interface CreateIslandInput {
+	island_visibility: IslandVisibility;
+	name?: string;
+	description?: string;
+	cover_url?: string;
+	metadata?: JSONValue;
+}
+
+export interface EditIslandInput {
+	island_id: number;
+	options: EditIslandOptions[];
+	island_visibility?: IslandVisibility;
+	name?: string;
+	description?: string;
+	cover_url?: string;
+	metadata?: JSONValue;
+}
+
+export const EditIslandOptions = {
+	change_island_visibility: "change_island_visibility",
+	edit_name: "edit_name",
+	delete_name: "delete_name",
+	edit_description: "edit_description",
+	delete_description: "delete_description",
+	edit_cover_url: "edit_cover_url",
+	delete_cover_url: "delete_cover_url",
+	edit_metadata: "edit_metadata",
+	delete_metadata: "delete_metadata",
+} as const;
+
+export type EditIslandOptions = (typeof EditIslandOptions)[keyof typeof EditIslandOptions];
+
 // ==================== Post ====================
 
 export interface PostRow {
