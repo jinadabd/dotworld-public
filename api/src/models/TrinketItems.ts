@@ -71,8 +71,8 @@ export async function getAllTrinketItems(trinketId: number): Promise<TrinketItem
 	);
 
 	const trinketItems = result.rows;
-	if (trinketItems.length === 0)
-		translatePostgresError("getAllTrinketItems", undefined, { notFound: true });
+	// if (trinketItems.length === 0)
+	// 	translatePostgresError("getAllTrinketItems", undefined, { notFound: true });
 	return trinketItems;
 }
 
@@ -229,5 +229,27 @@ export async function deleteTrinketItem(trinketItemId: number): Promise<TrinketI
 
 	const trinketItem = result.rows[0];
 	if (!trinketItem) translatePostgresError("deleteTrinketItem", undefined, { notFound: true });
+
+	const after = await pool.query(
+		`UPDATE trinket_items
+		 SET item_order = item_order - 1
+		 WHERE trinket_id = $1 AND item_order > $2`,
+		[trinketItem.trinket_id, trinketItem.item_order],
+	);
+
 	return trinketItem;
+}
+
+export async function deleteAllTrinketItems(trinketId: number): Promise<TrinketItemRow[]> {
+	const result = await pool.query<TrinketItemRow>(
+		`DELETE FROM trinket_items
+		 WHERE trinket_id = $1
+		 RETURNING *`,
+		[trinketId],
+	);
+
+	const trinketItems = result.rows;
+	// if (trinketItems.length === 0)
+	// 	translatePostgresError("deleteAllTrinketItems", undefined, { notFound: true });
+	return trinketItems;
 }

@@ -3,10 +3,10 @@ import { login, me, signup } from "../controllers/authController.ts";
 import { authLimiter } from "../middleware/rateLimit.ts";
 import { requireAuth } from "../middleware/requireAuth.ts";
 
-const router = Router();
+const AuthRouter = Router();
 
-router.post("/signup", authLimiter, signup);
-router.post("/login", authLimiter, login);
-router.get("/me", requireAuth, me);
+AuthRouter.post("/signup", authLimiter, signup);
+AuthRouter.post("/login", authLimiter, login);
+AuthRouter.get("/me", requireAuth, me);
 
-export default router;
+export default AuthRouter;

@@ -87,7 +87,7 @@ export interface SignupInput {
 export const LoginMethod = {
 	email: "email",
 	username: "username",
-};
+} as const;
 
 export type LoginMethod = (typeof LoginMethod)[keyof typeof LoginMethod];
 
@@ -183,6 +183,7 @@ export interface TrinketRow {
 	description?: string;
 	cover_url?: string;
 	metadata: JSONValue;
+	file_size_bytes: number;
 	created_at: Date;
 }
 
@@ -193,17 +194,19 @@ export interface CreateTrinketInput {
 	description?: string;
 	cover_url?: string;
 	// trinket_bubbles?: number[];
-	metadata: JSONValue;
+	metadata?: JSONValue;
+	file_size_bytes: number;
 }
 
 export interface EditTrinketInput {
 	trinket_id: number;
 	options: EditTrinketOptions[];
-	visibility: TrinketVisibility;
+	visibility?: TrinketVisibility;
 	title?: string;
 	description?: string;
 	cover_url?: string;
 	metadata?: string;
+	file_size_bytes: number;
 }
 
 export const EditTrinketOptions = {
@@ -250,6 +253,17 @@ export interface TrinketItemRow {
 export interface TrinketItemReorder {
 	item_id: number;
 	item_order: number;
+}
+
+export interface CreateTrinketItemInput {
+	trinket_id: number;
+	item_type: PostType;
+	item_order: number;
+	file_size_bytes: number;
+	title?: string;
+	description?: string;
+	media_url?: string;
+	metadata?: JSONValue;
 }
 
 // ==================== Friendship ====================

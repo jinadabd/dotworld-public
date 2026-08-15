@@ -9,14 +9,15 @@ export async function createTrinket(
 	trinketVisibility: TrinketVisibility,
 	trinketType: TrinketType,
 	title: string,
+	fileSizeBytes: number,
 	description?: string,
 	coverURL?: string,
 	metadata?: JSONValue,
 ): Promise<TrinketRow> {
 	try {
 		const result = await pool.query<TrinketRow>(
-			`INSERT INTO trinkets(user_id, trinket_visibility, trinket_type, title, description, cover_url, metadata)
-             VALUES ($1, $2, $3, $4, $5, $6, $7)
+			`INSERT INTO trinkets(user_id, trinket_visibility, trinket_type, title, description, cover_url, metadata, file_size_bytes)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
              RETURNING *`,
 			[
 				userId,
@@ -26,6 +27,7 @@ export async function createTrinket(
 				description ?? "",
 				coverURL ?? "",
 				metadata,
+				fileSizeBytes,
 			],
 		);
 
@@ -48,7 +50,7 @@ export async function getTrinketById(trinketId: number): Promise<TrinketRow> {
 	);
 
 	const trinket = result.rows[0];
-	if (!trinket) translatePostgresError("getTrinket", undefined, { notFound: true });
+	if (!trinket) translatePostgresError("getTrinketById", undefined, { notFound: true });
 	return trinket;
 }
 
@@ -145,6 +147,7 @@ export async function changeTrinketDescription(
 export async function changeTrinketCoverURL(
 	trinketId: number,
 	coverURL: string,
+	fileSizeBytes: number,
 ): Promise<{ trinket: TrinketRow; oldCoverURL: string | null }> {
 	const before = await pool.query<TrinketRow>(
 		`SELECT cover_url
@@ -160,10 +163,10 @@ export async function changeTrinketCoverURL(
 
 	const result = await pool.query<TrinketRow>(
 		`UPDATE trinkets
-         SET cover_url = $1
-         WHERE id = $2
+         SET cover_url = $1, file_size_bytes = $2
+         WHERE id = $3
          RETURNING *`,
-		[coverURL, trinketId],
+		[coverURL, fileSizeBytes, trinketId],
 	);
 
 	const trinket = result.rows[0];
@@ -209,7 +212,7 @@ export async function deleteTrinketDescription(trinketId: number): Promise<Trink
 export async function deleteTrinketCoverURL(
 	trinketId: number,
 ): Promise<{ trinket: TrinketRow; oldCoverURL: string | null }> {
-	return await changeTrinketCoverURL(trinketId, "");
+	return await changeTrinketCoverURL(trinketId, "", 0);
 }
 
 export async function deleteTrinketMetadata(
