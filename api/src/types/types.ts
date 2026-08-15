@@ -107,10 +107,11 @@ export interface MediaInput {
 export interface IslandRow {
 	id: number;
 	user_id: number;
-	name?: string;
 	island_visibility: IslandVisibility;
+	name?: string;
 	description?: string;
 	cover_url?: string;
+	metadata?: JSONValue;
 	created_at: Date;
 }
 
@@ -279,6 +280,14 @@ export interface FriendshipRow {
 export interface Friendship extends Omit<FriendshipRow, "user_id" | "friend_id"> {
 	users: [PublicUser, PublicUser];
 }
+
+export const ChangeStatusOptions = {
+	cancel: "cancel",
+	reject: "reject",
+	accept: "accept",
+} as const;
+
+export type ChangeStatusOptions = (typeof ChangeStatusOptions)[keyof typeof ChangeStatusOptions];
 
 // ==================== Bubble ====================
 

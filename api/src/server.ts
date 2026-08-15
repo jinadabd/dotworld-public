@@ -5,22 +5,20 @@ import authRouter from "./routes/auth.ts";
 import { errorHandler } from "./middleware/errorHandler.ts";
 import { composeRouter, postsRouter } from "./routes/posts.ts";
 import TrinketRouter from "./routes/trinkets.ts";
+import FriendsRouter from "./routes/friends.ts";
 
 const server = express();
 const PORT = process.env.PORT || 3000;
 
 server.use(express.json());
 server.use("/auth", authRouter);
-// server.use("/", homeRouter);
-// server.use("/:username", authRouter);
 
 server.use("/compose", composeRouter);
-
 server.use("/posts", postsRouter);
-// server.use("/:userId/posts", postsRouter);
 
 server.use("/trinkets", TrinketRouter);
-// server.use("/:userId/trinkets", TrinketRouter);
+
+server.use("/friends", FriendsRouter);
 
 server.use(errorHandler);
 

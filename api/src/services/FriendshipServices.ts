@@ -7,8 +7,9 @@ import {
 	getAllUserFriends,
 	getFriendship,
 	getFriendshipStatus,
+	rejectFriendship,
 } from "../models/Friendships.ts";
-import { FriendshipStatus, type FriendshipRow } from "../types/types.ts";
+import { ChangeStatusOptions, FriendshipStatus, type FriendshipRow } from "../types/types.ts";
 
 // ================= CREATE ===================
 
@@ -18,8 +19,9 @@ export async function createFriendshipService(
 ): Promise<FriendshipRow> {
 	if (userId === friendId)
 		throw new ServerError(ServerErrorCode.INVALID_INPUT, "createFriendshipService");
-	const friendship = await getFriendshipStatus(userId, friendId);
-	if (friendship) throw new ServerError(ServerErrorCode.INVALID_INPUT, "createFriendshipService");
+	const friendship = await getFriendship(userId, friendId);
+	if (friendship !== null)
+		throw new ServerError(ServerErrorCode.INVALID_INPUT, "createFriendshipService");
 
 	return await createFriendship(userId, friendId);
 }
@@ -30,7 +32,7 @@ export async function getFriendshipService(
 	userId: number,
 	friendId: number,
 ): Promise<FriendshipRow | null> {
-	return await getFriendshipStatus(userId, friendId);
+	return await getFriendship(userId, friendId);
 }
 
 export async function getAllUserFriendshipsService(userId: number): Promise<FriendshipRow[]> {
@@ -39,11 +41,25 @@ export async function getAllUserFriendshipsService(userId: number): Promise<Frie
 
 // ================= UPDATE ===================
 
-export async function acceptFriendshipService(
+export async function changeFriendshipStatusService(
+	initiatingId: number,
+	userId: number,
+	change: ChangeStatusOptions,
+): Promise<FriendshipRow> {
+	if (change === ChangeStatusOptions.accept)
+		return await acceptFriendshipRequest(initiatingId, userId);
+	else if (change === ChangeStatusOptions.reject)
+		return await rejectFriendshipRequest(initiatingId, userId);
+	else if (change === ChangeStatusOptions.cancel)
+		return await cancelFriendshipRequest(initiatingId, userId);
+	throw new ServerError(ServerErrorCode.INVALID_INPUT, "acceptFriendshipService");
+}
+
+async function acceptFriendshipRequest(
 	acceptingId: number,
 	requestingId: number,
 ): Promise<FriendshipRow> {
-	const friendship = await getFriendship(acceptingId, requestingId);
+	const friendship = await getFriendshipStatus(acceptingId, requestingId);
 	if (
 		!friendship ||
 		friendship.friendship_status === FriendshipStatus.friends ||
@@ -54,7 +70,22 @@ export async function acceptFriendshipService(
 	return await acceptUserFriendship(acceptingId, requestingId);
 }
 
-export async function cancelFriendshipService(
+async function rejectFriendshipRequest(
+	rejectingId: number,
+	requestingId: number,
+): Promise<FriendshipRow> {
+	const friendship = await getFriendship(rejectingId, requestingId);
+	if (
+		!friendship ||
+		friendship.friendship_status === FriendshipStatus.friends ||
+		friendship.user_id !== requestingId
+	)
+		throw new ServerError(ServerErrorCode.INVALID_INPUT, "cancelFriendshipService");
+
+	return await rejectFriendship(rejectingId, requestingId);
+}
+
+async function cancelFriendshipRequest(
 	cancellingId: number,
 	friendId: number,
 ): Promise<FriendshipRow> {
@@ -85,7 +116,7 @@ export async function deleteFriendshipService(
 // ================= REQUIRES ===================
 
 export async function requireFriendship(firstId: number, secondId: number) {
-	const friendship = await getFriendshipStatus(firstId, secondId);
+	const friendship = await getFriendship(firstId, secondId);
 	if (!friendship || friendship.friendship_status !== FriendshipStatus.friends)
 		throw new ServerError(ServerErrorCode.ACCESS_DENIED, "requireFriendship");
 }
