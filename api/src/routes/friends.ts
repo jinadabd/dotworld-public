@@ -5,12 +5,15 @@ import {
 	changeFriendshipStatus,
 	getAllFriends,
 	getFriendship,
+	getPendingFriendships,
 	removeFriend,
 } from "../controllers/friendsController.ts";
 
 const FriendsRouter = Router();
 
 FriendsRouter.get("/", requireAuth, getAllFriends);
+FriendsRouter.get("/requests", requireAuth, getPendingFriendships);
+
 FriendsRouter.get("/:friendId", requireAuth, getFriendship);
 
 FriendsRouter.post("/:friendId", requireAuth, addFriend);

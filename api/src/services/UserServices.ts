@@ -75,6 +75,10 @@ export async function meService(userId: number) {
 
 // ===================== USER ====================
 
+export async function getUserByIdService(userId: number): Promise<PublicUser> {
+	return await getUserById(userId);
+}
+
 export async function changeNameService(userId: number, newName: string): Promise<PublicUser> {
 	requireName(newName);
 	const user = await changeUserName(userId, newName);

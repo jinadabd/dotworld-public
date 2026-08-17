@@ -4,6 +4,7 @@ import {
 	cancelFriendship,
 	createFriendship,
 	deleteFriendship,
+	getAllPendingFriendships,
 	getAllUserFriends,
 	getFriendship,
 	getFriendshipStatus,
@@ -19,7 +20,7 @@ export async function createFriendshipService(
 ): Promise<FriendshipRow> {
 	if (userId === friendId)
 		throw new ServerError(ServerErrorCode.INVALID_INPUT, "createFriendshipService");
-	const friendship = await getFriendship(userId, friendId);
+	const friendship = await getFriendshipStatus(userId, friendId);
 	if (friendship !== null)
 		throw new ServerError(ServerErrorCode.INVALID_INPUT, "createFriendshipService");
 
@@ -32,11 +33,17 @@ export async function getFriendshipService(
 	userId: number,
 	friendId: number,
 ): Promise<FriendshipRow | null> {
+	if (!userId || !friendId)
+		throw new ServerError(ServerErrorCode.INVALID_INPUT, "getFriendshipService");
 	return await getFriendship(userId, friendId);
 }
 
 export async function getAllUserFriendshipsService(userId: number): Promise<FriendshipRow[]> {
 	return await getAllUserFriends(userId);
+}
+
+export async function getFriendshipRequestsService(userId: number): Promise<FriendshipRow[]> {
+	return await getAllPendingFriendships(userId);
 }
 
 // ================= UPDATE ===================
@@ -74,7 +81,7 @@ async function rejectFriendshipRequest(
 	rejectingId: number,
 	requestingId: number,
 ): Promise<FriendshipRow> {
-	const friendship = await getFriendship(rejectingId, requestingId);
+	const friendship = await getFriendshipStatus(rejectingId, requestingId);
 	if (
 		!friendship ||
 		friendship.friendship_status === FriendshipStatus.friends ||
@@ -89,7 +96,7 @@ async function cancelFriendshipRequest(
 	cancellingId: number,
 	friendId: number,
 ): Promise<FriendshipRow> {
-	const friendship = await getFriendship(cancellingId, friendId);
+	const friendship = await getFriendshipStatus(cancellingId, friendId);
 	if (
 		!friendship ||
 		friendship.friendship_status === FriendshipStatus.friends ||

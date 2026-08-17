@@ -53,8 +53,8 @@ export async function getAllPendingFriendships(userId: number): Promise<Friendsh
 	);
 
 	const friendships = result.rows;
-	if (friendships.length === 0)
-		translatePostgresError("getAllUserFriends", undefined, { notFound: true });
+	// if (friendships.length === 0)
+	// 	translatePostgresError("getAllUserFriends", undefined, { notFound: true });
 	return friendships;
 }
 
@@ -191,8 +191,8 @@ export async function rejectFriendship(
 export async function deleteFriendship(userId: number, friendId: number): Promise<FriendshipRow> {
 	const result = await pool.query<FriendshipRow>(
 		`DELETE FROM friendships
-         WHERE (user_id = $1 AND friend_id = $2)
-		 OR (user_id = $2 AND friend_id = $1)
+         WHERE ((user_id = $1 AND friend_id = $2)
+		 OR (user_id = $2 AND friend_id = $1))
 		 AND friendship_status = 'friends'
          RETURNING *`,
 		[userId, friendId],
