@@ -1,0 +1,50 @@
+import { useState } from "react";
+import { useGetUserTrinketsQuery } from "./trinketApi";
+import { TrinketCard } from "./TrinketCard";
+import { CreateTrinketForm } from "./CreateTrinketForm";
+import { TactileButton } from "../../components/buttons/TactileButton";
+
+interface Props {
+	username: string;
+	isOwnIsland?: boolean;
+}
+
+export function UserTrinkets({ username, isOwnIsland = false }: Props) {
+	const [isCreating, setIsCreating] = useState(false);
+	const { data: trinkets, isLoading, error } = useGetUserTrinketsQuery({ username });
+
+	if (isCreating) {
+		return (
+			<CreateTrinketForm
+				onSuccess={() => setIsCreating(false)}
+				onCancel={() => setIsCreating(false)}
+			/>
+		);
+	}
+
+	return (
+		<div>
+			<div>
+				<h2>{isOwnIsland ? "My Trinkets" : `${username}'s Trinkets`}</h2>
+				{isOwnIsland && (
+					<TactileButton onClick={() => setIsCreating(true)}>Add Trinket</TactileButton>
+				)}
+			</div>
+
+			{isLoading ? (
+				<p>Loading trinkets...</p>
+			) : error || !trinkets || trinkets.length === 0 ? (
+				<p>No trinkets found.</p>
+			) : (
+				<div>
+					{trinkets.map((trinket) => (
+						<TrinketCard
+							key={trinket.id}
+							trinket={trinket}
+						/>
+					))}
+				</div>
+			)}
+		</div>
+	);
+}

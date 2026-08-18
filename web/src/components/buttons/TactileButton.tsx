@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
-type Colours = "yellow" | "green" | "blue" | "red" | "cream" | "dark";
+export type Colours = "yellow" | "green" | "blue" | "red" | "cream" | "dark";
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
 	colour?: Colours;

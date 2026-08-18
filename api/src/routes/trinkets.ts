@@ -4,6 +4,7 @@ import {
 	createTrinket,
 	deleteTrinket,
 	editTrinket,
+	getCommunityTrinkets,
 	getTrinket,
 } from "../controllers/trinketController.ts";
 import {
@@ -22,5 +23,7 @@ TrinketRouter.delete("/:trinketId", requireAuth, deleteTrinket);
 TrinketRouter.post("/:trinketId", requireAuth, createTrinketItem);
 TrinketRouter.get("/:trinketId/:trinketItemId", requireAuth, getTrinketItem);
 TrinketRouter.delete("/:trinketId/:trinketItemId", requireAuth, deleteTrinketItem);
+
+TrinketRouter.get("/community", requireAuth, getCommunityTrinkets);
 
 export default TrinketRouter;

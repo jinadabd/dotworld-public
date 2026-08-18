@@ -4,7 +4,9 @@ import {
 	createTrinketService,
 	deleteTrinketService,
 	editTrinketService,
+	getCommunityTrinketsService,
 	getTrinketService,
+	getUserTrinketsService,
 } from "../services/TrinketServices.ts";
 import { getAllTrinketItemsService } from "../services/TrinketItemsServices.ts";
 
@@ -21,6 +23,18 @@ export async function getTrinket(req: Request<{ trinketId: string }>, res: Respo
 	const trinket = await getTrinketService(userId, trinketId);
 	const trinketItems = await getAllTrinketItemsService(userId, trinketId);
 	res.status(200).json({ trinket: trinket, trinketItems: trinketItems });
+}
+
+export async function getUserTrinkets(req: Request<{ username: string }>, res: Response) {
+	const viewerId = (req as any).userId;
+	const username = req.params.username;
+	const trinkets = await getUserTrinketsService(viewerId, username);
+	res.status(200).json(trinkets);
+}
+
+export async function getCommunityTrinkets(req: Request, res: Response) {
+	const trinkets = await getCommunityTrinketsService();
+	res.status(200).json(trinkets);
 }
 
 export async function editTrinket(

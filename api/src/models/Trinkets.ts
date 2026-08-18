@@ -62,8 +62,19 @@ export async function getAllTrinketsByUserId(userId: number): Promise<TrinketRow
 		[userId],
 	);
 
-	const trinket = result.rows;
-	return trinket;
+	const trinkets = result.rows;
+	return trinkets;
+}
+
+export async function getPublicTrinkets(): Promise<TrinketRow[]> {
+	const result = await pool.query<TrinketRow>(
+		`SELECT *
+         FROM trinkets
+         WHERE trinket_visibility = 'world'`,
+	);
+
+	const trinkets = result.rows;
+	return trinkets;
 }
 
 export async function getAllFeaturedTrinkets(userId: number): Promise<TrinketRow[]> {

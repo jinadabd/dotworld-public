@@ -1,5 +1,5 @@
 import pool from "../config/postgres.ts";
-import type { PostRow, PostVisibility, PostType } from "../types/types.ts";
+import type { PostRow, PostVisibility, PostType, PaginatedPosts } from "../types/types.ts";
 import { translatePostgresError } from "../errors/PostgresError.ts";
 
 // ==================== CREATE ====================
@@ -76,21 +76,51 @@ export async function getPostById(postId: number): Promise<PostRow> {
 
 export async function getPostsFromUser(
 	userId: number,
-	limit: number,
-	timestamp: Date,
-): Promise<PostRow[] | null> {
-	if (!timestamp) timestamp = new Date();
-	const result = await pool.query<PostRow>(
-		`SELECT *
+	page: number = 1,
+	limit: number = 25,
+	timestamp: Date = new Date(),
+): Promise<{ posts: PostRow[]; count: number }> {
+	const offset = (page - 1) * limit;
+	const result = await pool.query<PostRow & { total_count: number }>(
+		`SELECT 
+		 	*,
+		 	COUNT(*) OVER()::integer AS total_count
          FROM posts
          WHERE user_id = $1 AND created_at <= $2
          ORDER BY created_at DESC
-         LIMIT $3`,
-		[userId, timestamp, limit],
+		 LIMIT $3 OFFSET $4`,
+		[userId, timestamp, limit, offset],
 	);
 
-	const posts = result.rows ?? null;
-	return posts;
+	const count = result.rows.length > 0 && result.rows[0] ? result.rows[0].total_count : 0;
+	const posts = result.rows.map(({ total_count, ...post }) => post as PostRow);
+	return { posts, count };
+}
+
+export async function getPostsFromFriends(
+	friendIds: number[],
+	page: number = 1,
+	limit: number = 25,
+	timestamp: Date = new Date(),
+): Promise<{ posts: PostRow[]; count: number }> {
+	if (friendIds.length === 0) return { posts: [], count: 0 };
+	const offset = (page - 1) * limit;
+	const queryValues = friendIds.map((_, index) => `$${index + 4}`).join(", ");
+
+	const result = await pool.query<PostRow & { total_count: number }>(
+		`SELECT 
+		 	*,
+		 	COUNT(*) OVER()::integer AS total_count
+         FROM posts
+         WHERE created_at <= $1
+		 AND user_id IN (${queryValues})
+         ORDER BY created_at DESC
+		 LIMIT $2 OFFSET $3`,
+		[timestamp, limit, offset, ...friendIds],
+	);
+	const count = result.rows.length > 0 && result.rows[0] ? result.rows[0].total_count : 0;
+	const posts = result.rows.map(({ total_count, ...post }) => post as PostRow);
+	return { posts, count };
 }
 
 // ==================== UPDATE ====================

@@ -63,7 +63,8 @@ export async function getIslandService(
 	const island = await getIslandByUserId(user.id);
 	if (!island) throw new ServerError(ServerErrorCode.NOT_FOUND, "getIslandService");
 
-	if (island.island_visibility === "friends") requireFriendship(user.id, requestingId);
+	if (island.island_visibility === "friends" && requestingId !== user.id)
+		requireFriendship(user.id, requestingId);
 
 	const featuredTrinkets = await getAllFeaturedTrinkets(user.id);
 

@@ -168,8 +168,19 @@ export interface PostRow {
 	created_at: Date;
 }
 
-export interface PostWithAuthor extends Omit<PostRow, "user_id"> {
-	user: PublicUser;
+export interface PostWithAuthor {
+	post: PostRow;
+	author: PublicUser;
+}
+
+export interface PaginatedPosts {
+	posts: PostWithAuthor[];
+	pagination: {
+		currentPage: number;
+		totalPages: number;
+		totalPosts: number;
+		hasMore: boolean;
+	};
 }
 
 export interface ComposePostInput {

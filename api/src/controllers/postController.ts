@@ -3,7 +3,9 @@ import {
 	composePostService,
 	deletePostService,
 	editPostService,
+	getFriendsChatterService,
 	getPostService,
+	getUserPostsService,
 } from "../services/PostServices.ts";
 import type { ComposePostInput, EditPostInput } from "../types/types.ts";
 
@@ -19,6 +21,26 @@ export async function getPost(req: Request<{ postId: string }>, res: Response) {
 	const postId = Number.parseInt(req.params.postId, 10);
 	const post = await getPostService(userId, postId);
 	res.status(200).json(post);
+}
+
+export async function getUserPosts(
+	req: Request<{ userId: string; page?: string; limit?: string }>,
+	res: Response,
+) {
+	const viewerId = (req as any).user_id;
+	const userId = Number.parseInt(req.params.userId, 10);
+	const page = req.params.page ? Number.parseInt(req.params.page, 10) : undefined;
+	const limit = req.params.limit ? Number.parseInt(req.params.limit, 10) : undefined;
+	const posts = await getUserPostsService(viewerId, userId, page, limit);
+	res.status(200).json(posts);
+}
+
+export async function getChatter(req: Request<{ page?: number; limit?: number }>, res: Response) {
+	const userId = (req as any).user_id;
+	const page = req.params.page;
+	const limit = req.params.limit;
+	const chatter = await getFriendsChatterService(userId, page, limit);
+	res.status(200).json(chatter);
 }
 
 export async function editPost(req: Request<{ postId: string }, {}, EditPostInput>, res: Response) {

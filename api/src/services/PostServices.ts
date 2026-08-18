@@ -1,5 +1,6 @@
 import { MAX_POST_BUBBLES } from "../constants/businessLogic.ts";
 import { ServerError, ServerErrorCode } from "../errors/ServerError.ts";
+import { getAllUserFriends } from "../models/Friendships.ts";
 import {
 	changePostBody,
 	changePostVisibility,
@@ -7,21 +8,25 @@ import {
 	deletePost,
 	deletePostBody,
 	getPostById,
+	getPostsFromFriends,
+	getPostsFromUser,
 } from "../models/Post.ts";
 import {
 	getAllBubblesByPostId,
 	sharePostToBubbles,
 	unsharePostFromBubbles,
 } from "../models/PostBubble.ts";
-import { decrementUserStorage, incrementUserStorage } from "../models/User.ts";
+import { decrementUserStorage, getUserById, incrementUserStorage } from "../models/User.ts";
 import type {
 	ComposePostInput,
 	EditPostInput,
 	EditPostOptions,
+	PaginatedPosts,
 	PostBubble,
 	PostRow,
 	PostType,
 	PostVisibility,
+	PostWithAuthor,
 } from "../types/types.ts";
 import { requireBubbleMembership } from "./BubbleServices.ts";
 import { deleteFromR2Service } from "./CloudflareServices.ts";
@@ -58,18 +63,80 @@ export async function composePostService(
 
 // =========================== GET ==========================
 
-export async function getPostService(userId: number, postId: number): Promise<PostRow> {
+export async function getPostService(userId: number, postId: number): Promise<PostWithAuthor> {
 	const post = await getPostById(postId);
-	if (post.user_id === userId) return post;
+	const author = await getUserById(post.user_id);
+	if (post.user_id === userId) return { post, author };
 
 	await requirePostAccess(userId, post);
-	return post;
+	return { post, author };
+}
+
+export async function getUserPostsService(
+	viewerId: number,
+	userId: number,
+	page: number = 1,
+	limit: number = 25,
+): Promise<PaginatedPosts> {
+	if (viewerId !== userId) await requireFriendship(viewerId, userId);
+	const { posts } = await getPostsFromUser(userId, page, limit);
+	const filteredPosts = posts.filter((post) => post.post_visibility !== "self");
+
+	const filteredWithAuthors: PostWithAuthor[] = await Promise.all(
+		filteredPosts.map(async (post) => {
+			const author = await getUserById(post.user_id);
+			return { post, author };
+		}),
+	);
+	const filteredCount = filteredWithAuthors.length;
+
+	return {
+		posts: filteredWithAuthors,
+		pagination: {
+			currentPage: page,
+			totalPages: Math.ceil(filteredCount / limit),
+			totalPosts: filteredCount,
+			hasMore: page * limit < filteredCount,
+		},
+	};
+}
+
+export async function getFriendsChatterService(
+	userId: number,
+	page: number = 1,
+	limit: number = 25,
+): Promise<PaginatedPosts> {
+	const friends = await getAllUserFriends(userId);
+	const friendIds = friends.map((friend) => friend.id);
+	const { posts } = await getPostsFromFriends(friendIds, page, limit);
+	const filteredPosts = posts.filter((post) => post.post_visibility !== "self");
+
+	const filteredWithAuthors: PostWithAuthor[] = await Promise.all(
+		filteredPosts.map(async (post) => {
+			const author = await getUserById(post.user_id);
+			return { post, author };
+		}),
+	);
+	const filteredCount = filteredWithAuthors.length;
+
+	return {
+		posts: filteredWithAuthors,
+		pagination: {
+			currentPage: page,
+			totalPages: Math.ceil(filteredCount / limit),
+			totalPosts: filteredCount,
+			hasMore: page * limit < filteredCount,
+		},
+	};
 }
 
 // =========================== EDIT ==========================
 
-export async function editPostService(authorId: number, input: EditPostInput): Promise<PostRow> {
-	const { authorId: _, post: post } = await requirePostAuthorship(authorId, input.post_id);
+export async function editPostService(
+	authorId: number,
+	input: EditPostInput,
+): Promise<PostWithAuthor> {
+	const { post: post } = await requirePostAuthorship(authorId, input.post_id);
 	const options = requireEditPostOptions(input.edit_options);
 
 	for (const option of options) {
@@ -106,8 +173,10 @@ export async function editPostService(authorId: number, input: EditPostInput): P
 				throw new ServerError(ServerErrorCode.INVALID_INPUT, "editPostService");
 		}
 	}
+	const author = await getUserById(authorId);
+	const updatedPost = await getPostById(post.id);
 
-	return await getPostById(post.id);
+	return { post: updatedPost, author: author };
 }
 
 async function editPostVisibility(
@@ -166,7 +235,7 @@ async function removePostFromBubbles(
 
 // =========================== DELETE ==========================
 
-export async function deletePostService(authorId: number, postId: number): Promise<PostRow> {
+export async function deletePostService(authorId: number, postId: number): Promise<PostWithAuthor> {
 	await requirePostAuthorship(authorId, postId);
 
 	const post = await deletePost(postId, authorId);
@@ -176,7 +245,8 @@ export async function deletePostService(authorId: number, postId: number): Promi
 		if (post.file_size_bytes > 0) await decrementUserStorage(authorId, post.file_size_bytes);
 	}
 
-	return post;
+	const author = await getUserById(authorId);
+	return { post, author };
 }
 
 // ========================== REQUIRES ===========================

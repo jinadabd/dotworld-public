@@ -1,3 +1,5 @@
+import { Nav } from "./Nav";
+
 export function LeftPanel() {
-	return <p>Left</p>;
+	return <Nav />;
 }

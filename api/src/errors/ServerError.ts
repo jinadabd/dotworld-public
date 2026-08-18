@@ -21,6 +21,7 @@ export const ServerErrorCode = {
 	MISSING_FIELD: "MISSING_FIELD",
 	INVALID_INPUT: "INVALID_INPUT",
 	VALUE_TOO_LONG: "VALUE_TOO_LONG",
+	PAYLOAD_TOO_LARGE: "PAYLOAD_TOO_LARGE",
 
 	ACCESS_DENIED: "ACCESS_DENIED",
 
@@ -47,7 +48,7 @@ export const ServerErrorStatus: Record<ServerErrorCode, number> = {
 
 	[ServerErrorCode.ACCESS_DENIED]: 403,
 
-	//413 content too large
+	[ServerErrorCode.PAYLOAD_TOO_LARGE]: 413,
 
 	[ServerErrorCode.NOT_FOUND]: 404,
 

@@ -14,15 +14,15 @@ import {
 	deleteTrinketDescription,
 	deleteTrinketMetadata,
 	featureTrinket,
+	getAllTrinketsByUserId,
+	getPublicTrinkets,
 	getTrinketById,
 	unfeatureTrinket,
 } from "../models/Trinkets.ts";
-import { decrementUserStorage, incrementUserStorage } from "../models/User.ts";
+import { decrementUserStorage, getUserByUsername, incrementUserStorage } from "../models/User.ts";
 import type {
 	CreateTrinketInput,
 	EditTrinketInput,
-	JSONValue,
-	TrinketItemReorder,
 	TrinketItemRow,
 	TrinketRow,
 	TrinketType,
@@ -72,6 +72,26 @@ export async function getTrinketService(userId: number, trinketId: number): Prom
 	}
 
 	throw new ServerError(ServerErrorCode.ACCESS_DENIED, "getTrinketService");
+}
+
+export async function getUserTrinketsService(
+	viewerId: number,
+	username: string,
+): Promise<TrinketRow[]> {
+	const user = await getUserByUsername(username);
+	if (!user) throw new ServerError(ServerErrorCode.NOT_FOUND, "getUserTrinketsService");
+
+	if (viewerId !== user.id) await requireFriendship(user.id, viewerId);
+
+	const trinkets = await getAllTrinketsByUserId(user.id);
+	if (viewerId === user.id) return trinkets;
+
+	const trinketsToShow = trinkets.filter((trinket) => trinket.trinket_visibility !== "self");
+	return trinketsToShow;
+}
+
+export async function getCommunityTrinketsService(): Promise<TrinketRow[]> {
+	return await getPublicTrinkets();
 }
 
 // ========================= EDIT ============================

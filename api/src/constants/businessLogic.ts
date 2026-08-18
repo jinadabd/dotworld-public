@@ -1,10 +1,21 @@
 export const RESERVED_USERNAMES = new Set([
 	"auth",
-	"bubbles",
+	"island",
+	"islands",
+	"trinket",
+	"trinkets",
+	"friend",
+	"friends",
 	"chatter",
+	"bubble",
+	"bubbles",
 	"compose",
+	"posts",
+	"users",
+	"uploads",
 	"settings",
 	"about",
+	"welcome",
 	"help",
 ]);
 

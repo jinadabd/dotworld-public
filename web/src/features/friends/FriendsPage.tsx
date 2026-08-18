@@ -4,6 +4,7 @@ import { useFriendshipActions } from "./useFriendshipActions";
 import { FetchedUserBadge } from "../users/FetchedUserBadge";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
+import { UserSearch } from "../../components/UserSearch";
 
 export function FriendsPage() {
 	const { data: friends, isLoading } = useGetFriendsQuery();
@@ -51,6 +52,11 @@ export function FriendsPage() {
 							/>
 						);
 					})}
+				</section>
+
+				<section>
+					<h2>Add friends</h2>
+					<UserSearch />
 				</section>
 			</div>
 		</>
