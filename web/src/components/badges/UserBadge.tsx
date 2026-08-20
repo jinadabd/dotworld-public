@@ -5,26 +5,28 @@ import { Link } from "react-router-dom";
 interface Props {
 	user: PublicUser;
 	children?: React.ReactNode;
+	style?: CSSModuleClasses;
 }
 
-export function UserBadge({ user, children }: Props) {
+export function UserBadge({ user, children, style }: Props) {
+	const usedStyle = style ?? styles;
 	return (
-		<div className={styles.badge}>
+		<div className={usedStyle.badgeWithChildren}>
 			<Link
 				to={`/${user.username}`}
-				className="styles.link">
+				className={usedStyle.badge}>
 				{user.photograph_url ? (
 					<img
 						src={user.photograph_url}
 						alt=""
-						className={styles.avatar}
+						className={usedStyle.photograph}
 					/>
 				) : (
-					<span className={styles.initials}>{user.username[0]}</span>
+					<span className={usedStyle.initials}>{user.username[0]}</span>
 				)}
 				<div>
-					<p className={styles.name}>{user.name}</p>
-					<p className={styles.username}>{user.username}</p>
+					<p className={usedStyle.name}>{user.name}</p>
+					<p className={usedStyle.username}>{user.username}</p>
 				</div>
 			</Link>
 			{children}

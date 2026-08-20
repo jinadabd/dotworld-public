@@ -3,7 +3,7 @@ import { TactileButton } from "../../components/buttons/TactileButton";
 import { useGetUserPostsQuery } from "./postsApi";
 import { ComposePostForm } from "./ComposePostForm";
 import { PostCard } from "./PostCard";
-import styles from "./Posts.module.css";
+import postStyles from "./Posts.module.css";
 
 interface Props {
 	username: string;
@@ -31,9 +31,11 @@ export function UserPosts({ username, isOwnIsland = false }: Props) {
 	const { posts, pagination } = data;
 
 	return (
-		<div>
-			<div>
-				<h2>{isOwnIsland ? "My Posts" : `${username}'s Posts`}</h2>
+		<div className={postStyles.pageContainer}>
+			<div className={postStyles.headerRow}>
+				<h2 className={postStyles.sectionTitle}>
+					{isOwnIsland ? "My Posts" : `${username}'s Posts`}
+				</h2>
 				{isComposing ? (
 					<ComposePostForm
 						onSuccess={() => setIsComposing(false)}
@@ -41,7 +43,7 @@ export function UserPosts({ username, isOwnIsland = false }: Props) {
 					/>
 				) : (
 					isOwnIsland && (
-						<TactileButton onClick={() => setIsComposing(true)}>Compose</TactileButton>
+						<TactileButton onPress={() => setIsComposing(true)}>Compose</TactileButton>
 					)
 				)}
 			</div>
@@ -51,7 +53,7 @@ export function UserPosts({ username, isOwnIsland = false }: Props) {
 			) : error || !posts || posts.length === 0 ? (
 				<p>No posts found.</p>
 			) : (
-				<div className={styles.postView}>
+				<div className={postStyles.postView}>
 					{posts.map((postWithAuthor) => (
 						<PostCard
 							key={postWithAuthor.post.id}

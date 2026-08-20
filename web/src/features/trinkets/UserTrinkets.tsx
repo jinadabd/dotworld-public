@@ -3,6 +3,7 @@ import { useGetUserTrinketsQuery } from "./trinketApi";
 import { TrinketCard } from "./TrinketCard";
 import { CreateTrinketForm } from "./CreateTrinketForm";
 import { TactileButton } from "../../components/buttons/TactileButton";
+import styles from "./Trinkets.module.css";
 
 interface Props {
 	username: string;
@@ -23,9 +24,11 @@ export function UserTrinkets({ username, isOwnIsland = false }: Props) {
 	}
 
 	return (
-		<div>
-			<div>
-				<h2>{isOwnIsland ? "My Trinkets" : `${username}'s Trinkets`}</h2>
+		<div className={styles.trinketsView}>
+			<div className={styles.headerRow}>
+				<h2 className={styles.sectionTitle}>
+					{isOwnIsland ? "My Trinkets" : `${username}'s Trinkets`}
+				</h2>
 				{isOwnIsland && (
 					<TactileButton onClick={() => setIsCreating(true)}>Add Trinket</TactileButton>
 				)}
@@ -36,12 +39,13 @@ export function UserTrinkets({ username, isOwnIsland = false }: Props) {
 			) : error || !trinkets || trinkets.length === 0 ? (
 				<p>No trinkets found.</p>
 			) : (
-				<div>
+				<div className={styles.trinketGrid}>
 					{trinkets.map((trinket) => (
-						<TrinketCard
-							key={trinket.id}
-							trinket={trinket}
-						/>
+						<div
+							className={styles.trinketCard}
+							key={trinket.id}>
+							<TrinketCard trinket={trinket} />
+						</div>
 					))}
 				</div>
 			)}

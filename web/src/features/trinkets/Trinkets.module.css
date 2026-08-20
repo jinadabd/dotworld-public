@@ -1,0 +1,62 @@
+@import "../../styles/palette.css";
+
+.trinketsView {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-family: 'Bitcount', sans-serif;
+  font-size: 1.75rem;
+  margin: 0;
+  color: var(--dark, #281c14);
+}
+
+/* Grid Layout for Trinket Cards */
+.trinketGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* 3D Scroll Extrusion for Trinket Cards */
+@keyframes extrudeTrinket {
+  0%, 30% {
+    transform: translateY(0);
+    box-shadow: 0 0 0 transparent;
+  }
+  50%, 70% {
+    transform: translateY(-8px);
+    box-shadow: 
+      0 5px 0 rgb(131, 112, 76),
+      0 10px 14px -4px rgb(185, 172, 147);
+  }
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 0 0 transparent;
+  }
+}
+
+.trinketCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background-color: var(--white);
+  border: 1pt solid var(--dark, #281c14);
+  border-radius: 10px;
+  padding: 1rem;
+
+  animation: extrudeTrinket linear both;
+  animation-timeline: view();
+  animation-range: entry 0% exit 100%;
+}

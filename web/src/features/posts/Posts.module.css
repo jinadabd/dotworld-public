@@ -1,14 +1,4 @@
-/* @import "../../styles/palette.css"; */
-
-/* div.postView {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-    flex: 1;
-    min-height: 0;  
-    overflow-y: auto;
-    padding: 20px;
-} */
+@import "../../styles/palette.css";
 
 @keyframes extrudeCard {
     0%, 30% {
@@ -17,10 +7,10 @@
     }
     /* Extruded in center of screen */
     50%, 70% {
-        transform: translateY(-6px);
+        transform: translateY(-10px);
         box-shadow: 
-            0 6px 0 rgb(144, 134, 116),
-            0 12px 16px -4px oklch(0 0 0 / 0.2);
+            0 6px 0 rgb(131, 112, 76),
+            0 12px 16px -4px rgb(185, 172, 147);
     }
     100% {
         transform: translateY(0);
@@ -28,16 +18,133 @@
     }
 }
 
-div.postCard {
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  /* no height, no overflow — .contentArea (the parent) owns scrolling now */
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-family: 'Bitcount', sans-serif;
+  font-size: 1.75rem;
+  margin: 0;
+  color: var(--dark, #281c14);
+}
+
+.postView {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  /* Let the parent window/island handle scrolling */
+  overflow: visible; 
+}
+
+.postCard {
     display: flex;
     flex-direction: column;
+    gap: 10px;
     background-color: var(--white);
     border: 1pt solid var(--dark);
     border-radius: 10px;
     padding: 10px 20px;
 
-    /* Attach scroll-driven timeline */
     animation: extrudeCard linear both;
     animation-timeline: view();
     animation-range: entry 0% exit 100%;
+}
+
+/* ===================== USER BADGE ========================== */
+
+.badgeWithChildren {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.25rem 0.5rem;
+  margin: -0.25rem -0.5rem;
+  border-radius: 8px;
+  transition: background-color 150ms cubic-bezier(0.2, 0, 0.2, 1),
+              transform 150ms cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.badge:hover {
+  background-color: color-mix(in oklch, var(--dark, #281c14) 7%, transparent);
+}
+
+.badge:active {
+  transform: scale(0.98);
+}
+
+.photograph {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid color-mix(in oklch, var(--dark, #281c14) 15%, transparent);
+  flex-shrink: 0;
+}
+
+.initials {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: color-mix(in oklch, var(--dark, #281c14) 10%, transparent);
+  color: var(--dark, #281c14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  border: 1px solid color-mix(in oklch, var(--dark, #281c14) 15%, transparent);
+  user-select: none;
+}
+
+.badge > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.25;
+}
+
+.name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--dark, #281c14);
+}
+
+.badge:hover .name {
+  text-decoration: underline;
+}
+
+.username {
+  margin: 0;
+  font-family: 'Bitcount';
+  font-size: 0.8125rem;
+  opacity: 0.6;
+  color: var(--dark, #281c14);
+}
+
+.username::before {
+  content: "@";
 }

@@ -5,7 +5,7 @@ import {
 	useSendFriendRequestMutation,
 } from "../../features/friends/friendsApi";
 import { TactileButton } from "./TactileButton";
-import { TactileButtonWithCap } from "./TactileButtonWithCap";
+// import { TactileButtonWithCap } from "./TactileButtonWithCap";
 
 interface Props {
 	userId: number;
@@ -24,7 +24,7 @@ export function FriendshipButton({ userId, status, isIncoming }: Props) {
 			<TactileButton
 				colour="blue"
 				disabled={isBusy}
-				onClick={() => sendRequest({ friendId: userId })}>
+				onPress={() => sendRequest({ friendId: userId })}>
 				Add friend
 			</TactileButton>
 		);
@@ -32,12 +32,12 @@ export function FriendshipButton({ userId, status, isIncoming }: Props) {
 
 	if (status === "friends") {
 		return (
-			<TactileButtonWithCap
+			<TactileButton
 				colour="cream"
 				disabled={isBusy}
-				onClick={() => removeFriend({ friendId: userId })}>
-				Remove friend
-			</TactileButtonWithCap>
+				onPress={() => removeFriend({ friendId: userId })}>
+				Remove
+			</TactileButton>
 		);
 	}
 
@@ -47,13 +47,13 @@ export function FriendshipButton({ userId, status, isIncoming }: Props) {
 				<TactileButton
 					colour="blue"
 					disabled={isBusy}
-					onClick={() => changeRequest({ friendId: userId, change: "accept" })}>
+					onPress={() => changeRequest({ friendId: userId, change: "accept" })}>
 					Accept
 				</TactileButton>
 				<TactileButton
 					colour="cream"
 					disabled={isBusy}
-					onClick={() => changeRequest({ friendId: userId, change: "reject" })}>
+					onPress={() => changeRequest({ friendId: userId, change: "reject" })}>
 					Reject
 				</TactileButton>
 			</div>
@@ -64,7 +64,7 @@ export function FriendshipButton({ userId, status, isIncoming }: Props) {
 		<TactileButton
 			colour="cream"
 			disabled={isBusy}
-			onClick={() => changeRequest({ friendId: userId, change: "cancel" })}>
+			onPress={() => changeRequest({ friendId: userId, change: "cancel" })}>
 			Cancel
 		</TactileButton>
 	);

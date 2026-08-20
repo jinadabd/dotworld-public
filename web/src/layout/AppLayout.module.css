@@ -9,13 +9,20 @@
     overflow: hidden;
 }
 
+.divide {
+    width: 70%;
+    height: 2px;
+    background-color: var(--dark);
+}
+
 aside {
     width: fit-content;
     height: 100%;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 15%;
+    align-items: center;
+    gap: 2rem;
     background-color: var(--white);
     position: relative;
     z-index: 2;
@@ -61,15 +68,14 @@ aside {
 } */
 
 main {
-    flex: 1;
-    padding: 20px 40px;
-    background-color: var(--cream);
-    overflow-y: hidden;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    /* margin: 0 15px; */
+  flex: 1;
+  min-width: 0;
+  padding: 0 40px;
+  background-color: var(--cream);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* no overflow property here */
 }
 
 /* .rightPanel::before {

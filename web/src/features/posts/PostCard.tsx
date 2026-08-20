@@ -1,6 +1,7 @@
 import type { PostRow, PostWithAuthor, PublicUser } from "@shared/types";
 import { UserBadge } from "../../components/badges/UserBadge";
 import styles from "./Posts.module.css";
+import { InteractionBar } from "../../components/buttons/InteractionBar";
 
 interface PostCardProps {
 	postWithAuthor: PostWithAuthor;
@@ -12,7 +13,9 @@ export function PostCard({ postWithAuthor }: PostCardProps) {
 	return (
 		<div className={styles.postCard}>
 			{/* Author Header */}
-			<UserBadge user={author}>
+			<UserBadge
+				user={author}
+				style={styles}>
 				<time>{new Date(post.created_at).toLocaleDateString()}</time>
 			</UserBadge>
 
@@ -24,6 +27,8 @@ export function PostCard({ postWithAuthor }: PostCardProps) {
 					alt="Post media"
 				/>
 			)}
+
+			<InteractionBar />
 		</div>
 	);
 }

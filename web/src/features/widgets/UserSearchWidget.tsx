@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLazySearchUsersQuery } from "../users/userApi";
 import { UserBadge } from "../../components/badges/UserBadge";
+import styles from "./Widgets.module.css";
+import badgeStyle from "./WidgetUserBadge.module.css";
 
 export function UserSearchWidget() {
 	const [input, setInput] = useState("");
@@ -13,19 +15,27 @@ export function UserSearchWidget() {
 	}, [input, trigger]);
 
 	return (
-		<div>
+		<div className={`${styles.widget} ${styles.userSearch}`}>
 			<input
+				className={styles.textInput}
 				type="text"
 				value={input}
 				onChange={(e) => setInput(e.target.value)}
-				placeholder="Search username"
+				placeholder="Search..."
 			/>
-			{isFetching && <p>Searhing...</p>}
-			{results?.length === 0 && input.trim().length >= 4 && <p>No users found.</p>}
-			<ul>
+			{isFetching && <p className={styles.statusText}>Searhing...</p>}
+			{results?.length === 0 && input.trim().length >= 4 && (
+				<p className={styles.statusText}>No users found.</p>
+			)}
+			<ul className={styles.resultsList}>
 				{results?.map((user) => (
-					<li key={user.id}>
-						<UserBadge user={user} />
+					<li
+						className={styles.resultItem}
+						key={user.id}>
+						<UserBadge
+							style={badgeStyle}
+							user={user}
+						/>
 					</li>
 				))}
 			</ul>

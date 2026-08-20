@@ -8,6 +8,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	colour?: Colours;
 	icon?: ReactNode;
 	active?: boolean;
+	disabled?: boolean;
 	onPress?: () => void;
 }
 
@@ -18,6 +19,7 @@ export function TactileButton({
 	className,
 	active,
 	onPress,
+	disabled,
 	...rest
 }: Props) {
 	const navKeys: KeyPosition[] = [
@@ -28,10 +30,11 @@ export function TactileButton({
 			colSpan: 2,
 			keycapProps: {
 				className:
-					`${styles.tactile} ${styles[colour]} ${active ? "active" : ""} ${className ?? ""}`.trim(),
+					`${styles.tactile} ${styles[colour]} ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${className ?? ""}`.trim(),
 				colour: colour,
 				legend: "1",
 				isActive: active,
+				disabled,
 				onPress,
 				children: (
 					<>

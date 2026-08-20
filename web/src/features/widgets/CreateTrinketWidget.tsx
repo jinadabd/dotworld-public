@@ -1,6 +1,7 @@
 import type { TrinketType, TrinketVisibility } from "@shared/types";
 import { TactileButton } from "../../components/buttons/TactileButton";
 import { useCreateTrinket } from "../../hooks/useCreateTrinket";
+import styles from "./Widgets.module.css";
 
 export function CreateTrinketWidget() {
 	const create = useCreateTrinket();
@@ -13,14 +14,16 @@ export function CreateTrinketWidget() {
 	// }
 
 	return (
-		<div>
+		<div className={`${styles.widget} ${styles.createTrinket}`}>
 			<input
+				className={styles.textInput}
 				type="text"
 				value={create.title}
 				onChange={(e) => create.setTitle(e.target.value)}
 				placeholder="Trinket title"
 			/>
 			<select
+				className={styles.selectInput}
 				value={create.visibility}
 				onChange={(e) => create.setVisibility(e.target.value as TrinketVisibility)}>
 				<option value="world">World</option>
@@ -29,6 +32,7 @@ export function CreateTrinketWidget() {
 			</select>
 
 			<select
+				className={styles.selectInput}
 				value={create.type}
 				onChange={(e) => create.setType(e.target.value as TrinketType)}>
 				<option value="collection">Collection</option>

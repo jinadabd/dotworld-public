@@ -1,10 +1,11 @@
 import { Keycap } from "../components/buttons/Keycap";
 import { LogoutButton } from "../features/auth/LogoutButton";
+import { DotworldWidget } from "../features/widgets/DotworldWidget";
 
 export function RightPanel() {
 	return (
 		<>
-			<div>dotworld</div>
+			<DotworldWidget />
 			<div>Playlists</div>
 			<LogoutButton />
 		</>

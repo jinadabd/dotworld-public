@@ -26,15 +26,15 @@ export function FriendsPage() {
 						<h2>Requests</h2>
 						{requests.map((req) => (
 							<FetchedUserBadge userId={req.user_id}>
-								<div key={req.user_id}>
+								<div key={req.id}>
 									<TactileButton
 										colour="blue"
-										onClick={() => acceptFriendRequest(req.user_id)}>
+										onPress={() => acceptFriendRequest(req.user_id)}>
 										Accept
 									</TactileButton>
 									<TactileButton
 										colour="cream"
-										onClick={() => rejectFriendRequest(req.user_id)}>
+										onPress={() => rejectFriendRequest(req.user_id)}>
 										Reject
 									</TactileButton>
 								</div>

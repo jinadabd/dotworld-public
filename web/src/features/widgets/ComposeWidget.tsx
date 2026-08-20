@@ -1,5 +1,6 @@
 import { TactileButton } from "../../components/buttons/TactileButton";
 import { useComposePost } from "../../hooks/useComposePost";
+import styles from "./Widgets.module.css";
 
 export function ComposeWidget() {
 	const compose = useComposePost();
@@ -12,8 +13,9 @@ export function ComposeWidget() {
 	}
 
 	return (
-		<div>
+		<div className={`${styles.widget} ${styles.compose}`}>
 			<textarea
+				className={styles.textArea}
 				value={compose.bodyText}
 				onChange={(e) => compose.setBodyText(e.target.value)}
 				onPaste={compose.handlePaste}
@@ -24,7 +26,7 @@ export function ComposeWidget() {
 
 			{compose.mediaFile && <p>{compose.mediaFile.name} attached</p>}
 			<TactileButton
-				onClick={compose.submit}
+				onPress={compose.submit}
 				disabled={!compose.hasContent || compose.isBusy}>
 				{compose.isBusy ? "Posting..." : "Post"}
 			</TactileButton>
