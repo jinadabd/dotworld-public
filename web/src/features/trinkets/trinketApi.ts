@@ -4,6 +4,7 @@ import type {
 	TrinketItemRow,
 	EditTrinketInput,
 	CreateTrinketItemInput,
+	PaginatedTrinkets,
 } from "@shared/types";
 import { api } from "../../services/api";
 
@@ -24,7 +25,29 @@ export const trinketApi = api.injectEndpoints({
 		}),
 		getCommunityTrinkets: builder.query<TrinketRow[], void>({
 			query: () => `/trinkets/community`,
-			providesTags: ["Trinket"],
+			providesTags: (result) =>
+				result
+					? [
+							...result.map(({ id }) => ({
+								type: "Trinket" as const,
+								id: id,
+							})),
+							{ type: "Trinket", id: "COMMUNITYTRINKETS" },
+						]
+					: [{ type: "Trinket", id: "COMMUNITYTRINKETS" }],
+		}),
+		getFriendsTrinkets: builder.query<PaginatedTrinkets, { page?: number; limit?: number }>({
+			query: ({ page = 1, limit = 25 }) => `/trinkets/friends?page=${page}&limit=${limit}`,
+			providesTags: (result) =>
+				result
+					? [
+							...result.trinkets.map(({ id }) => ({
+								type: "Trinket" as const,
+								id: id,
+							})),
+							{ type: "Trinket", id: "FRIENDTRINKETS" },
+						]
+					: [{ type: "Trinket", id: "FRIENDTRINKETS" }],
 		}),
 
 		createTrinket: builder.mutation<TrinketRow, CreateTrinketInput>({
@@ -44,7 +67,7 @@ export const trinketApi = api.injectEndpoints({
 			invalidatesTags: (result, error, { trinketId }) => [{ type: "Trinket", id: trinketId }],
 		}),
 		deleteTrinket: builder.mutation<TrinketRow, { trinketId: number }>({
-			query: (trinketId) => ({
+			query: ({ trinketId }) => ({
 				url: `/trinkets/${trinketId}`,
 				method: "DELETE",
 			}),
@@ -93,6 +116,7 @@ export const {
 	useGetTrinketQuery,
 	useGetUserTrinketsQuery,
 	useGetCommunityTrinketsQuery,
+	useGetFriendsTrinketsQuery,
 	useCreateTrinketMutation,
 	useEditTrinketMutation,
 	useDeleteTrinketMutation,

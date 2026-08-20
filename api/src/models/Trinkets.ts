@@ -70,11 +70,59 @@ export async function getPublicTrinkets(): Promise<TrinketRow[]> {
 	const result = await pool.query<TrinketRow>(
 		`SELECT *
          FROM trinkets
-         WHERE trinket_visibility = 'world'`,
+         WHERE trinket_visibility = 'world'
+		 ORDER BY edited_at DESC`,
 	);
 
 	const trinkets = result.rows;
 	return trinkets;
+}
+
+// export async function getPublicTrinkets(
+// 	page: number = 1,
+// 	limit: number = 25,
+// ): Promise<{ trinkets: TrinketRow[]; count: number }> {
+// 	const offset = (page - 1) * limit;
+// 	const result = await pool.query<TrinketRow & { total_count: number }>(
+// 		`SELECT
+// 			*,
+// 			COUNT(*) OVER()::integer AS total_count
+//          FROM trinkets
+//          WHERE trinket_visibility = 'world'
+// 		 ORDER BY edited_at DESC
+// 		 LIMIT $1 OFFSET $2`,
+// 		[limit, offset],
+// 	);
+
+// 	const count = result.rows.length > 0 && result.rows[0] ? result.rows[0].total_count : 0;
+// 	const trinkets = result.rows.map(({ total_count, ...trinket }) => trinket as TrinketRow);
+// 	return { trinkets, count };
+// }
+
+export async function getAllFriendsTrinkets(
+	friendIds: number[],
+	page: number = 1,
+	limit: number = 25,
+): Promise<{ trinkets: TrinketRow[]; count: number }> {
+	if (friendIds.length === 0) return { trinkets: [], count: 0 };
+	const offset = (page - 1) * limit;
+	const queryValues = friendIds.map((_, index) => `$${index + 3}`).join(", ");
+
+	const result = await pool.query<TrinketRow & { total_count: number }>(
+		`SELECT 
+			*,
+			COUNT(*) OVER()::integer AS total_count
+         FROM trinkets
+         WHERE trinket_visibility IN ('friends', 'world')
+		 AND user_id IN (${queryValues})
+		 ORDER BY edited_at DESC
+		 LIMIT $1 OFFSET $2`,
+		[limit, offset, ...friendIds],
+	);
+
+	const count = result.rows.length > 0 && result.rows[0] ? result.rows[0].total_count : 0;
+	const trinkets = result.rows.map(({ total_count, ...trinket }) => trinket as TrinketRow);
+	return { trinkets, count };
 }
 
 export async function getAllFeaturedTrinkets(userId: number): Promise<TrinketRow[]> {

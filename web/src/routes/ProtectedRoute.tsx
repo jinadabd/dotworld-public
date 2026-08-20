@@ -8,7 +8,7 @@ export function ProtectedRoute() {
 		<Outlet />
 	) : (
 		<Navigate
-			to="/login"
+			to="/"
 			replace
 		/>
 	);

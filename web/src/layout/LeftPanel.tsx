@@ -1,5 +1,12 @@
-import { Nav } from "./Nav";
+import { useSidebarSlot } from "../context/SidebarSlotContext";
+import { KeycapNav } from "../components/buttons/KeycapNav";
 
 export function LeftPanel() {
-	return <Nav />;
+	const slot = useSidebarSlot();
+	return (
+		<>
+			<KeycapNav />
+			{slot?.content}
+		</>
+	);
 }

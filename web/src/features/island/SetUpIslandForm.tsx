@@ -40,38 +40,41 @@ export function SetUpIslandForm({ username }: { username: string }) {
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<VisibilityToggle
-				value={visibility}
-				onChange={setVisibility}
-			/>
-			<input
-				value={name}
-				onChange={(e) => setName(e.target.value)}
-				placeholder="name"
-			/>
-			<input
-				value={description}
-				onChange={(e) => setDescription(e.target.value)}
-				placeholder="description"
-			/>
-			<input
-				type="file"
-				accept="image/*"
-				onChange={(e) => setCoverFile(e.target.files?.[0] ?? null)}
-			/>
-			{/* <input
+		<div>
+			<h1>Create Island</h1>
+			<form onSubmit={handleSubmit}>
+				<VisibilityToggle
+					value={visibility}
+					onChange={setVisibility}
+				/>
+				<input
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+					placeholder="name"
+				/>
+				<input
+					value={description}
+					onChange={(e) => setDescription(e.target.value)}
+					placeholder="description"
+				/>
+				<input
+					type="file"
+					accept="image/*"
+					onChange={(e) => setCoverFile(e.target.files?.[0] ?? null)}
+				/>
+				{/* <input
 				value={metadata}
 				onChange={(e) => setMetadata(e.target.value)}
 				placeholder="metadata"
 			/> */}
 
-			<button
-				type="submit"
-				disabled={isLoading || isUploading}>
-				Create Island
-			</button>
-			{error && <p>{extractErrorMessage(error)}</p>}
-		</form>
+				<button
+					type="submit"
+					disabled={isLoading || isUploading}>
+					Create Island
+				</button>
+				{error && <p>{extractErrorMessage(error)}</p>}
+			</form>
+		</div>
 	);
 }

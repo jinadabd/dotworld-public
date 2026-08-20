@@ -1,17 +1,20 @@
-import type { PostRow, PublicUser } from "@shared/types";
-import { FetchedUserBadge } from "../users/FetchedUserBadge";
+import type { PostRow, PostWithAuthor, PublicUser } from "@shared/types";
+import { UserBadge } from "../../components/badges/UserBadge";
+import styles from "./Posts.module.css";
 
 interface PostCardProps {
-	post: PostRow;
+	postWithAuthor: PostWithAuthor;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ postWithAuthor }: PostCardProps) {
+	const { post, author } = postWithAuthor;
+
 	return (
-		<div className="post-card">
+		<div className={styles.postCard}>
 			{/* Author Header */}
-			<FetchedUserBadge userId={post.user_id}>
+			<UserBadge user={author}>
 				<time>{new Date(post.created_at).toLocaleDateString()}</time>
-			</FetchedUserBadge>
+			</UserBadge>
 
 			{/* Post Content */}
 			{post.body_text && <p>{post.body_text}</p>}

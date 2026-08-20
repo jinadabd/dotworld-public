@@ -1,6 +1,7 @@
 // ====================== CREATE ============================
 
 import { ServerError, ServerErrorCode } from "../errors/ServerError.ts";
+import { getAllUserFriends } from "../models/Friendships.ts";
 import { deleteTrinketItem, getAllTrinketItems } from "../models/TrinketItems.ts";
 import {
 	changeTrinketCoverURL,
@@ -14,6 +15,7 @@ import {
 	deleteTrinketDescription,
 	deleteTrinketMetadata,
 	featureTrinket,
+	getAllFriendsTrinkets,
 	getAllTrinketsByUserId,
 	getPublicTrinkets,
 	getTrinketById,
@@ -23,6 +25,7 @@ import { decrementUserStorage, getUserByUsername, incrementUserStorage } from ".
 import type {
 	CreateTrinketInput,
 	EditTrinketInput,
+	PaginatedTrinkets,
 	TrinketItemRow,
 	TrinketRow,
 	TrinketType,
@@ -94,6 +97,28 @@ export async function getCommunityTrinketsService(): Promise<TrinketRow[]> {
 	return await getPublicTrinkets();
 }
 
+export async function getFriendsTrinketsService(
+	userId: number,
+	page: number = 1,
+	limit: number = 25,
+): Promise<PaginatedTrinkets> {
+	const friends = await getAllUserFriends(userId);
+	const friendIds = friends.map((friendship) =>
+		friendship.user_id === userId ? friendship.friend_id : friendship.user_id,
+	);
+
+	const { trinkets, count } = await getAllFriendsTrinkets(friendIds, page, limit);
+
+	return {
+		trinkets,
+		pagination: {
+			currentPage: page,
+			totalPages: Math.ceil(count / limit),
+			totalTrinkets: count,
+			hasMore: page * limit < count,
+		},
+	};
+}
 // ========================= EDIT ============================
 
 export async function editTrinketService(

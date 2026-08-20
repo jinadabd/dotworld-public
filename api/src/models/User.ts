@@ -65,6 +65,22 @@ export async function getUserById(id: number): Promise<PublicUser> {
 	return user;
 }
 
+export async function searchUsersByUsername(
+	prefix: string,
+	excludeUserId: number,
+): Promise<PublicUser[]> {
+	const result = await pool.query<PublicUser>(
+		`SELECT ${PublicUserColumns} FROM users
+		 WHERE username ILIKE $1 || '%'
+		 AND id != $2
+		 ORDER by username
+		 LIMIT 10`,
+		[prefix, excludeUserId],
+	);
+
+	return result.rows;
+}
+
 export async function getUserHashedPassword(userId: number): Promise<string> {
 	const before = await pool.query<{ password_hash: string }>(
 		`SELECT password_hash FROM users

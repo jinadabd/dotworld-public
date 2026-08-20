@@ -20,7 +20,7 @@ export async function getFriendship(req: Request<{ friendId: string }>, res: Res
 	const userId = (req as any).userId;
 	const friendId = Number.parseInt(req.params.friendId, 10);
 	const friendship = await getFriendshipService(userId, friendId);
-	res.status(201).json(friendship);
+	res.status(200).json(friendship);
 }
 
 export async function getAllFriends(req: Request, res: Response) {

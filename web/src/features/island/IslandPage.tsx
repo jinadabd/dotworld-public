@@ -1,76 +1,68 @@
 import { useParams } from "react-router-dom";
 import { useGetIslandByUsernameQuery } from "./islandApi";
-import { extractErrorMessage } from "../../utils/errors";
 import { SetUpIslandForm } from "./SetUpIslandForm";
 import type { RootState } from "../../app/store";
 import { useSelector } from "react-redux";
-import { useState } from "react";
-import { useGetUserTrinketsQuery } from "../trinkets/trinketApi";
-import { TrinketCard } from "../trinkets/TrinketCard";
-import { CreateTrinketForm } from "../trinkets/CreateTrinketForm";
-import { UserTrinkets } from "../trinkets/UserTrinkets";
-
-type IslandView = "posts" | "trinkets";
+import { LockedIsland } from "./LockedIsland";
+import { UnlockedIsland } from "./UnlockedIsland";
+import { useSetSidebar } from "../../hooks/useSetSidebar";
+import { FriendshipButton } from "../../components/buttons/FriendshipButton";
+import { useGetFriendshipQuery } from "../friends/friendsApi";
 
 export function IslandPage() {
 	const { username } = useParams<{ username: string }>();
-	const myUsername = useSelector((state: RootState) => state.auth.user!.username);
+	const { id: myId, username: myUsername } = useSelector((state: RootState) => state.auth.user!);
 
-	if (!username) return <p>No Island specified</p>;
 	const isOwnIsland = username === myUsername;
 
-	const [view, setView] = useState<IslandView>("posts");
-	const [isCreatingTrinket, setIsCreatingTrinket] = useState(false);
+	const { data, isLoading: isIslandLoading } = useGetIslandByUsernameQuery(
+		{ username: username ?? "" },
+		{ skip: !username },
+	);
 
-	const {
-		data: island,
-		isLoading: isIslandLoading,
-		error: islandError,
-	} = useGetIslandByUsernameQuery({ username });
+	const { data: friendship, isLoading: isFriendshipLoading } = useGetFriendshipQuery(
+		{ friendId: data?.user?.id ?? 0 },
+		{ skip: !data?.user?.id || isOwnIsland },
+	);
 
-	if (isIslandLoading) return <p>Loading...</p>;
-	if (!island) {
-		if (isOwnIsland) return <SetUpIslandForm username={username} />;
-		return <p>This user doesn't have an Island yet. {":("}</p>;
+	const status = friendship?.friendship_status ?? null;
+	const isIncoming = friendship?.friend_id === myId;
+
+	const sidebarNode = isOwnIsland ? null : data?.user && !isFriendshipLoading ? ( //editislandbutton
+		<FriendshipButton
+			userId={data.user.id}
+			status={status}
+			isIncoming={isIncoming}
+		/>
+	) : null;
+
+	useSetSidebar(sidebarNode);
+
+	if (!username) return <p>No Island specified</p>;
+	if (isIslandLoading) return <p>Loading {username}'s Island...</p>;
+
+	if (!data || !data.island) {
+		return isOwnIsland ? (
+			<SetUpIslandForm username={username} />
+		) : (
+			<p>{username} doesn't have an island yet.</p>
+		);
 	}
 
-	if (islandError) return <p>{extractErrorMessage(islandError)}</p>;
+	if (data.locked) {
+		return (
+			<div>
+				<LockedIsland user={data.user} />
+			</div>
+		);
+	}
 
 	return (
 		<div>
-			<div>
-				<h1>{island!.name ?? `${username}'s Island`}</h1>
-				<p>{island!.description}</p>
-				{island.cover_url && <img src={island.cover_url} />}
-			</div>
-			{/* View Selector */}
-			<div>
-				<button
-					onClick={() => setView("posts")}
-					disabled={view === "posts"}>
-					Posts
-				</button>
-				<button
-					onClick={() => setView("trinkets")}
-					disabled={view === "trinkets"}>
-					Trinkets
-				</button>
-			</div>
-
-			{/* View Content */}
-			{view === "posts" && (
-				<div>
-					<h2>Posts</h2>
-					{/* User posts list component */}
-				</div>
-			)}
-
-			{view === "trinkets" && (
-				<UserTrinkets
-					username={username}
-					isOwnIsland={isOwnIsland}
-				/>
-			)}
+			<UnlockedIsland
+				islandWithContent={data}
+				isOwnIsland
+			/>
 		</div>
 	);
 }

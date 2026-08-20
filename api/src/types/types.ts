@@ -115,10 +115,26 @@ export interface IslandRow {
 	created_at: Date;
 }
 
-export interface IslandWithContent extends Omit<IslandRow, "user_id"> {
+export interface IslandWithContent {
+	island: IslandRow;
 	user: PublicUser;
-	featured_trinkets: TrinketWithItems[];
-	featured_posts: PostWithAuthor[];
+	featured_trinkets: TrinketRow[];
+	locked: false;
+	// featured_posts: PostWithAuthor[];
+}
+
+export interface IslandPreview {
+	island: Omit<IslandRow, "name" | "description" | "cover_url" | "metadata">;
+	user: PublicUser;
+	friendship_status: FriendshipStatus | null;
+	locked: true;
+}
+
+export interface IslandNotCreated {
+	island: null;
+	user: PublicUser;
+	friendship_status: FriendshipStatus | null;
+	locked: true;
 }
 
 export interface CreateIslandInput {
@@ -229,6 +245,17 @@ export interface TrinketRow {
 	metadata: JSONValue;
 	file_size_bytes: number;
 	created_at: Date;
+	updated_at: Date;
+}
+
+export interface PaginatedTrinkets {
+	trinkets: TrinketRow[];
+	pagination: {
+		currentPage: number;
+		totalPages: number;
+		totalTrinkets: number;
+		hasMore: boolean;
+	};
 }
 
 export interface CreateTrinketInput {

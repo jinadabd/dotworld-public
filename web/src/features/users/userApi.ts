@@ -7,7 +7,11 @@ export const userApi = api.injectEndpoints({
 			query: (userId) => `/users/${userId}`,
 			providesTags: (result, error, userId) => [{ type: "User", id: userId }],
 		}),
+
+		searchUsers: builder.query<PublicUser[], string>({
+			query: (q) => `/users/search?q=${encodeURIComponent(q)}`,
+		}),
 	}),
 });
 
-export const { useGetUserQuery } = userApi;
+export const { useGetUserQuery, useLazySearchUsersQuery } = userApi;

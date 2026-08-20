@@ -113,6 +113,7 @@ export async function getPostsFromFriends(
 		 	COUNT(*) OVER()::integer AS total_count
          FROM posts
          WHERE created_at <= $1
+		 AND post_visibility = 'friends'
 		 AND user_id IN (${queryValues})
          ORDER BY created_at DESC
 		 LIMIT $2 OFFSET $3`,

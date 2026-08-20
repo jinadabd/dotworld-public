@@ -18,7 +18,7 @@ export function CreateTrinketForm({ onSuccess, onCancel }: Props) {
 	const { upload, isUploading } = useFileUpload();
 	const [createTrinket, { isLoading, error }] = useCreateTrinketMutation();
 
-	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 		try {
 			const coverURL = coverFile ? await upload(coverFile, "trinket_cover") : undefined;
@@ -56,15 +56,17 @@ export function CreateTrinketForm({ onSuccess, onCancel }: Props) {
 			<select
 				value={visibility}
 				onChange={(e) => setVisibility(e.target.value as TrinketVisibility)}>
-				<option value="public">Public</option>
+				<option value="world">Public</option>
 				<option value="friends">Friends</option>
-				<option value="private">Private</option>
+				<option value="self">Private</option>
 			</select>
 
 			<select
 				value={type}
 				onChange={(e) => setType(e.target.value as TrinketType)}>
-				<option value="standard">Standard</option>
+				<option value="collection">Collection</option>
+				<option value="playlist">Collection</option>
+				<option value="gallery">Collection</option>
 			</select>
 
 			<input

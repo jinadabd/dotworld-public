@@ -1,0 +1,42 @@
+/* @import "../../styles/palette.css";
+
+.yellow {
+    --tactile-face: var(--yellow);
+    --tactile-dark: var(--yellow-dark);
+    --tactile-light: var(--yellow);
+}
+
+.yellow:hover {
+    --tactile-face: var(--yellow-dark);
+}
+
+.green {
+    --tactile-face: var(--green);
+    --tactile-dark: var(--green-dark);
+    --tactile-light: var(--green);
+}
+
+.green:hover {
+    --tactile-face: var(--green-dark);
+    
+}
+
+.blue {
+    --tactile-face: var(--blue);
+    --tactile-dark: var(--blue-dark);
+    --tactile-light: var(--blue);
+}
+
+.blue:hover {
+    --tactile-face: var(--blue-dark);
+}
+
+.red {
+    --tactile-face: var(--red);
+    --tactile-dark: var(--red-dark);
+    --tactile-light: var(--red);
+}
+
+.red:hover {
+    --tactile-face: var(--red-dark);
+} */

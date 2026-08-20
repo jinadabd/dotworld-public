@@ -1,19 +1,54 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+import styles from "./TactileButton.module.css";
+import { KeyboardLayout, type KeyPosition } from "./KeyboardLayout";
 
-export type Colours = "yellow" | "green" | "blue" | "red" | "cream" | "dark";
+export type Colours = "yellow" | "green" | "blue" | "red" | "cream" | "charcoal";
 
-interface Props extends HTMLAttributes<HTMLButtonElement> {
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	colour?: Colours;
 	icon?: ReactNode;
+	active?: boolean;
+	onPress?: () => void;
 }
 
-export function TactileButton({ colour = "cream", icon, children, className, ...rest }: Props) {
+export function TactileButton({
+	colour = "cream",
+	icon,
+	children,
+	className,
+	active,
+	onPress,
+	...rest
+}: Props) {
+	const navKeys: KeyPosition[] = [
+		{
+			id: `${rest.id}${colour}`,
+			col: 1,
+			row: 1,
+			colSpan: 2,
+			keycapProps: {
+				className:
+					`${styles.tactile} ${styles[colour]} ${active ? "active" : ""} ${className ?? ""}`.trim(),
+				colour: colour,
+				legend: "1",
+				isActive: active,
+				onPress,
+				children: (
+					<>
+						{icon}
+						{children}
+					</>
+				),
+			},
+		},
+	];
+
 	return (
-		<button
-			className={`tactile ${colour} ${className ?? ""}`}
-			{...rest}>
-			{icon}
-			{children}
-		</button>
+		<KeyboardLayout
+			keys={navKeys}
+			columns={1}
+			rows={1}
+			plateColor="#272727"
+		/>
 	);
 }

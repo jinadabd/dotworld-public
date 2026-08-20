@@ -14,6 +14,7 @@ import {
 	changeUserPassword,
 	changeUserPhotograph,
 	changeUserSeal,
+	searchUsersByUsername,
 } from "../models/User.ts";
 import {
 	LoginMethod,
@@ -79,6 +80,14 @@ export async function getUserByIdService(userId: number): Promise<PublicUser> {
 	return await getUserById(userId);
 }
 
+export async function searchUsersService(
+	requesterId: number,
+	query: string,
+): Promise<PublicUser[]> {
+	const trimmed = query.trim();
+	if (trimmed.length <= 3) return [];
+	return await searchUsersByUsername(trimmed, requesterId);
+}
 export async function changeNameService(userId: number, newName: string): Promise<PublicUser> {
 	requireName(newName);
 	const user = await changeUserName(userId, newName);
@@ -153,7 +162,7 @@ function requireEmail(email: string) {
 }
 
 function requireUsername(username: string) {
-	if (!username || username.trim().length === 0)
+	if (!username || username.trim().length <= 3)
 		throw new ServerError(ServerErrorCode.MISSING_FIELD, "requireUsername");
 	else if (username.trim().length > FieldLengths.USERNAME)
 		throw new ServerError(ServerErrorCode.VALUE_TOO_LONG, "requireUsername");

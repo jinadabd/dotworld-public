@@ -35,7 +35,7 @@ export async function getFriendshipService(
 ): Promise<FriendshipRow | null> {
 	if (!userId || !friendId)
 		throw new ServerError(ServerErrorCode.INVALID_INPUT, "getFriendshipService");
-	return await getFriendship(userId, friendId);
+	return await getFriendshipStatus(userId, friendId);
 }
 
 export async function getAllUserFriendshipsService(userId: number): Promise<FriendshipRow[]> {

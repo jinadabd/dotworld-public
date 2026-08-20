@@ -3,9 +3,9 @@ import { api } from "../../services/api";
 
 export const friendsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getFriendship: builder.query<FriendshipRow, { friendId: number }>({
+		getFriendship: builder.query<FriendshipRow | null, { friendId: number }>({
 			query: ({ friendId }) => `/friends/${friendId}`,
-			providesTags: (result, error, { friendId }) => [{ type: "Friendship", id: "LIST" }],
+			providesTags: (result, error, { friendId }) => [{ type: "Friendship", id: friendId }],
 		}),
 
 		getFriends: builder.query<FriendshipRow[], void>({
@@ -20,7 +20,9 @@ export const friendsApi = api.injectEndpoints({
 
 		sendFriendRequest: builder.mutation<FriendshipRow, { friendId: number }>({
 			query: ({ friendId }) => ({ url: `/friends/${friendId}`, method: "POST" }),
-			invalidatesTags: [{ type: "Friendship", id: "LIST" }],
+			invalidatesTags: (result, error, { friendId }) => [
+				{ type: "Friendship", id: friendId },
+			],
 		}),
 
 		changeFriendshipStatus: builder.mutation<
@@ -32,7 +34,9 @@ export const friendsApi = api.injectEndpoints({
 				method: "PATCH",
 				body: { change },
 			}),
-			invalidatesTags: [{ type: "Friendship", id: "LIST" }],
+			invalidatesTags: (result, error, { friendId }) => [
+				{ type: "Friendship", id: friendId },
+			],
 		}),
 
 		removeFriend: builder.mutation<FriendshipRow, { friendId: number }>({
@@ -40,7 +44,9 @@ export const friendsApi = api.injectEndpoints({
 				url: `/friends/${friendId}`,
 				method: "DELETE",
 			}),
-			invalidatesTags: [{ type: "Friendship", id: "LIST" }],
+			invalidatesTags: (result, error, { friendId }) => [
+				{ type: "Friendship", id: friendId },
+			],
 		}),
 	}),
 });

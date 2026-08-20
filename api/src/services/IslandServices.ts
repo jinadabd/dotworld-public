@@ -1,4 +1,5 @@
 import { ServerError, ServerErrorCode } from "../errors/ServerError.ts";
+import { getFriendshipStatus } from "../models/Friendships.ts";
 import {
 	changeIslandCoverURL,
 	changeIslandDescription,
@@ -16,12 +17,16 @@ import {
 } from "../models/Islands.ts";
 import { getAllFeaturedTrinkets } from "../models/Trinkets.ts";
 import { getUserByUsername } from "../models/User.ts";
+import FriendsRouter from "../routes/friends.ts";
 import {
 	EditIslandOptions,
 	type CreateIslandInput,
 	type EditIslandInput,
+	type IslandNotCreated,
+	type IslandPreview,
 	type IslandRow,
 	type IslandVisibility,
+	type IslandWithContent,
 	type JSONValue,
 	type TrinketRow,
 } from "../types/types.ts";
@@ -56,19 +61,40 @@ export async function createIslandService(
 export async function getIslandService(
 	requestingId: number,
 	islandUsername: string,
-): Promise<{ island: IslandRow; featuredTrinkets: TrinketRow[] }> {
+): Promise<IslandWithContent | IslandPreview | IslandNotCreated> {
 	const user = await getUserByUsername(islandUsername);
-	if (!user) throw new ServerError(ServerErrorCode.INVALID_INPUT, "getIslandService");
+	if (!user) throw new ServerError(ServerErrorCode.NOT_FOUND, "getIslandService");
+
+	const isOwner = requestingId === user.id;
 
 	const island = await getIslandByUserId(user.id);
-	if (!island) throw new ServerError(ServerErrorCode.NOT_FOUND, "getIslandService");
 
-	if (island.island_visibility === "friends" && requestingId !== user.id)
-		requireFriendship(user.id, requestingId);
+	const friendship_status =
+		(await getFriendshipStatus(requestingId, user.id))?.friendship_status ?? null;
+	const areFriends = friendship_status === "friends";
 
-	const featuredTrinkets = await getAllFeaturedTrinkets(user.id);
+	if (!island)
+		return {
+			island: null,
+			user,
+			friendship_status,
+			locked: true,
+		};
 
-	return { island, featuredTrinkets };
+	const canView = isOwner || island.island_visibility === "world" || areFriends;
+
+	if (canView) {
+		const featuredTrinkets = await getAllFeaturedTrinkets(user.id);
+		return { island, user, featured_trinkets: featuredTrinkets, locked: false };
+	}
+
+	const { id, created_at, island_visibility, user_id } = island;
+	return {
+		island: { id, created_at, island_visibility, user_id },
+		user,
+		friendship_status,
+		locked: true,
+	};
 }
 
 // ==================== DELETE =====================

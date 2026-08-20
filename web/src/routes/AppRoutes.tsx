@@ -8,6 +8,7 @@ import { IslandPage } from "../features/island/IslandPage";
 import { TrinketsPage } from "../features/trinkets/TrinketsPage";
 import { FriendsPage } from "../features/friends/FriendsPage";
 import { ChatterPage } from "../features/chatter/ChatterPage";
+import { TrinketSinglePage } from "../features/trinkets/TrinketSinglePage";
 
 export function AppRoutes() {
 	return (
@@ -36,6 +37,10 @@ export function AppRoutes() {
 					<Route
 						path="/trinkets"
 						element={<TrinketsPage />}
+					/>
+					<Route
+						path="/trinkets/:trinketId"
+						element={<TrinketSinglePage />}
 					/>
 					<Route
 						path="/friends"

@@ -1,21 +1,25 @@
 import { useState } from "react";
-import { useGetChatterFeedQuery } from "../posts/postsApi";
+import { useGetChatterQuery } from "../posts/postsApi";
 import { PostCard } from "../posts/PostCard"; // Replace with your Post component
+import { useSetSidebar } from "../../hooks/useSetSidebar";
+import { ComposeWidget } from "../widgets/ComposeWidget";
+import styles from "./Chatter.module.css";
+import { ChatterTabBar } from "./ChatterTabBar";
 
 const LOCAL_STORAGE_KEY = "chatter_last_read_time";
 
 export function ChatterPage() {
-	const [page, setPage] = useState(1);
-	const [activeTab, setActiveTab] = useState<"unread" | "read" | "all">("all");
+	useSetSidebar(<ComposeWidget />);
 
-	// Store/retrieving the timestamp threshold for read status
+	const [page, setPage] = useState(1);
+	const [activeTab, setActiveTab] = useState<"unread" | "read" | "all">("unread");
+
 	const [lastReadTime, setLastReadTime] = useState<string>(() => {
 		return localStorage.getItem(LOCAL_STORAGE_KEY) || new Date(0).toISOString();
 	});
 
-	const { data, isLoading, error } = useGetChatterFeedQuery({ page, limit: 25 });
+	const { data, isLoading, error } = useGetChatterQuery({ page, limit: 25 });
 
-	// Mark current feed items as read when switching pages or unmounting
 	const markAsRead = () => {
 		const now = new Date().toISOString();
 		localStorage.setItem(LOCAL_STORAGE_KEY, now);
@@ -36,75 +40,27 @@ export function ChatterPage() {
 	});
 
 	return (
-		<div>
+		<div className={styles.pageContainer}>
 			<h1>Chatter</h1>
 
-			{/* Read / Unread Tabs */}
-			<div>
-				<button
-					onClick={() => setActiveTab("all")}
-					disabled={activeTab === "all"}>
-					All
-				</button>
-				<button
-					onClick={() => setActiveTab("unread")}
-					disabled={activeTab === "unread"}>
-					Unread
-				</button>
-				<button
-					onClick={() => setActiveTab("read")}
-					disabled={activeTab === "read"}>
-					Read
-				</button>
-				<button onClick={markAsRead}>Mark All as Read</button>
-			</div>
+			<ChatterTabBar
+				activeTab={activeTab}
+				setActiveTab={setActiveTab}
+				markAsRead={markAsRead}
+			/>
 
-			{/* Posts List */}
 			{filteredPosts.length === 0 ? (
-				<p>No posts to display in this view.</p>
+				<div className={styles.postView}>No posts to display in this view.</div>
 			) : (
-				<div>
-					{filteredPosts.map(({ post }) => (
+				<div className={styles.postView}>
+					{filteredPosts.map((postWithAuthor) => (
 						<PostCard
-							key={post.id}
-							post={post}
+							key={postWithAuthor.post.id}
+							postWithAuthor={postWithAuthor}
 						/>
 					))}
 				</div>
 			)}
-
-			{/* Google-Style Numeric Pagination Controls */}
-			<div>
-				<button
-					disabled={page === 1}
-					onClick={() => {
-						markAsRead();
-						setPage((prev) => Math.max(prev - 1, 1));
-					}}>
-					&laquo; Previous
-				</button>
-
-				{Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((pageNum) => (
-					<button
-						key={pageNum}
-						onClick={() => {
-							markAsRead();
-							setPage(pageNum);
-						}}
-						disabled={pageNum === page}>
-						{pageNum}
-					</button>
-				))}
-
-				<button
-					disabled={!pagination.hasMore}
-					onClick={() => {
-						markAsRead();
-						setPage((prev) => prev + 1);
-					}}>
-					Next &raquo;
-				</button>
-			</div>
 		</div>
 	);
 }

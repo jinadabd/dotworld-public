@@ -16,7 +16,12 @@ import {
 	sharePostToBubbles,
 	unsharePostFromBubbles,
 } from "../models/PostBubble.ts";
-import { decrementUserStorage, getUserById, incrementUserStorage } from "../models/User.ts";
+import {
+	decrementUserStorage,
+	getUserById,
+	getUserByUsername,
+	incrementUserStorage,
+} from "../models/User.ts";
 import type {
 	ComposePostInput,
 	EditPostInput,
@@ -74,24 +79,26 @@ export async function getPostService(userId: number, postId: number): Promise<Po
 
 export async function getUserPostsService(
 	viewerId: number,
-	userId: number,
+	username: string,
 	page: number = 1,
 	limit: number = 25,
 ): Promise<PaginatedPosts> {
-	if (viewerId !== userId) await requireFriendship(viewerId, userId);
-	const { posts } = await getPostsFromUser(userId, page, limit);
-	const filteredPosts = posts.filter((post) => post.post_visibility !== "self");
+	const author = await getUserByUsername(username);
+	if (!author) throw new ServerError(ServerErrorCode.NOT_FOUND, "getUserPostsService");
 
-	const filteredWithAuthors: PostWithAuthor[] = await Promise.all(
-		filteredPosts.map(async (post) => {
-			const author = await getUserById(post.user_id);
-			return { post, author };
-		}),
-	);
-	const filteredCount = filteredWithAuthors.length;
+	const isOwner = viewerId !== author.id;
+	if (isOwner) await requireFriendship(viewerId, author.id);
+
+	const { posts } = await getPostsFromUser(author.id, page, limit);
+	const filteredPosts = isOwner ? posts.filter((post) => post.post_visibility !== "self") : posts;
+
+	const filteredWithAuthor: PostWithAuthor[] = filteredPosts.map((post) => {
+		return { post, author };
+	});
+	const filteredCount = filteredWithAuthor.length;
 
 	return {
-		posts: filteredWithAuthors,
+		posts: filteredWithAuthor,
 		pagination: {
 			currentPage: page,
 			totalPages: Math.ceil(filteredCount / limit),
@@ -107,7 +114,10 @@ export async function getFriendsChatterService(
 	limit: number = 25,
 ): Promise<PaginatedPosts> {
 	const friends = await getAllUserFriends(userId);
-	const friendIds = friends.map((friend) => friend.id);
+	const friendIds = friends.map((friendship) =>
+		friendship.user_id === userId ? friendship.friend_id : friendship.user_id,
+	);
+
 	const { posts } = await getPostsFromFriends(friendIds, page, limit);
 	const filteredPosts = posts.filter((post) => post.post_visibility !== "self");
 

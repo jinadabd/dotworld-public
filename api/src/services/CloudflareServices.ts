@@ -19,7 +19,7 @@ const MAX_SIZES: Record<string, number> = {
 	island_cover: 5 * 1024 * 1024,
 	post_media: 10 * 1024 * 1024,
 	trinket_cover: 5 * 1024 * 1024,
-	trinket_item_media: 10 * 1024 * 1024,
+	trinket_item_media: 15 * 1024 * 1024,
 };
 
 const ALLOWED_TYPES: Record<string, string[]> = {

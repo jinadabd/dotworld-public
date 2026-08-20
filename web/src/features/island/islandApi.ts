@@ -1,12 +1,20 @@
-import type { IslandRow, CreateIslandInput, EditIslandInput } from "@shared/types";
+import type {
+	IslandRow,
+	CreateIslandInput,
+	EditIslandInput,
+	IslandWithContent,
+	IslandPreview,
+	IslandNotCreated,
+} from "@shared/types";
 import { api } from "../../services/api";
 
 export const islandApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getIslandByUsername: builder.query<IslandRow, { username: string }>({
+		getIslandByUsername: builder.query<
+			IslandWithContent | IslandPreview | IslandNotCreated,
+			{ username: string }
+		>({
 			query: ({ username }) => `/${username}`,
-			transformResponse: (response: { island: IslandRow } | IslandRow) =>
-				"island" in response ? response.island : response,
 			providesTags: (result, error, { username }) => [{ type: "Island", id: username }],
 		}),
 

@@ -15,27 +15,41 @@ export const postApi = api.injectEndpoints({
 			providesTags: (result, error, { postId }) => [{ type: "Post", id: postId }],
 		}),
 
-		getUserPosts: builder.query<PaginatedPosts, { username: string }>({
-			query: ({ username }) => `/${username}/posts`,
-			providesTags: (result, error, { username }) => [
-				{ type: "Post", id: `USER_${username}` },
-			],
+		getUserPosts: builder.query<
+			PaginatedPosts,
+			{ username: string; page?: number; limit?: number }
+		>({
+			query: ({ username, page = 1, limit = 25 }) =>
+				`/${username}/posts?page=${page}&limit=${limit}`,
+			providesTags: (result) =>
+				result
+					? [
+							...result.posts.map(({ post }) => ({
+								type: "Post" as const,
+								id: post.id,
+							})),
+							{ type: "Post", id: "USERCHATTER" },
+						]
+					: [{ type: "Post", id: "USERCHATTER" }],
 		}),
 
-		getChatterFeed: builder.query<PaginatedPosts, { page?: number; limit?: number }>({
+		getChatter: builder.query<PaginatedPosts, { page?: number; limit?: number }>({
 			query: ({ page = 1, limit = 25 }) => `/chatter?page=${page}&limit=${limit}`,
 			providesTags: (result) =>
 				result
 					? [
-							...result.posts.map(({ id }) => ({ type: "Post" as const, id })),
-							{ type: "Post", id: "FEED" },
+							...result.posts.map(({ post }) => ({
+								type: "Post" as const,
+								id: post.id,
+							})),
+							{ type: "Post", id: "CHATTER" },
 						]
-					: [{ type: "Post", id: "FEED" }],
+					: [{ type: "Post", id: "CHATTER" }],
 		}),
 
 		createPost: builder.mutation<PostRow, ComposePostInput>({
 			query: (body) => ({
-				url: "/posts",
+				url: "/compose",
 				method: "POST",
 				body,
 			}),
@@ -64,7 +78,7 @@ export const postApi = api.injectEndpoints({
 export const {
 	useGetPostQuery,
 	useGetUserPostsQuery,
-	useGetChatterFeedQuery,
+	useGetChatterQuery,
 	useCreatePostMutation,
 	useEditPostMutation,
 	useDeletePostMutation,

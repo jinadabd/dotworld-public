@@ -4,9 +4,12 @@ import { useFriendshipActions } from "./useFriendshipActions";
 import { FetchedUserBadge } from "../users/FetchedUserBadge";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
-import { UserSearch } from "../../components/UserSearch";
+import { useSetSidebar } from "../../hooks/useSetSidebar";
+import { UserSearchWidget } from "../widgets/UserSearchWidget";
 
 export function FriendsPage() {
+	useSetSidebar(<UserSearchWidget />);
+
 	const { data: friends, isLoading } = useGetFriendsQuery();
 	const { data: requests } = useGetPendingFriendRequestsQuery();
 	const { acceptFriendRequest, rejectFriendRequest, cancelFriendRequest } =
@@ -52,11 +55,6 @@ export function FriendsPage() {
 							/>
 						);
 					})}
-				</section>
-
-				<section>
-					<h2>Add friends</h2>
-					<UserSearch />
 				</section>
 			</div>
 		</>
