@@ -1,27 +1,30 @@
 :root {
-    /* ============ YELLOW ============= */
-    --yellow: #F4C851;
-    --yellow-light: #f3d277;
-    --yellow-dark: #e2b843;
+	/* ============ YELLOW ============= */
+	--yellow: #f4c851;
+	--yellow-light: #f3d277;
+	--yellow-dark: #e2b843;
 
-    /* ============ GREEN ============= */
-    --green: #77EF62;
-    --green-light: #89f376;
-    --green-dark: #61ce4e;
+	/* ============ GREEN ============= */
+	--green: #77ef62;
+	--green-light: #89f376;
+	--green-dark: #61ce4e;
 
-    /* ============ BLUE ============= */
-    --blue: #6DB3F2;
-    --blue-light: #85c0f4;
-    --blue-dark: #589bd4;
+	/* ============ BLUE ============= */
+	--blue: #6db3f2;
+	--blue-light: #85c0f4;
+	--blue-dark: #589bd4;
 
-    /* ============ RED ============= */
-    --red: #F34968;
-    --red-light: #f36780;
-    --red-dark: #d8425e;
+	/* ============ RED ============= */
+	--red: #f34968;
+	--red-light: #f36780;
+	--red-dark: #d8425e;
 
-    /* ============ NEUTRALS ============= */
-    --cream: #F4F1E9;
-    --white: #FAFAFA;
-    --dark: #272727;
-    --black: #131313;
+	/* ============ NEUTRALS ============= */
+	--cream: #f4f1e9;
+	--offwhite: #f8f6f2;
+	--white: #fafafa;
+	--beige: #cac0a3;
+	--brown: #ab8d75;
+	--dark: #272727;
+	--black: #131313;
 }

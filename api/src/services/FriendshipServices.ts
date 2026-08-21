@@ -42,8 +42,14 @@ export async function getAllUserFriendshipsService(userId: number): Promise<Frie
 	return await getAllUserFriends(userId);
 }
 
-export async function getFriendshipRequestsService(userId: number): Promise<FriendshipRow[]> {
-	return await getAllPendingFriendships(userId);
+export async function getFriendshipPendingRequestsService(
+	userId: number,
+	type: "pending" | "requests",
+): Promise<FriendshipRow[]> {
+	const all = await getAllPendingFriendships(userId);
+	if (type === "pending") return all.filter((friendship) => friendship.user_id === userId);
+	if (type === "requests") return all.filter((friendship) => friendship.user_id !== userId);
+	throw new ServerError(ServerErrorCode.INVALID_INPUT, "getFriendshipPendingRequestsService");
 }
 
 // ================= UPDATE ===================

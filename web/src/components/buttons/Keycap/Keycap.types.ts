@@ -17,4 +17,5 @@ export interface KeycapProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 	sideColor?: string;
 	href?: string;
 	isActive?: boolean;
+	isHighlighted?: boolean;
 }

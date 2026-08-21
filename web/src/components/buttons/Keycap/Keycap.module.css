@@ -56,8 +56,8 @@
   height: 100%;
   padding-bottom: 2px;
   color: var(--text);
-  font-family: system-ui, -apple-system, sans-serif;
-  font-weight: 500;
+  font-family: "Helvetica";
+  font-weight: bold;
   font-size: 1.125rem;
   user-select: none;
   pointer-events: none;
@@ -77,6 +77,7 @@
   pointer-events: none;
   padding-bottom: 2px;
 }
+
 .keycap[data-color="yellow"]   { --legend-hover: var(--yellow); }
 .keycap[data-color="green"]    { --legend-hover: var(--green); }
 .keycap[data-color="blue"]     { --legend-hover: var(--blue); }
@@ -89,8 +90,6 @@
   color: var(--legend-hover, var(--text));
   opacity: 1;
 }
-
-
 
 /* === PRESSED STATE === */
 .keycap:active,
@@ -220,9 +219,31 @@
   height: calc(100% - 5px) !important;
 }
 
-.keycap:hover:not(:active):not([data-pressed="true"]):not([data-active="true"]):not([data-disabled="true"]) {
+.keycap:hover:not(:active):not([data-pressed="true"]):not([data-active="true"]):not([data-disabled="true"]):not([data-highlighted="true"]) {
   transform: translateY(1px) scale(0.995);
   filter: brightness(0.94);
   height: calc(100% - 1px) !important;
 }
 
+/* === HIGHLIGHTED STATE === */
+
+/* 1. Make the legend take on the passed color variant and full opacity */
+.keycap[data-highlighted="true"] .legend {
+  color: var(--legend-hover, var(--text));
+  opacity: 1;
+}
+
+/* 2. Apply the "pressed" depth transform and shadow while keeping cream background */
+.keycap[data-highlighted="true"] {
+  transform: translateY(2px) scale(0.98);
+  box-shadow:
+    0 1px 1px -1px oklch(0 0 0 / 0.15),
+    inset 0 0 6px oklch(0 0 0 / 0.45);
+  height: calc(100% - 2px) !important;
+}
+
+/* 3. Deepen the press if the user clicks a keycap that is already highlighted */
+.keycap[data-highlighted="true"]:active {
+  transform: translateY(5px) scale(0.97);
+  height: calc(100% - 5px) !important;
+}

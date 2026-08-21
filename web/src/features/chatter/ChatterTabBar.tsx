@@ -1,5 +1,4 @@
 import type { ButtonHTMLAttributes } from "react";
-import type { RootState } from "../../app/store";
 import { KeyboardLayout, type KeyPosition } from "../../components/buttons/KeyboardLayout";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {

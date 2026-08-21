@@ -9,7 +9,7 @@ export function LogoutButton() {
 
 	return (
 		<TactileButton
-			onPress={() => {
+			onRelease={() => {
 				dispatch(logout());
 				navigate("/");
 			}}>

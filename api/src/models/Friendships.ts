@@ -47,7 +47,7 @@ export async function getAllPendingFriendships(userId: number): Promise<Friendsh
 	const result = await pool.query<FriendshipRow>(
 		`SELECT *
          FROM friendships
-         WHERE friend_id = $1
+         WHERE (user_id = $1 OR friend_id = $1)
 		 AND friendship_status = 'pending'`,
 		[userId],
 	);

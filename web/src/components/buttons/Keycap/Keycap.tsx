@@ -16,6 +16,7 @@ export function Keycap({
 	faceColor,
 	sideColor,
 	isActive = false,
+	isHighlighted = false,
 	...rest
 }: KeycapProps) {
 	const handlePress = onPress;
@@ -46,6 +47,7 @@ export function Keycap({
 			data-size={size}
 			data-disabled={disabled || undefined}
 			data-active={isActive || undefined}
+			data-highlighted={isHighlighted || undefined}
 			style={customStyle}
 			disabled={disabled}
 			onClick={onPress}

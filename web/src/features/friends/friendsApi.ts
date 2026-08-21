@@ -10,18 +10,51 @@ export const friendsApi = api.injectEndpoints({
 
 		getFriends: builder.query<FriendshipRow[], void>({
 			query: () => "/friends",
-			providesTags: [{ type: "Friendship", id: "LIST" }],
+			providesTags: (result) =>
+				result
+					? [
+							...result.map(({ friend_id }) => ({
+								type: "Friendship" as const,
+								id: friend_id,
+							})),
+							{ type: "Friendship", id: "FRIENDS" },
+						]
+					: [{ type: "Friendship", id: "FRIENDS" }],
 		}),
 
-		getPendingFriendRequests: builder.query<FriendshipRow[], void>({
+		getFriendRequests: builder.query<FriendshipRow[], void>({
 			query: () => "/friends/requests",
-			providesTags: [{ type: "Friendship", id: "LIST" }],
+			providesTags: (result) =>
+				result
+					? [
+							...result.map(({ user_id }) => ({
+								type: "Friendship" as const,
+								id: user_id,
+							})),
+							{ type: "Friendship", id: "REQUESTS" },
+						]
+					: [{ type: "Friendship", id: "REQUESTS" }],
+		}),
+
+		getFriendshipPending: builder.query<FriendshipRow[], void>({
+			query: () => "/friends/pending",
+			providesTags: (result) =>
+				result
+					? [
+							...result.map(({ friend_id }) => ({
+								type: "Friendship" as const,
+								id: friend_id,
+							})),
+							{ type: "Friendship", id: "PENDING" },
+						]
+					: [{ type: "Friendship", id: "PENDING" }],
 		}),
 
 		sendFriendRequest: builder.mutation<FriendshipRow, { friendId: number }>({
 			query: ({ friendId }) => ({ url: `/friends/${friendId}`, method: "POST" }),
 			invalidatesTags: (result, error, { friendId }) => [
 				{ type: "Friendship", id: friendId },
+				{ type: "Friendship", id: "PENDING" },
 			],
 		}),
 
@@ -36,6 +69,9 @@ export const friendsApi = api.injectEndpoints({
 			}),
 			invalidatesTags: (result, error, { friendId }) => [
 				{ type: "Friendship", id: friendId },
+				{ type: "Friendship", id: "FRIENDS" },
+				{ type: "Friendship", id: "REQUESTS" },
+				{ type: "Friendship", id: "PENDING" },
 			],
 		}),
 
@@ -46,6 +82,7 @@ export const friendsApi = api.injectEndpoints({
 			}),
 			invalidatesTags: (result, error, { friendId }) => [
 				{ type: "Friendship", id: friendId },
+				{ type: "Friendship", id: "FRIENDS" },
 			],
 		}),
 	}),
@@ -53,7 +90,8 @@ export const friendsApi = api.injectEndpoints({
 
 export const {
 	useGetFriendsQuery,
-	useGetPendingFriendRequestsQuery,
+	useGetFriendshipPendingQuery,
+	useGetFriendRequestsQuery,
 	useGetFriendshipQuery,
 	useSendFriendRequestMutation,
 	useChangeFriendshipStatusMutation,

@@ -6,13 +6,15 @@ import {
 	getAllFriends,
 	getFriendship,
 	getPendingFriendships,
+	getRequestsFriendships,
 	removeFriend,
 } from "../controllers/friendsController.ts";
 
 const FriendsRouter = Router();
 
 FriendsRouter.get("/", requireAuth, getAllFriends);
-FriendsRouter.get("/requests", requireAuth, getPendingFriendships);
+FriendsRouter.get("/requests", requireAuth, getRequestsFriendships);
+FriendsRouter.get("/pending", requireAuth, getPendingFriendships);
 
 FriendsRouter.get("/:friendId", requireAuth, getFriendship);
 

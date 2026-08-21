@@ -13,75 +13,103 @@ export function KeycapNav() {
 
 	const navKeys: KeyPosition[] = [
 		{
-			id: "island",
+			id: "islandIcon",
 			col: 1,
+			row: 1,
+			colSpan: 1,
+			keycapProps: {
+				colour: "yellow",
+				isActive: location.pathname === `/${username}`,
+				onPress: () => navigate(`/${username}`),
+				children: <IslandIcon size={25} />,
+			},
+		},
+		{
+			id: "islandLabel",
+			col: 2,
 			row: 1,
 			colSpan: 2,
 			keycapProps: {
 				colour: "yellow",
 				legend: "⬤",
-				isActive: location.pathname === `/${username}`,
+				isHighlighted: location.pathname === `/${username}`,
 				onPress: () => navigate(`/${username}`),
-				children: (
-					<>
-						<IslandIcon size={20} />
-						<span>Island</span>
-					</>
-				),
+				children: "Island",
 			},
 		},
 		{
-			id: "trinkets",
+			id: "trinketsIcon",
 			col: 1,
+			row: 2,
+			colSpan: 1,
+			keycapProps: {
+				colour: "green",
+				isActive: location.pathname === "/trinkets",
+				onPress: () => navigate("/trinkets"),
+				children: <TrinketsIcon size={25} />,
+			},
+		},
+		{
+			id: "trinketsLabel",
+			col: 2,
 			row: 2,
 			colSpan: 2,
 			keycapProps: {
 				colour: "green",
 				legend: "⬤",
-				isActive: location.pathname === "/trinkets",
+				isHighlighted: location.pathname === "/trinkets",
 				onPress: () => navigate("/trinkets"),
-				children: (
-					<>
-						<TrinketsIcon size={20} />
-						<span>Trinkets</span>
-					</>
-				),
+				children: "Trinkets",
 			},
 		},
 		{
-			id: "friends",
+			id: "friendsIcon",
 			col: 1,
+			row: 3,
+			colSpan: 1,
+			keycapProps: {
+				colour: "blue",
+				isActive: location.pathname === "/friends",
+				onPress: () => navigate("/friends"),
+				children: <FriendsIcon size={25} />,
+			},
+		},
+		{
+			id: "friendsLabel",
+			col: 2,
 			row: 3,
 			colSpan: 2,
 			keycapProps: {
 				colour: "blue",
 				legend: "⬤",
-				isActive: location.pathname === "/friends",
+				isHighlighted: location.pathname === "/friends",
 				onPress: () => navigate("/friends"),
-				children: (
-					<>
-						<FriendsIcon size={20} />
-						<span>Friends</span>
-					</>
-				),
+				children: "Friends",
 			},
 		},
 		{
-			id: "chatter",
+			id: "chatterIcon",
 			col: 1,
+			row: 4,
+			colSpan: 1,
+			keycapProps: {
+				colour: "red",
+				isActive: location.pathname === "/chatter",
+				onPress: () => navigate("/chatter"),
+				children: <ChatterIcon size={25} />,
+			},
+		},
+		{
+			id: "chatterLabel",
+			col: 2,
 			row: 4,
 			colSpan: 2,
 			keycapProps: {
 				colour: "red",
 				legend: "⬤",
-				isActive: location.pathname === "/chatter",
+				isHighlighted: location.pathname === "/chatter",
 				onPress: () => navigate("/chatter"),
-				children: (
-					<>
-						<ChatterIcon size={20} />
-						<span>Chatter</span>
-					</>
-				),
+				children: "Chatter",
 			},
 		},
 	];
@@ -89,7 +117,7 @@ export function KeycapNav() {
 	return (
 		<KeyboardLayout
 			keys={navKeys}
-			columns={1}
+			columns={2}
 			rows={4}
 			plateColor="var(--dark)"
 		/>

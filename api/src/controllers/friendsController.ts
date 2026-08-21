@@ -4,7 +4,7 @@ import {
 	createFriendshipService,
 	deleteFriendshipService,
 	getAllUserFriendshipsService,
-	getFriendshipRequestsService,
+	getFriendshipPendingRequestsService,
 	getFriendshipService,
 } from "../services/FriendshipServices.ts";
 import type { ChangeStatusOptions } from "../types/types.ts";
@@ -29,9 +29,15 @@ export async function getAllFriends(req: Request, res: Response) {
 	res.status(200).json(friends);
 }
 
+export async function getRequestsFriendships(req: Request, res: Response) {
+	const userId = (req as any).userId;
+	const requests = await getFriendshipPendingRequestsService(userId, "requests");
+	res.status(200).json(requests);
+}
+
 export async function getPendingFriendships(req: Request, res: Response) {
 	const userId = (req as any).userId;
-	const pending = await getFriendshipRequestsService(userId);
+	const pending = await getFriendshipPendingRequestsService(userId, "pending");
 	res.status(200).json(pending);
 }
 

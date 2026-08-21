@@ -1,62 +1,37 @@
-import { TactileButton } from "../../components/buttons/TactileButton";
-import { useGetFriendsQuery, useGetPendingFriendRequestsQuery } from "./friendsApi";
-import { useFriendshipActions } from "./useFriendshipActions";
-import { FetchedUserBadge } from "../users/FetchedUserBadge";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 import { useSetSidebar } from "../../hooks/useSetSidebar";
 import { UserSearchWidget } from "../widgets/UserSearchWidget";
+import { FriendsTabBar } from "./FriendsTabBar";
+import { useState } from "react";
+import { FriendsView } from "./FriendsView";
+import { RequestsView } from "./RequestsView";
+import { PendingView } from "./PendingView";
+
+type FriendsView = "friends" | "requests" | "pending";
 
 export function FriendsPage() {
 	useSetSidebar(<UserSearchWidget />);
-
-	const { data: friends, isLoading } = useGetFriendsQuery();
-	const { data: requests } = useGetPendingFriendRequestsQuery();
-	const { acceptFriendRequest, rejectFriendRequest, cancelFriendRequest } =
-		useFriendshipActions();
+	const [view, setView] = useState<FriendsView>("friends");
 
 	const myId = useSelector((state: RootState) => state.auth.user!.id);
 	return (
 		<>
-			<h1>Friends</h1>
-
 			<div>
-				{requests && requests.length > 0 && (
-					<section>
-						<h2>Requests</h2>
-						{requests.map((req) => (
-							<FetchedUserBadge userId={req.user_id}>
-								<div key={req.id}>
-									<TactileButton
-										colour="blue"
-										onPress={() => acceptFriendRequest(req.user_id)}>
-										Accept
-									</TactileButton>
-									<TactileButton
-										colour="cream"
-										onPress={() => rejectFriendRequest(req.user_id)}>
-										Reject
-									</TactileButton>
-								</div>
-							</FetchedUserBadge>
-						))}
-					</section>
-				)}
-
-				<section>
-					<h2>My Friends</h2>
-					{friends?.map((friendship) => {
-						const otherUserId =
-							friendship.user_id === myId ? friendship.friend_id : friendship.user_id;
-						return (
-							<FetchedUserBadge
-								key={friendship.id}
-								userId={otherUserId}
-							/>
-						);
-					})}
-				</section>
+				<h1>Friends</h1>
+				<FriendsTabBar
+					activeTab={view}
+					setActiveTab={setView}
+				/>
 			</div>
+
+			{view === "friends" ? (
+				<FriendsView />
+			) : view === "requests" ? (
+				<RequestsView />
+			) : (
+				<PendingView />
+			)}
 		</>
 	);
 }

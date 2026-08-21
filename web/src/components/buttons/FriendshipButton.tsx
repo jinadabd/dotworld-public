@@ -24,7 +24,7 @@ export function FriendshipButton({ userId, status, isIncoming }: Props) {
 			<TactileButton
 				colour="blue"
 				disabled={isBusy}
-				onPress={() => sendRequest({ friendId: userId })}>
+				onRelease={() => sendRequest({ friendId: userId })}>
 				Add friend
 			</TactileButton>
 		);
@@ -35,7 +35,7 @@ export function FriendshipButton({ userId, status, isIncoming }: Props) {
 			<TactileButton
 				colour="cream"
 				disabled={isBusy}
-				onPress={() => removeFriend({ friendId: userId })}>
+				onRelease={() => removeFriend({ friendId: userId })}>
 				Remove
 			</TactileButton>
 		);
@@ -47,13 +47,13 @@ export function FriendshipButton({ userId, status, isIncoming }: Props) {
 				<TactileButton
 					colour="blue"
 					disabled={isBusy}
-					onPress={() => changeRequest({ friendId: userId, change: "accept" })}>
+					onRelease={() => changeRequest({ friendId: userId, change: "accept" })}>
 					Accept
 				</TactileButton>
 				<TactileButton
 					colour="cream"
 					disabled={isBusy}
-					onPress={() => changeRequest({ friendId: userId, change: "reject" })}>
+					onRelease={() => changeRequest({ friendId: userId, change: "reject" })}>
 					Reject
 				</TactileButton>
 			</div>
@@ -64,7 +64,7 @@ export function FriendshipButton({ userId, status, isIncoming }: Props) {
 		<TactileButton
 			colour="cream"
 			disabled={isBusy}
-			onPress={() => changeRequest({ friendId: userId, change: "cancel" })}>
+			onRelease={() => changeRequest({ friendId: userId, change: "cancel" })}>
 			Cancel
 		</TactileButton>
 	);

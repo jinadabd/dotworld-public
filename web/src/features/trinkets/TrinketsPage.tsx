@@ -6,6 +6,7 @@ import { CommunityTrinkets } from "./CommunityTrinkets";
 import { CreateTrinketWidget } from "../widgets/CreateTrinketWidget";
 import { useSetSidebar } from "../../hooks/useSetSidebar";
 import { FriendsTrinkets } from "./FriendsTrinkets";
+import { TrinketTabBar } from "./TrinketTabBar";
 
 type TrinketView = "self" | "friends" | "community";
 
@@ -20,25 +21,10 @@ export function TrinketsPage() {
 			<div>
 				<h1>Trinkets</h1>
 
-				<div>
-					{username && (
-						<button
-							onClick={() => setView("self")}
-							disabled={view === "self"}>
-							Self
-						</button>
-					)}
-					<button
-						onClick={() => setView("friends")}
-						disabled={view === "friends"}>
-						Friends
-					</button>
-					<button
-						onClick={() => setView("community")}
-						disabled={view === "community"}>
-						Community
-					</button>
-				</div>
+				<TrinketTabBar
+					activeTab={view}
+					setActiveTab={setView}
+				/>
 			</div>
 
 			{view === "self" && username ? (

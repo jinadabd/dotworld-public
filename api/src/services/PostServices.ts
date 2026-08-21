@@ -86,24 +86,24 @@ export async function getUserPostsService(
 	const author = await getUserByUsername(username);
 	if (!author) throw new ServerError(ServerErrorCode.NOT_FOUND, "getUserPostsService");
 
-	const isOwner = viewerId !== author.id;
-	if (isOwner) await requireFriendship(viewerId, author.id);
+	const isOwner = viewerId === author.id;
+	if (!isOwner) await requireFriendship(viewerId, author.id);
 
-	const { posts } = await getPostsFromUser(author.id, page, limit);
-	const filteredPosts = isOwner ? posts.filter((post) => post.post_visibility !== "self") : posts;
+	const { posts, count } = await getPostsFromUser(author.id, page, limit);
+	const filteredPosts = isOwner ? posts : posts.filter((post) => post.post_visibility !== "self");
 
 	const filteredWithAuthor: PostWithAuthor[] = filteredPosts.map((post) => {
 		return { post, author };
 	});
-	const filteredCount = filteredWithAuthor.length;
+	// const filteredCount = filteredWithAuthor.length;
 
 	return {
 		posts: filteredWithAuthor,
 		pagination: {
 			currentPage: page,
-			totalPages: Math.ceil(filteredCount / limit),
-			totalPosts: filteredCount,
-			hasMore: page * limit < filteredCount,
+			totalPages: Math.max(1, Math.ceil(count / limit)),
+			totalPosts: count,
+			hasMore: page * limit < count,
 		},
 	};
 }
@@ -118,7 +118,7 @@ export async function getFriendsChatterService(
 		friendship.user_id === userId ? friendship.friend_id : friendship.user_id,
 	);
 
-	const { posts } = await getPostsFromFriends(friendIds, page, limit);
+	const { posts, count } = await getPostsFromFriends(friendIds, page, limit);
 	const filteredPosts = posts.filter((post) => post.post_visibility !== "self");
 
 	const filteredWithAuthors: PostWithAuthor[] = await Promise.all(
@@ -127,15 +127,15 @@ export async function getFriendsChatterService(
 			return { post, author };
 		}),
 	);
-	const filteredCount = filteredWithAuthors.length;
+	// const filteredCount = filteredWithAuthors.length;
 
 	return {
 		posts: filteredWithAuthors,
 		pagination: {
 			currentPage: page,
-			totalPages: Math.ceil(filteredCount / limit),
-			totalPosts: filteredCount,
-			hasMore: page * limit < filteredCount,
+			totalPages: Math.max(1, Math.ceil(count / limit)),
+			totalPosts: count,
+			hasMore: page * limit < count,
 		},
 	};
 }

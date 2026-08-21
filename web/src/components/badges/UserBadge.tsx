@@ -1,5 +1,5 @@
 import type { PublicUser } from "@shared/types";
-import styles from "./UserBadge.module.css";
+import defaultStyle from "./UserBadge.module.css";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function UserBadge({ user, children, style }: Props) {
-	const usedStyle = style ?? styles;
+	const usedStyle = style ?? defaultStyle;
 	return (
 		<div className={usedStyle.badgeWithChildren}>
 			<Link
