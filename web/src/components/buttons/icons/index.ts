@@ -4,3 +4,4 @@ export { TrinketsIcon } from "./TrinketsIcon";
 export { FriendsIcon } from "./FriendsIcon";
 export { LockIcon } from "./LockIcon";
 export { StarIcon } from "./StarIcon";
+export { UserSealIcon } from "./UserSealIcon";

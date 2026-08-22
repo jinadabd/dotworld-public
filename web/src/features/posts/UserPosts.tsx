@@ -5,6 +5,7 @@ import { ComposePostForm } from "./ComposePostForm";
 import { PostCard } from "./PostCard";
 import postStyles from "./Posts.module.css";
 import { PaginationBar } from "../../components/buttons/PaginationBar";
+import { PostPolaroid } from "./PostPolaroid";
 
 interface Props {
 	username: string;
@@ -32,21 +33,25 @@ export function UserPosts({ username, isOwnIsland = false }: Props) {
 	const { posts, pagination } = data;
 
 	return (
-		<div className={postStyles.pageContainer}>
+		<>
 			<div className={postStyles.headerRow}>
 				<h2 className={postStyles.sectionTitle}>
 					{isOwnIsland ? "My Posts" : `${username}'s Posts`}
 				</h2>
-				{isComposing ? (
-					<ComposePostForm
-						onSuccess={() => setIsComposing(false)}
-						onCancel={() => setIsComposing(false)}
-					/>
-				) : (
-					isOwnIsland && (
-						<TactileButton onPress={() => setIsComposing(true)}>Compose</TactileButton>
-					)
-				)}
+				<div className={postStyles.composeView}>
+					{isComposing ? (
+						<ComposePostForm
+							onSuccess={() => setIsComposing(false)}
+							onCancel={() => setIsComposing(false)}
+						/>
+					) : (
+						isOwnIsland && (
+							<TactileButton onRelease={() => setIsComposing(true)}>
+								Compose
+							</TactileButton>
+						)
+					)}
+				</div>
 			</div>
 
 			{isLoading ? (
@@ -55,12 +60,19 @@ export function UserPosts({ username, isOwnIsland = false }: Props) {
 				<p>No posts found.</p>
 			) : (
 				<div className={postStyles.postView}>
-					{posts.map((postWithAuthor) => (
-						<PostCard
-							key={postWithAuthor.post.id}
-							postWithAuthor={postWithAuthor}
-						/>
-					))}
+					{posts.map((postWithAuthor) =>
+						postWithAuthor.post.post_type === "text" ? (
+							<PostCard
+								key={postWithAuthor.post.id}
+								postWithAuthor={postWithAuthor}
+							/>
+						) : (
+							<PostPolaroid
+								key={postWithAuthor.post.id}
+								postWithAuthor={postWithAuthor}
+							/>
+						),
+					)}
 				</div>
 			)}
 
@@ -69,6 +81,6 @@ export function UserPosts({ username, isOwnIsland = false }: Props) {
 				setPage={setPage}
 				posts={{ posts, pagination }}
 			/>
-		</div>
+		</>
 	);
 }

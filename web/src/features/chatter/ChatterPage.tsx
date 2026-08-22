@@ -7,6 +7,7 @@ import { ChatterTabBar } from "./ChatterTabBar";
 import pageStyles from "../../styles/MainPage.module.css";
 import postStyles from "../posts/Posts.module.css";
 import { PaginationBar } from "../../components/buttons/PaginationBar";
+import { PostPolaroid } from "../posts/PostPolaroid";
 
 const LOCAL_STORAGE_KEY = "chatter_last_read_time";
 
@@ -96,17 +97,28 @@ export function ChatterPage() {
 					<p className={pageStyles.statusMessage}>No posts to display in this view.</p>
 				) : (
 					<div className={postStyles.postView}>
-						{filteredPosts.map((postWithAuthor) => (
-							<PostCard
-								key={postWithAuthor.post.id}
-								postWithAuthor={postWithAuthor}
-							/>
-						))}
-						<PaginationBar
-							page={page}
-							setPage={setPage}
-							posts={{ posts, pagination }}
-						/>
+						{filteredPosts.map((postWithAuthor) =>
+							postWithAuthor.post.post_type === "text" ? (
+								<PostCard
+									key={postWithAuthor.post.id}
+									postWithAuthor={postWithAuthor}
+								/>
+							) : (
+								<PostPolaroid
+									key={postWithAuthor.post.id}
+									postWithAuthor={postWithAuthor}
+								/>
+							),
+						)}
+						{filteredPosts.length > 1 && (
+							<div className={postStyles.paginationBar}>
+								<PaginationBar
+									page={page}
+									setPage={setPage}
+									posts={{ posts, pagination }}
+								/>
+							</div>
+						)}
 					</div>
 				)}
 			</div>

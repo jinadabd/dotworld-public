@@ -5,6 +5,7 @@ import { UserTrinkets } from "../trinkets/UserTrinkets";
 import { FeaturedTrinketWidget } from "./FeaturedTrinketWidget";
 import { IslandTabBar } from "./IslandTabBar";
 import styles from "./Island.module.css";
+import pageStyles from "../../styles/MainPage.module.css";
 
 type IslandView = "posts" | "trinkets";
 
@@ -17,12 +18,17 @@ export function UnlockedIsland({ islandWithContent, isOwnIsland = false }: Props
 	const [view, setView] = useState<IslandView>("posts");
 	const { island, user, featured_trinkets } = islandWithContent;
 	return (
-		<div className={styles.islandPage}>
-			<div className={styles.headerCard}>
-				<h1 className={styles.islandTitle}>
+		<div className={pageStyles.pageContainer}>
+			<div className={pageStyles.pageHeader}>
+				<h1 className={pageStyles.pageTitle}>
 					{/* {island.name ?? `${user.name}'s Island`} */}
 					{`${user.name}'s Island`}
 				</h1>
+
+				<IslandTabBar
+					activeTab={view}
+					setActiveTab={setView}
+				/>
 				<p className={styles.islandUsername}>@{user.name}</p>
 				{island.description && (
 					<p className={styles.islandDescription}>{island.description}</p>
@@ -44,13 +50,7 @@ export function UnlockedIsland({ islandWithContent, isOwnIsland = false }: Props
 				</div>
 			</div>
 
-			<IslandTabBar
-				className={styles.tabBarContainer}
-				activeTab={view}
-				setActiveTab={setView}
-			/>
-
-			<div className={styles.contentArea}>
+			<div className={pageStyles.pageMain}>
 				{view === "posts" && (
 					<UserPosts
 						username={user.username}

@@ -28,7 +28,7 @@ export function InteractionBar() {
 			row: 1,
 			colSpan: 1,
 			keycapProps: {
-				colour: "red",
+				colour: "blue",
 				isActive: isStarred,
 				onPress: handleStarToggle,
 				onRelease: handleStarToggle,
@@ -41,7 +41,7 @@ export function InteractionBar() {
 			row: 1,
 			colSpan: 1,
 			keycapProps: {
-				colour: "yellow",
+				colour: "red",
 				isActive: isReplying,
 				onPress: handleReplyToggle,
 				onRelease: handleReplyToggle,

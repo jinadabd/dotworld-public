@@ -49,7 +49,7 @@ export function ComposePostForm({ onSuccess, onCancel }: Props) {
 			{onCancel && (
 				<TactileButton
 					type="button"
-					onClick={onCancel}>
+					onRelease={onCancel}>
 					Cancel
 				</TactileButton>
 			)}

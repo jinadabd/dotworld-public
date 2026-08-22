@@ -21,18 +21,18 @@
 			font-size: 4rem;
 		}
 	}
-}
 
-.pageMain {
-	flex: 1;
-	min-height: 0;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+	.pageMain {
+		flex: 1;
+		min-height: 0;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 
-	.statusMessage {
-		font-family: "Helvetica";
+		.statusMessage {
+			font-family: "Helvetica";
+		}
 	}
 }
 
