@@ -27,10 +27,14 @@ export function useKeycapPress({ onPress, onRelease, disabled }: UseKeycapPressO
 	const buttonProps = {
 		onPointerDown: (e: React.PointerEvent) => {
 			e.preventDefault();
+			e.currentTarget.setPointerCapture(e.pointerId); // keep tracking this pointer even if it leaves the element
 			press();
 		},
 		onPointerUp: () => release(),
-		onPointerLeave: () => release(),
+		onPointerCancel: () => {
+			pressedRef.current = false;
+			setPressed(false);
+		}, // reset visual state without firing onRelease, e.g. on drag-away-and-release-outside
 		onKeyDown: (e: React.KeyboardEvent) => {
 			if (e.key === " " || e.key === "Enter") {
 				e.preventDefault();

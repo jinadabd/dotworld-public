@@ -1,5 +1,4 @@
 import type { PostWithAuthor } from "@shared/types";
-import { UserBadge } from "../../components/badges/UserBadge";
 import styles from "./Posts.module.css";
 import { InteractionBar } from "../../components/buttons/InteractionBar";
 import { formatDate } from "../../utils/formatDate";

@@ -72,6 +72,9 @@ export const friendsApi = api.injectEndpoints({
 				{ type: "Friendship", id: "FRIENDS" },
 				{ type: "Friendship", id: "REQUESTS" },
 				{ type: "Friendship", id: "PENDING" },
+				{ type: "Post", id: "CHATTER" },
+				{ type: "Post", id: `CHATTER-${friendId}` },
+				{ type: "Post", id: "USER_POSTS" },
 			],
 		}),
 
@@ -83,6 +86,9 @@ export const friendsApi = api.injectEndpoints({
 			invalidatesTags: (result, error, { friendId }) => [
 				{ type: "Friendship", id: friendId },
 				{ type: "Friendship", id: "FRIENDS" },
+				{ type: "Post", id: "CHATTER" },
+				{ type: "Post", id: `CHATTER-${friendId}` },
+				{ type: "Post", id: "USER_POSTS" },
 			],
 		}),
 	}),

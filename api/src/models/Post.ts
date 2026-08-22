@@ -78,7 +78,6 @@ export async function getPostsFromUser(
 	userId: number,
 	page: number = 1,
 	limit: number = 25,
-	timestamp: Date = new Date(),
 ): Promise<{ posts: PostRow[]; count: number }> {
 	const offset = (page - 1) * limit;
 	const result = await pool.query<PostRow & { total_count: number }>(
@@ -86,10 +85,10 @@ export async function getPostsFromUser(
 		 	*,
 		 	COUNT(*) OVER()::integer AS total_count
          FROM posts
-         WHERE user_id = $1 AND created_at <= $2
+         WHERE user_id = $1 AND created_at <= now()
          ORDER BY created_at DESC
-		 LIMIT $3 OFFSET $4`,
-		[userId, timestamp, limit, offset],
+		 LIMIT $2 OFFSET $3`,
+		[userId, limit, offset],
 	);
 
 	const count = result.rows.length > 0 && result.rows[0] ? result.rows[0].total_count : 0;

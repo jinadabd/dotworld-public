@@ -73,7 +73,7 @@ export function UserBadgeKeycap({ user, mode = "row" }: Props) {
 			},
 		},
 		{
-			id: `handle-${user.id}`,
+			id: `friendship-${user.id}`,
 			col: mode === "row" ? 6 : 3,
 			row: mode === "row" ? 1 : 2,
 			colSpan: 1,

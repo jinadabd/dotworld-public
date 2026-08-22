@@ -1,20 +1,18 @@
-import { UserBadge } from "../../components/badges/UserBadge";
+import { UserBadgeKeycap } from "../../components/buttons/KeycapUserBadge";
 import { useGetUserQuery } from "./userApi";
 
 interface Props {
 	userId: number;
-	children?: React.ReactNode;
-	style?: CSSModuleClasses;
+	mode?: "row" | "column";
 }
 
-export function FetchedUserBadge({ userId, children, style }: Props) {
+export function FetchedUserBadge({ userId, mode = "row" }: Props) {
 	const { data: user, isLoading } = useGetUserQuery(userId);
 	if (isLoading || !user) return <></>;
 	return (
-		<UserBadge
+		<UserBadgeKeycap
 			user={user}
-			style={style}>
-			{children}
-		</UserBadge>
+			mode={mode}
+		/>
 	);
 }

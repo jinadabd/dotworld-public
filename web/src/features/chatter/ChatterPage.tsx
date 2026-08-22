@@ -4,10 +4,11 @@ import { PostCard } from "../posts/PostCard"; // Replace with your Post componen
 import { useSetSidebar } from "../../hooks/useSetSidebar";
 import { ComposeWidget } from "../widgets/ComposeWidget";
 import { ChatterTabBar } from "./ChatterTabBar";
-import pageStyles from "../../styles/MainPage.module.css";
-import postStyles from "../posts/Posts.module.css";
 import { PaginationBar } from "../../components/buttons/PaginationBar";
 import { PostPolaroid } from "../posts/PostPolaroid";
+
+import pageStyles from "../../styles/MainPage.module.css";
+import postStyles from "../posts/Posts.module.css";
 
 const LOCAL_STORAGE_KEY = "chatter_last_read_time";
 

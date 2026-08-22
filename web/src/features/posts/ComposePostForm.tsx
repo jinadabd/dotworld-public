@@ -1,58 +1,43 @@
 import type { PostVisibility } from "@shared/types";
-import { useComposePost } from "../../hooks/useComposePost";
+import { useComposePost, type UseComposePostReturn } from "../../hooks/useComposePost";
 import { TactileButton } from "../../components/buttons/TactileButton";
+import formStyles from "../../styles/Form.module.css";
+import { PostVisibilityToggle } from "./PostVisibilityToggle";
+import { FileUploadButton } from "../../components/buttons/FileUploadButton";
 
 interface Props {
-	onSuccess?: () => void;
-	onCancel?: () => void;
+	compose: UseComposePostReturn;
 }
 
-export function ComposePostForm({ onSuccess, onCancel }: Props) {
-	const compose = useComposePost(onSuccess);
-
+export function ComposePostForm({ compose }: Props) {
 	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 		await compose.submit();
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<h3>Create a Post</h3>
-
+		<form
+			id="compose-post-form"
+			onSubmit={handleSubmit}>
 			<textarea
+				className={formStyles.textArea}
 				value={compose.bodyText}
 				onChange={(e) => compose.setBodyText(e.target.value)}
 				placeholder="What's on your mind?"
 				rows={4}
 			/>
 
-			<select
-				value={compose.visibility}
-				onChange={(e) => compose.setVisibility(e.target.value as PostVisibility)}>
-				<option value="friends">Friends</option>
-				{/* <option value="bubble">Bubble</option> */}
-				<option value="self">Self</option>
-			</select>
+			<div className={formStyles.postOptions}>
+				<PostVisibilityToggle
+					visibility={compose.visibility}
+					setVisibility={compose.setVisibility}
+				/>
 
-			<input
-				type="file"
-				accept="image/*, video/*, audio/*"
-				onChange={(e) => compose.setMediaFile(e.target.files?.[0] ?? null)}
-			/>
-
-			<TactileButton
-				type="submit"
-				disabled={!compose.hasContent || compose.isBusy}>
-				{compose.isBusy ? "Posting..." : "Post"}
-			</TactileButton>
-
-			{onCancel && (
-				<TactileButton
-					type="button"
-					onRelease={onCancel}>
-					Cancel
-				</TactileButton>
-			)}
+				<FileUploadButton
+					selectedFile={compose.mediaFile}
+					onFileSelect={(file) => compose.setMediaFile(file)}
+				/>
+			</div>
 		</form>
 	);
 }

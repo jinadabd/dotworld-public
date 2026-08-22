@@ -2,34 +2,41 @@ import { useSelector } from "react-redux";
 import { useGetFriendsQuery } from "./friendsApi";
 import type { RootState } from "../../app/store";
 import { FetchedUserBadge } from "../users/FetchedUserBadge";
-import styles from "./Friends.module.css";
 import { RemoveFriendButton } from "./RemoveFriendButton";
 
-export function FriendsView({ providedStyle }: { providedStyle?: CSSModuleClasses }) {
+import friendStyles from "./Friends.module.css";
+
+export function FriendsView() {
 	const { data: friends, isLoading } = useGetFriendsQuery();
 	const myId = useSelector((state: RootState) => state.auth.user!.id);
 	return (
-		<div className={styles.friendsView}>
-			<h2 className={styles.viewHeader}>My Friends</h2>
-			{isLoading && <p className={styles.statusMessage}>Loading...</p>}
-			<div className={styles.friendsList}>
+		<>
+			<div className={friendStyles.headerRow}>
+				<h2 className={friendStyles.sectionTitle}>My Friends</h2>
+				{isLoading && <p className={friendStyles.statusMessage}>Loading...</p>}
+			</div>
+
+			<div className={friendStyles.friendsView}>
 				{!friends && (
-					<p className={styles.statusMessage}>You don't have any friends yet :&lpar;</p>
+					<p className={friendStyles.statusMessage}>
+						You don't have any friends yet :&lpar;
+					</p>
 				)}
 				{friends &&
 					friends.map((friendship) => {
 						const otherUserId =
 							friendship.user_id === myId ? friendship.friend_id : friendship.user_id;
 						return (
-							<FetchedUserBadge
-								key={friendship.friend_id}
-								userId={otherUserId}
-								style={providedStyle}>
+							<div className={friendStyles.friendRow}>
+								<FetchedUserBadge
+									key={friendship.friend_id}
+									userId={otherUserId}
+								/>
 								<RemoveFriendButton friendId={otherUserId} />
-							</FetchedUserBadge>
+							</div>
 						);
 					})}
 			</div>
-		</div>
+		</>
 	);
 }

@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { TactileButton } from "../../components/buttons/TactileButton";
 import { useGetUserPostsQuery } from "./postsApi";
 import { ComposePostForm } from "./ComposePostForm";
 import { PostCard } from "./PostCard";
-import postStyles from "./Posts.module.css";
 import { PaginationBar } from "../../components/buttons/PaginationBar";
 import { PostPolaroid } from "./PostPolaroid";
+import { useComposePost } from "../../hooks/useComposePost";
+import { ComposeToolbar } from "./ComposeToolbar";
+
+import postStyles from "./Posts.module.css";
 
 interface Props {
 	username: string;
@@ -16,16 +18,14 @@ export function UserPosts({ username, isOwnIsland = false }: Props) {
 	const [page, setPage] = useState(1);
 
 	const [isComposing, setIsComposing] = useState(false);
-	const { data, isLoading, error } = useGetUserPostsQuery({ username, page, limit: 25 });
+	const compose = useComposePost();
 
-	if (isComposing) {
-		return (
-			<ComposePostForm
-				onSuccess={() => setIsComposing(false)}
-				onCancel={() => setIsComposing(false)}
-			/>
-		);
+	async function handleSubmit() {
+		const success = await compose.submit();
+		if (success) setIsComposing(false);
 	}
+
+	const { data, isLoading, error } = useGetUserPostsQuery({ username, page, limit: 25 });
 
 	if (isLoading) return <p>Loading psots...</p>;
 	if (error || !data) return <p>Failed to load posts.</p>;
@@ -38,19 +38,22 @@ export function UserPosts({ username, isOwnIsland = false }: Props) {
 				<h2 className={postStyles.sectionTitle}>
 					{isOwnIsland ? "My Posts" : `${username}'s Posts`}
 				</h2>
-				<div className={postStyles.composeView}>
-					{isComposing ? (
-						<ComposePostForm
-							onSuccess={() => setIsComposing(false)}
-							onCancel={() => setIsComposing(false)}
-						/>
-					) : (
-						isOwnIsland && (
-							<TactileButton onRelease={() => setIsComposing(true)}>
-								Compose
-							</TactileButton>
-						)
-					)}
+				{isOwnIsland && (
+					<ComposeToolbar
+						isComposing={isComposing}
+						onToggleCompose={() => setIsComposing((prev) => !prev)}
+						onSubmit={handleSubmit}
+						hasContent={compose.hasContent}
+						isBusy={compose.isBusy}
+					/>
+				)}
+			</div>
+
+			<div
+				className={postStyles.composeDrawer}
+				data-expanded={isComposing}>
+				<div className={postStyles.drawerInner}>
+					<ComposePostForm compose={compose} />
 				</div>
 			</div>
 

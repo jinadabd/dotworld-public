@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useFileUpload } from "./useFileUpload";
 import { useCreatePostMutation } from "../features/posts/postsApi";
 
-export function useComposePost(onSuccess?: () => void) {
+export function useComposePost() {
 	const [bodyText, setBodyText] = useState("");
 	const [visibility, setVisibility] = useState<PostVisibility>("friends");
 	const [mediaFile, setMediaFile] = useState<File | null>(null);
@@ -39,8 +39,10 @@ export function useComposePost(onSuccess?: () => void) {
 
 			setBodyText("");
 			setMediaFile(null);
-			onSuccess?.();
-		} catch {}
+			return true;
+		} catch {
+			return false;
+		}
 	}
 
 	function handlePaste(e: React.ClipboardEvent) {
@@ -61,3 +63,5 @@ export function useComposePost(onSuccess?: () => void) {
 		isBusy,
 	};
 }
+
+export type UseComposePostReturn = ReturnType<typeof useComposePost>;

@@ -9,6 +9,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	icon?: ReactNode;
 	active?: boolean;
 	disabled?: boolean;
+	isHighlighted?: boolean;
 	onRelease?: () => void;
 }
 
@@ -20,6 +21,7 @@ export function TactileButton({
 	active,
 	onRelease,
 	disabled,
+	isHighlighted = false,
 	...rest
 }: Props) {
 	const buttonKey: KeyPosition[] = [
@@ -34,6 +36,7 @@ export function TactileButton({
 				colour: colour,
 				legend: "⬤",
 				isActive: active,
+				isHighlighted,
 				disabled,
 				onRelease,
 				children: (

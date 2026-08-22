@@ -1,4 +1,4 @@
-import type { IslandWithContent, PublicUser } from "@shared/types";
+import type { IslandWithContent } from "@shared/types";
 import { useState } from "react";
 import { UserPosts } from "../posts/UserPosts";
 import { UserTrinkets } from "../trinkets/UserTrinkets";

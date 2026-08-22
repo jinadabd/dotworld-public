@@ -1,0 +1,70 @@
+@import "../../styles/palette.css";
+.headerRow {
+	width: 65%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+	.sectionTitle {
+		font-family: "Bitcount";
+		font-size: 2rem;
+		color: var(--dark);
+	}
+}
+
+.textArea {
+	min-height: 7em;
+	max-height: 10rem;
+	resize: none;
+}
+
+.friendsView {
+	width: 65%;
+	padding: 1rem 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.5rem;
+
+	.interactionBar,
+	.userBadge {
+		zoom: 0.85;
+	}
+
+	.friendRow {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		background-color: var(--offwhite);
+		border-radius: 0.75rem;
+		padding: 1rem;
+
+		box-shadow:
+			0 0 0 var(--beige),
+			0 0 0 var(--brown),
+			0 0 0.25rem var(--brown) inset,
+			0 0 0 var(--beige) inset,
+			0 0 0 var(--white) inset;
+
+		/* Synchronized snappy transitions */
+		transition:
+			transform 0.2s cubic-bezier(0.2, 0, 0.2, 1),
+			box-shadow 0.2s cubic-bezier(0.2, 0, 0.2, 1);
+
+		& > * {
+			zoom: 0.85;
+		}
+
+		&:hover {
+			transform: translateY(-0.5rem);
+			box-shadow:
+				0 0.5rem 0 var(--beige),
+				0 0.55rem 0 var(--brown),
+				0 0 0.25rem var(--brown) inset,
+				0 -0.25rem 0.5rem var(--beige) inset,
+				0 0.75rem 0.25rem var(--white) inset;
+		}
+	}
+}

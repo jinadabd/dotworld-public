@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLazySearchUsersQuery } from "../users/userApi";
-import { UserBadge } from "../../components/badges/UserBadge";
 import styles from "./Widgets.module.css";
 import badgeStyle from "./WidgetUserBadge.module.css";
+import { UserBadgeKeycap } from "../../components/buttons/KeycapUserBadge";
 
 export function UserSearchWidget() {
 	const [input, setInput] = useState("");
@@ -32,9 +32,9 @@ export function UserSearchWidget() {
 					<li
 						className={styles.resultItem}
 						key={user.id}>
-						<UserBadge
-							style={badgeStyle}
+						<UserBadgeKeycap
 							user={user}
+							mode="column"
 						/>
 					</li>
 				))}

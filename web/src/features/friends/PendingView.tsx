@@ -1,35 +1,40 @@
 import { useGetFriendshipPendingQuery } from "./friendsApi";
 import { FetchedUserBadge } from "../users/FetchedUserBadge";
-import styles from "./Friends.module.css";
 import { TactileButton } from "../../components/buttons/TactileButton";
 import { useFriendshipActions } from "./useFriendshipActions";
+
+import friendStyles from "./Friends.module.css";
 
 export function PendingView({ providedStyle }: { providedStyle?: CSSModuleClasses }) {
 	const { data: pending, isLoading } = useGetFriendshipPendingQuery();
 	const { cancelFriendRequest } = useFriendshipActions();
 
 	return (
-		<div className={styles.friendsView}>
-			<h2 className={styles.viewHeader}>Pending Friend Requests</h2>
-			{isLoading && <p className={styles.statusMessage}>Loading...</p>}
-			<div className={styles.friendsList}>
+		<>
+			<div className={friendStyles.headerRow}>
+				<h2 className={friendStyles.sectionTitle}>Pending Requests</h2>
+				{isLoading && <p className={friendStyles.statusMessage}>Loading...</p>}
+			</div>
+
+			<div className={friendStyles.friendsView}>
 				{(!pending || pending.length === 0) && (
-					<p className={styles.statusMessage}>
+					<p className={friendStyles.statusMessage}>
 						You don't have any pending friend requests. {`:(`}
 					</p>
 				)}
 				{pending &&
 					pending.map((req) => (
-						<FetchedUserBadge
-							key={req.friend_id}
-							userId={req.friend_id}
-							style={providedStyle}>
+						<div className={friendStyles.friendRow}>
+							<FetchedUserBadge
+								key={req.friend_id}
+								userId={req.friend_id}
+							/>
 							<TactileButton onRelease={() => cancelFriendRequest(req.friend_id)}>
 								Cancel
 							</TactileButton>
-						</FetchedUserBadge>
+						</div>
 					))}
 			</div>
-		</div>
+		</>
 	);
 }

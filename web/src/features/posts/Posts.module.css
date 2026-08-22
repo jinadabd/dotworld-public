@@ -6,8 +6,52 @@
 	align-items: center;
 	justify-content: space-between;
 
-	.composeView {
+	.sectionTitle {
+		font-family: "Bitcount";
+		font-size: 2rem;
+		color: var(--dark);
 	}
+
+	.toolbarWrapper {
+		display: inline-flex;
+		align-items: center;
+		transition: all 0.25s cubic-bezier(0.2, 0, 0.2, 1);
+
+		.toggleIcon {
+			display: inline-block;
+			transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1);
+			font-weight: bold;
+			font-size: 2rem;
+			line-height: 1;
+			font-family: "Bitcount";
+			text-align: center;
+		}
+
+		.toggleIcon[data-active="true"] {
+			transform: rotate(45deg);
+		}
+	}
+}
+
+.composeDrawer {
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+	width: 65%;
+
+	&[data-expanded="true"] {
+		grid-template-rows: 1fr;
+	}
+
+	.drawerInner {
+		overflow: hidden;
+	}
+}
+
+.textArea {
+	min-height: 7em;
+	max-height: 10rem;
+	resize: none;
 }
 
 .postView {
@@ -30,9 +74,6 @@
 		gap: 1rem;
 		min-height: 10rem;
 		background-color: var(--offwhite);
-		/* box-shadow:
-		0 0 0.25rem var(--brown) inset,
-		0 0rem 0 var(--red); */
 		border-radius: 0.75rem;
 		padding: 1rem;
 

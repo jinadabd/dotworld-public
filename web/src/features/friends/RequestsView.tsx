@@ -1,34 +1,35 @@
-import { useSelector } from "react-redux";
 import { useGetFriendRequestsQuery } from "./friendsApi";
-import type { RootState } from "../../app/store";
 import { FetchedUserBadge } from "../users/FetchedUserBadge";
-import styles from "./Friends.module.css";
 import { IncomingRequestButtons } from "./IncomingRequestButtons";
+
+import friendStyles from "./Friends.module.css";
 
 export function RequestsView({ providedStyle }: { providedStyle?: CSSModuleClasses }) {
 	const { data: requests, isLoading } = useGetFriendRequestsQuery();
 
 	return (
-		<div className={styles.friendsView}>
-			<h2 className={styles.viewHeader}>Incoming Friend Requests</h2>
-			{isLoading && <p className={styles.statusMessage}>Loading...</p>}
-			<div className={styles.friendsList}>
+		<>
+			<div className={friendStyles.headerRow}>
+				<h2 className={friendStyles.sectionTitle}>Incoming Requests</h2>
+				{isLoading && <p className={friendStyles.statusMessage}>Loading...</p>}
+			</div>
+
+			<div className={friendStyles.friendsView}>
 				{(!requests || requests.length === 0) && (
-					<p className={styles.statusMessage}>
+					<p className={friendStyles.statusMessage}>
 						You don't have any incoming friend requests. {`:(`}
 					</p>
 				)}
 				{requests &&
 					requests.map((req) => (
-						<div key={req.user_id}>
-							<FetchedUserBadge
-								userId={req.user_id}
-								style={providedStyle}>
-								<IncomingRequestButtons friendId={req.user_id} />
-							</FetchedUserBadge>
+						<div
+							key={req.user_id}
+							className={friendStyles.friendRow}>
+							<FetchedUserBadge userId={req.user_id} />
+							<IncomingRequestButtons friendId={req.user_id} />
 						</div>
 					))}
 			</div>
-		</div>
+		</>
 	);
 }

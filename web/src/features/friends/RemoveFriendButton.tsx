@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { KeyboardLayout, type KeyPosition } from "../../components/buttons/KeyboardLayout";
 import { useRemoveFriendMutation } from "./friendsApi";
 import { TactileButtonWithConfirm } from "../../components/buttons/TactileButtonWithConfirm";
 

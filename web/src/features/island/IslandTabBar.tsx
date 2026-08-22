@@ -1,5 +1,4 @@
 import type { ButtonHTMLAttributes } from "react";
-import type { RootState } from "../../app/store";
 import { KeyboardLayout, type KeyPosition } from "../../components/buttons/KeyboardLayout";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -8,7 +7,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function IslandTabBar({ activeTab, setActiveTab }: Props) {
-	const navKeys: KeyPosition[] = [
+	const keys: KeyPosition[] = [
 		{
 			id: "postsTab",
 			col: 1,
@@ -41,7 +40,7 @@ export function IslandTabBar({ activeTab, setActiveTab }: Props) {
 
 	return (
 		<KeyboardLayout
-			keys={navKeys}
+			keys={keys}
 			columns={4}
 			rows={1}
 			plateColor="#272727"
