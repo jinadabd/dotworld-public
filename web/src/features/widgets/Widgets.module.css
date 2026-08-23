@@ -1,133 +1,141 @@
 .widget {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	align-items: center;
+
+	.widgetTitle {
+		margin-top: -0.5rem;
+		font-family: "Bitcount";
+		font-size: 2rem;
+	}
 }
 
-.textInput, .textArea {
-    width: calc(7.5rem + 0.375rem);
-    box-sizing: border-box;
-    padding: 0.875rem 1rem;
-    font-family: 'Helvetica';
-    font-size: 0.9375rem;
-    line-height: 1.5;
-    color: var(--dark);
-    background-color: var(--cream);
-    border: 1px solid color-mix(in oklch, var(--dark, #281c14) 20%, transparent);
-    border-radius: 8px;
-    resize: vertical;
-    outline: none;
-    box-shadow:
-        inset 0 2px 5px rgba(40, 28, 20, 0.14),
-        inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+.textInput,
+.textArea {
+	width: calc(7.5rem + 0.375rem);
+	box-sizing: border-box;
+	padding: 0.875rem 1rem;
+	font-family: "Helvetica";
+	font-size: 0.9375rem;
+	line-height: 1.5;
+	color: var(--dark);
+	background-color: var(--cream);
+	border: 1px solid color-mix(in oklch, var(--dark, #281c14) 20%, transparent);
+	border-radius: 8px;
+	resize: vertical;
+	outline: none;
+	box-shadow:
+		inset 0 2px 5px rgba(40, 28, 20, 0.14),
+		inset 0 0 0 1px rgba(0, 0, 0, 0.04);
 }
 
 .textArea {
-    min-height: 7em;
-    max-height: 10rem;
-    resize: none;
+	min-height: 7em;
+	max-height: 10rem;
+	resize: none;
 }
 
 /* Add to Widgets.module.css */
 
 .selectInput {
-    width: calc(7.5rem + 0.375rem);
-    box-sizing: border-box;
-    padding: 0.75rem 2rem 0.75rem 1rem;
-    font-family: 'Helvetica', sans-serif;
-    font-size: 0.9375rem;
-    line-height: 1.5;
-    color: var(--dark);
-    background-color: var(--cream);
-    border: 1px solid color-mix(in oklch, var(--dark, #281c14) 20%, transparent);
-    border-radius: 8px;
-    outline: none;
-    cursor: pointer;
+	width: calc(7.5rem + 0.375rem);
+	box-sizing: border-box;
+	padding: 0.75rem 2rem 0.75rem 1rem;
+	font-family: "Helvetica", sans-serif;
+	font-size: 0.9375rem;
+	line-height: 1.5;
+	color: var(--dark);
+	background-color: var(--cream);
+	border: 1px solid color-mix(in oklch, var(--dark, #281c14) 20%, transparent);
+	border-radius: 8px;
+	outline: none;
+	cursor: pointer;
 
-    /* Recessed inset 3D housing matching .textInput */
-    box-shadow:
-        inset 0 2px 5px rgba(40, 28, 20, 0.14),
-        inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+	/* Recessed inset 3D housing matching .textInput */
+	box-shadow:
+		inset 0 2px 5px rgba(40, 28, 20, 0.14),
+		inset 0 0 0 1px rgba(0, 0, 0, 0.04);
 
-    /* Custom retro arrow SVG replace native OS arrow */
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23281c14" d="M0 0l6 8 6-8z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 0.875rem center;
-    background-size: 0.65rem;
+	/* Custom retro arrow SVG replace native OS arrow */
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23281c14" d="M0 0l6 8 6-8z"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 0.875rem center;
+	background-size: 0.65rem;
 
-    transition: border-color 150ms ease, box-shadow 150ms ease;
+	transition:
+		border-color 150ms ease,
+		box-shadow 150ms ease;
 }
 
 .selectInput:focus {
-    border-color: var(--dark, #281c14);
-    box-shadow: 
-        inset 0 2px 4px rgba(40, 28, 20, 0.18),
-        0 0 0 3px color-mix(in oklch, var(--dark, #281c14) 12%, transparent);
+	border-color: var(--dark, #281c14);
+	box-shadow:
+		inset 0 2px 4px rgba(40, 28, 20, 0.18),
+		0 0 0 3px color-mix(in oklch, var(--dark, #281c14) 12%, transparent);
 }
 
 /* Style option items inside dropdown menu */
 .selectInput option {
-    background-color: var(--cream);
-    color: var(--dark);
-    font-family: 'Helvetica', sans-serif;
-    padding: 0.5rem;
+	background-color: var(--cream);
+	color: var(--dark);
+	font-family: "Helvetica", sans-serif;
+	padding: 0.5rem;
 }
 
 .userSearch {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
 }
 
 /* Status message styling (loading / no results) */
 .statusText {
-  margin: 0;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--dark, #281c14);
-  opacity: 0.7;
+	margin: 0;
+	padding: 0.25rem 0.5rem;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	color: var(--dark, #281c14);
+	opacity: 0.7;
 }
 
 /* Results list container */
 .resultsList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  max-height: 240px;
-  overflow-y: auto;
-  
-  /* Subtle scrollbar styling */
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in oklch, var(--dark, #281c14) 20%, transparent) transparent;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	max-height: 240px;
+	overflow-y: auto;
+
+	/* Subtle scrollbar styling */
+	scrollbar-width: thin;
+	scrollbar-color: color-mix(in oklch, var(--dark, #281c14) 20%, transparent) transparent;
 }
 
 /* Individual list items */
 .resultItem {
-  padding: 0.25rem;
-  border-radius: 8px;
-  background-color: var(--cream, #F4F1E9);
-  border: 1px solid color-mix(in oklch, var(--dark, #281c14) 12%, transparent);
-  transition: border-color 150ms ease;
+	padding: 0.25rem;
+	border-radius: 8px;
+	background-color: var(--cream, #f4f1e9);
+	border: 1px solid color-mix(in oklch, var(--dark, #281c14) 12%, transparent);
+	transition: border-color 150ms ease;
 }
 
 .resultItem:hover {
-  border-color: color-mix(in oklch, var(--dark, #281c14) 30%, transparent);
+	border-color: color-mix(in oklch, var(--dark, #281c14) 30%, transparent);
 }
 
 .dotworld {
-    position: relative;
-    font-family: "Bitcount";
-    font-size: 1.5rem;
+	position: relative;
+	font-family: "Bitcount";
+	font-size: 1.5rem;
 }
-
-
 
 /* .dotworld:hover {
     transform: translate(-2px, -2px);

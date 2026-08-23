@@ -1,27 +1,43 @@
+import type { TrinketType } from "@shared/types";
 import { useGetCommunityTrinketsQuery } from "./trinketApi";
 import { TrinketCard } from "./TrinketCard";
 
-export function CommunityTrinkets() {
+import trinketStyles from "./Trinkets.module.css";
+
+interface Props {
+	filter: TrinketType | "all";
+}
+
+export function CommunityTrinkets({ filter }: Props) {
 	const { data: trinkets, isLoading, error } = useGetCommunityTrinketsQuery();
 
+	if (isLoading) return <p>Loading Community Trinkets...</p>;
+	if (error || !trinkets) return <p>Failed to load Trinkets.</p>;
+
+	const filteredTrinkets =
+		filter === "all" ? trinkets : trinkets.filter((trinket) => trinket.trinket_type === filter);
+
 	return (
-		<div>
-			<h2>Community Trinkets</h2>
+		<>
+			<div className={trinketStyles.headerRow}>
+				<h2 className={trinketStyles.sectionTitle}>Community Trinkets</h2>
+			</div>
 
 			{isLoading ? (
-				<p>Loading community trinkets...</p>
-			) : error || !trinkets || trinkets.length === 0 ? (
-				<p>No community trinkets found.</p>
+				<p>Loading Community Trinkets...</p>
+			) : error || !filteredTrinkets || filteredTrinkets.length === 0 ? (
+				<p>{`No Community Trinkets found :'( Why not be the first?`}</p>
 			) : (
-				<div>
-					{trinkets.map((trinket) => (
+				<div className={trinketStyles.trinketView}>
+					{filteredTrinkets.map((trinket) => (
 						<TrinketCard
 							key={trinket.id}
 							trinket={trinket}
+							author={trinket.user}
 						/>
 					))}
 				</div>
 			)}
-		</div>
+		</>
 	);
 }

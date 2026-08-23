@@ -53,10 +53,5 @@ export function IslandPage() {
 		return <LockedIsland user={data.user} />;
 	}
 
-	return (
-		<UnlockedIsland
-			islandWithContent={data}
-			isOwnIsland
-		/>
-	);
+	return <UnlockedIsland islandWithContent={data} />;
 }

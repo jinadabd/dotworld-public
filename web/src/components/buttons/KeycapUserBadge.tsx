@@ -1,41 +1,22 @@
-import { useEffect, useState } from "react";
-import { FriendsIcon, UserSealIcon } from "./icons";
-import { generateUserSeal, type UserSeal } from "../../utils/generateSeal";
-import { KeyboardLayout, type KeyPosition } from "./KeyboardLayout";
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import type { PublicUser } from "@shared/types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { FriendsIcon, UserSealIcon } from "./icons";
+import { generateUserSeal } from "../../utils/generateSeal";
+import { KeyboardLayout, type KeyPosition } from "./KeyboardLayout";
 
 interface Props {
 	user: PublicUser;
 	mode?: "row" | "column";
 }
 
-const DEFAULT_SEAL: UserSeal = {
-	grid: [
-		[false, false, false, false, false],
-		[false, false, false, false, false],
-		[false, false, true, false, false],
-		[false, false, false, false, false],
-		[false, false, false, false, false],
-	],
-	color: "var(--dark)",
-};
-
 export function UserBadgeKeycap({ user, mode = "row" }: Props) {
-	const [seal, setSeal] = useState<UserSeal>(DEFAULT_SEAL);
 	const navigate = useNavigate();
 	const onRelease = () => navigate(`/${user.username}`);
 
-	useEffect(() => {
-		let isMounted = true;
-
-		generateUserSeal(user.username || user.id.toString()).then((res) => {
-			if (isMounted) setSeal(res);
-		});
-
-		return () => {
-			isMounted = false;
-		};
+	// Synchronous computation — calculated instantly on the first render frame
+	const seal = useMemo(() => {
+		return generateUserSeal(user.username || user.id.toString());
 	}, [user.username, user.id]);
 
 	const keys: KeyPosition[] = [
@@ -79,7 +60,6 @@ export function UserBadgeKeycap({ user, mode = "row" }: Props) {
 			colSpan: 1,
 			keycapProps: {
 				colour: "blue",
-				// isActive: true,
 				children: <FriendsIcon />,
 			},
 		},

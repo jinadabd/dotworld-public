@@ -6,16 +6,20 @@ import { PaginationBar } from "../../components/buttons/PaginationBar";
 import { PostPolaroid } from "./PostPolaroid";
 import { useComposePost } from "../../hooks/useComposePost";
 import { ComposeToolbar } from "./ComposeToolbar";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../app/store";
 
 import postStyles from "./Posts.module.css";
 
 interface Props {
 	username: string;
-	isOwnIsland?: boolean;
 }
 
-export function UserPosts({ username, isOwnIsland = false }: Props) {
+export function UserPosts({ username }: Props) {
 	const [page, setPage] = useState(1);
+
+	const { username: myUsername } = useSelector((state: RootState) => state.auth.user!);
+	const isOwnIsland = username === myUsername;
 
 	const [isComposing, setIsComposing] = useState(false);
 	const compose = useComposePost();
@@ -76,14 +80,14 @@ export function UserPosts({ username, isOwnIsland = false }: Props) {
 							/>
 						),
 					)}
+
+					<PaginationBar
+						page={page}
+						setPage={setPage}
+						posts={{ posts, pagination }}
+					/>
 				</div>
 			)}
-
-			<PaginationBar
-				page={page}
-				setPage={setPage}
-				posts={{ posts, pagination }}
-			/>
 		</>
 	);
 }

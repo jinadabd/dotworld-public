@@ -5,6 +5,7 @@ import type {
 	EditTrinketInput,
 	CreateTrinketItemInput,
 	PaginatedTrinkets,
+	TrinketWithAuthor,
 } from "@shared/types";
 import { api } from "../../services/api";
 
@@ -23,7 +24,7 @@ export const trinketApi = api.injectEndpoints({
 				{ type: "Trinket", id: `USER_${username}` },
 			],
 		}),
-		getCommunityTrinkets: builder.query<TrinketRow[], void>({
+		getCommunityTrinkets: builder.query<TrinketWithAuthor[], void>({
 			query: () => `/trinkets/community`,
 			providesTags: (result) =>
 				result
@@ -36,12 +37,12 @@ export const trinketApi = api.injectEndpoints({
 						]
 					: [{ type: "Trinket", id: "COMMUNITYTRINKETS" }],
 		}),
-		getFriendsTrinkets: builder.query<PaginatedTrinkets, { page?: number; limit?: number }>({
+		getFriendsTrinkets: builder.query<TrinketWithAuthor[], { page?: number; limit?: number }>({
 			query: ({ page = 1, limit = 25 }) => `/trinkets/friends?page=${page}&limit=${limit}`,
 			providesTags: (result) =>
 				result
 					? [
-							...result.trinkets.map(({ id }) => ({
+							...result.map(({ id }) => ({
 								type: "Trinket" as const,
 								id: id,
 							})),

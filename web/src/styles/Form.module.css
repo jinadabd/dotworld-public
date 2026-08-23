@@ -16,12 +16,10 @@ form {
 	.textInput,
 	.textArea {
 		width: 100%;
-		min-height: 7rem;
-		max-height: 30vh;
 		box-sizing: border-box;
 		padding: 1rem;
 		font-family: "Helvetica";
-		font-size: 0.9375rem;
+		font-size: 1rem;
 		line-height: 1.5;
 		color: var(--dark);
 		background-color: var(--cream);
@@ -34,10 +32,35 @@ form {
 			inset 0 0 0 1px var(--beige);
 	}
 
+	.textInput {
+		min-height: 3rem;
+		max-height: 3rem;
+	}
+
+	.textArea {
+		min-height: 7rem;
+		max-height: 30vh;
+	}
+
 	.postOptions {
 		width: 100%;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
+	}
+
+	.trinketOptions {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		align-items: center;
+
+		.optionRow {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+		}
 	}
 }

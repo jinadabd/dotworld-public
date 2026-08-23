@@ -249,7 +249,7 @@ export interface TrinketRow {
 }
 
 export interface PaginatedTrinkets {
-	trinkets: TrinketRow[];
+	trinkets: TrinketWithAuthor[];
 	pagination: {
 		currentPage: number;
 		totalPages: number;

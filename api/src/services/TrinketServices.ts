@@ -21,7 +21,12 @@ import {
 	getTrinketById,
 	unfeatureTrinket,
 } from "../models/Trinkets.ts";
-import { decrementUserStorage, getUserByUsername, incrementUserStorage } from "../models/User.ts";
+import {
+	decrementUserStorage,
+	getUserById,
+	getUserByUsername,
+	incrementUserStorage,
+} from "../models/User.ts";
 import type {
 	CreateTrinketInput,
 	EditTrinketInput,
@@ -30,6 +35,7 @@ import type {
 	TrinketRow,
 	TrinketType,
 	TrinketVisibility,
+	TrinketWithAuthor,
 } from "../types/types.ts";
 import { deleteFromR2Service } from "./CloudflareServices.ts";
 import { requireFriendship } from "./FriendshipServices.ts";
@@ -93,31 +99,42 @@ export async function getUserTrinketsService(
 	return trinketsToShow;
 }
 
-export async function getCommunityTrinketsService(): Promise<TrinketRow[]> {
-	return await getPublicTrinkets();
+export async function getCommunityTrinketsService(): Promise<TrinketWithAuthor[]> {
+	const trinkets = await getPublicTrinkets();
+
+	const trinketsWithAuthors = await Promise.all(
+		trinkets.map(async (trinket) => {
+			const { user_id, ...rest } = trinket;
+			const author = await getUserById(user_id);
+			const trinketWithAuthor: TrinketWithAuthor = { user: author, ...rest };
+			return trinketWithAuthor;
+		}),
+	);
+
+	return trinketsWithAuthors;
 }
 
 export async function getFriendsTrinketsService(
 	userId: number,
 	page: number = 1,
 	limit: number = 25,
-): Promise<PaginatedTrinkets> {
+): Promise<TrinketWithAuthor[]> {
 	const friends = await getAllUserFriends(userId);
 	const friendIds = friends.map((friendship) =>
 		friendship.user_id === userId ? friendship.friend_id : friendship.user_id,
 	);
 
 	const { trinkets, count } = await getAllFriendsTrinkets(friendIds, page, limit);
+	const trinketsWithFriends = await Promise.all(
+		trinkets.map(async (trinket) => {
+			const { user_id, ...rest } = trinket;
+			const author = await getUserById(user_id);
+			const trinketWithFriend: TrinketWithAuthor = { user: author, ...rest };
+			return trinketWithFriend;
+		}),
+	);
 
-	return {
-		trinkets,
-		pagination: {
-			currentPage: page,
-			totalPages: Math.ceil(count / limit),
-			totalTrinkets: count,
-			hasMore: page * limit < count,
-		},
-	};
+	return trinketsWithFriends;
 }
 // ========================= EDIT ============================
 

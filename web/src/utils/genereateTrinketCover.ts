@@ -1,6 +1,6 @@
-export interface UserSeal {
-	grid: boolean[][]; // 5x5 matrix
-	color: string; // OKLCH accent color derived from hash
+export interface TrinketSeal {
+	grid: boolean[][]; // 13x13 matrix
+	color: string;
 }
 
 // 32-bit FNV-1a hash to create a seed integer
@@ -13,7 +13,7 @@ function fnv1a(str: string): number {
 	return hash >>> 0;
 }
 
-// Mulberry32 PRNG for uniform pseudo-random generation
+// Mulberry32: High-quality 32-bit pseudo-random generator
 function mulberry32(a: number) {
 	return function () {
 		let t = (a += 0x6d2b79f5);
@@ -23,18 +23,19 @@ function mulberry32(a: number) {
 	};
 }
 
-export function generateUserSeal(identifier: string): UserSeal {
+export function generateTrinketCover(identifier: string): TrinketSeal {
 	const cleanId = identifier.toLowerCase().trim();
 	const seed = fnv1a(cleanId);
 	const rng = mulberry32(seed);
 
-	const SIZE = 5;
-	const HALF_WIDTH = Math.ceil(SIZE / 2); // 3 columns (col 0-1 mirrored, col 2 center)
+	const SIZE = 13;
+	const HALF_WIDTH = Math.ceil(SIZE / 2); // 7 columns
 	const grid: boolean[][] = Array.from({ length: SIZE }, () => Array(SIZE).fill(false));
 
 	for (let row = 0; row < SIZE; row++) {
 		for (let col = 0; col < HALF_WIDTH; col++) {
-			const isFilled = rng() > 0.5; // ~50% fill rate for 5x5 grids
+			// Threshold controls density (~45% active dots for balanced visuals)
+			const isFilled = rng() > 0.55;
 			grid[row][col] = isFilled;
 			grid[row][SIZE - 1 - col] = isFilled; // Mirror horizontally
 		}

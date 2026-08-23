@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useFileUpload } from "./useFileUpload";
 import { useCreateTrinketMutation } from "../features/trinkets/trinketApi";
 
-export function useCreateTrinket(onSuccess?: () => void) {
+export function useCreateTrinket() {
 	const [visibility, setVisibility] = useState<TrinketVisibility>("friends");
 	const [type, setType] = useState<TrinketType>("collection");
 	const [title, setTitle] = useState("");
@@ -37,14 +37,11 @@ export function useCreateTrinket(onSuccess?: () => void) {
 			setTitle("");
 			setDescription("");
 			setCoverFile(null);
-			onSuccess?.();
-		} catch {}
+			return true;
+		} catch {
+			return false;
+		}
 	}
-
-	// function handlePaste(e: React.ClipboardEvent) {
-	// 	const item = Array.from(e.clipboardData.items).find((i) => i.type.startsWith("image/"));
-	// 	if (item) setMediaFile(item.getAsFile());
-	// }
 
 	return {
 		visibility,
@@ -62,3 +59,5 @@ export function useCreateTrinket(onSuccess?: () => void) {
 		isBusy,
 	};
 }
+
+export type UseCreateTrinketReturn = ReturnType<typeof useCreateTrinket>;

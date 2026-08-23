@@ -2,53 +2,79 @@ import { useState } from "react";
 import { useGetUserTrinketsQuery } from "./trinketApi";
 import { TrinketCard } from "./TrinketCard";
 import { CreateTrinketForm } from "./CreateTrinketForm";
-import { TactileButton } from "../../components/buttons/TactileButton";
-import styles from "./Trinkets.module.css";
+import { CreateTrinketToolbar } from "./CreateTrinketToolbar";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../app/store";
+import { useCreateTrinket } from "../../hooks/useCreateTrinket";
+import type { TrinketType } from "@shared/types";
+
+import trinketStyles from "./Trinkets.module.css";
 
 interface Props {
 	username: string;
-	isOwnIsland?: boolean;
+	filter: TrinketType | "all";
 }
 
-export function UserTrinkets({ username, isOwnIsland = false }: Props) {
-	const [isCreating, setIsCreating] = useState(false);
-	const { data: trinkets, isLoading, error } = useGetUserTrinketsQuery({ username });
+export function UserTrinkets({ username, filter }: Props) {
+	const user = useSelector((state: RootState) => state.auth.user!);
+	const isOwnIsland = username === user.username;
 
-	if (isCreating) {
-		return (
-			<CreateTrinketForm
-				onSuccess={() => setIsCreating(false)}
-				onCancel={() => setIsCreating(false)}
-			/>
-		);
+	const [isCreating, setIsCreating] = useState(false);
+	const create = useCreateTrinket();
+
+	async function handleSubmit() {
+		const success = await create.submit();
+		if (success) setIsCreating(false);
 	}
 
+	const { data: trinkets, isLoading, error } = useGetUserTrinketsQuery({ username });
+
+	if (isLoading) return <p>Loading Trinkets...</p>;
+	if (error || !trinkets) return <p>Failed to load Trinkets.</p>;
+
+	const filteredTrinkets =
+		filter === "all" ? trinkets : trinkets.filter((trinket) => trinket.trinket_type === filter);
+
 	return (
-		<div className={styles.trinketsView}>
-			<div className={styles.headerRow}>
-				<h2 className={styles.sectionTitle}>
+		<>
+			<div className={trinketStyles.headerRow}>
+				<h2 className={trinketStyles.sectionTitle}>
 					{isOwnIsland ? "My Trinkets" : `${username}'s Trinkets`}
 				</h2>
 				{isOwnIsland && (
-					<TactileButton onClick={() => setIsCreating(true)}>Add Trinket</TactileButton>
+					<CreateTrinketToolbar
+						isCreating={isCreating}
+						onToggleCreate={() => setIsCreating((prev) => !prev)}
+						onSubmit={handleSubmit}
+						hasTitle={create.hasTitle}
+						isBusy={create.isBusy}
+					/>
 				)}
 			</div>
 
+			<div
+				className={trinketStyles.createDrawer}
+				data-expanded={isCreating}>
+				<div className={trinketStyles.drawerInner}>
+					<CreateTrinketForm create={create} />
+				</div>
+			</div>
+
 			{isLoading ? (
-				<p>Loading trinkets...</p>
-			) : error || !trinkets || trinkets.length === 0 ? (
-				<p>No trinkets found.</p>
+				<p>Loading your trinkets...</p>
+			) : error || !filteredTrinkets || filteredTrinkets.length === 0 ? (
+				<p>No trinkets found. Create some :D</p>
 			) : (
-				<div className={styles.trinketGrid}>
-					{trinkets.map((trinket) => (
-						<div
-							className={styles.trinketCard}
-							key={trinket.id}>
-							<TrinketCard trinket={trinket} />
-						</div>
+				<div className={trinketStyles.trinketView}>
+					{filteredTrinkets.map((trinket) => (
+						<TrinketCard
+							key={trinket.id}
+							trinket={trinket}
+							author={user}
+						/>
 					))}
 				</div>
 			)}
-		</div>
+		</>
 	);
 }

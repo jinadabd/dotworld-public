@@ -1,96 +1,58 @@
-import { useState } from "react";
-import { useCreateTrinketMutation } from "./trinketApi";
-import { useFileUpload } from "../../hooks/useFileUpload";
-import type { TrinketVisibility, TrinketType } from "@shared/types";
+import type { UseCreateTrinketReturn } from "../../hooks/useCreateTrinket";
+import { TrinketVisibilityToggle } from "./TrinketVisibilityToggle";
+import { TrinketTypeToggle } from "./TrinketTypeToggle";
+import { FileUploadButton } from "../../components/buttons/FileUploadButton";
+
+import formStyles from "../../styles/Form.module.css";
 
 interface Props {
-	onSuccess?: () => void;
-	onCancel?: () => void;
+	create: UseCreateTrinketReturn;
 }
 
-export function CreateTrinketForm({ onSuccess, onCancel }: Props) {
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [visibility, setVisibility] = useState<TrinketVisibility>("friends");
-	const [type, setType] = useState<TrinketType>("collection");
-	const [coverFile, setCoverFile] = useState<File | null>(null);
-
-	const { upload, isUploading } = useFileUpload();
-	const [createTrinket, { isLoading, error }] = useCreateTrinketMutation();
-
+export function CreateTrinketForm({ create }: Props) {
 	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
-		try {
-			const coverURL = coverFile ? await upload(coverFile, "trinket_cover") : undefined;
-
-			await createTrinket({
-				title,
-				description: description.trim() ? description : undefined,
-				trinket_visibility: visibility,
-				trinket_type: type,
-				cover_url: coverURL,
-				file_size_bytes: coverFile ? coverFile.size : 0,
-			}).unwrap();
-
-			onSuccess?.();
-		} catch {}
+		await create.submit();
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<h3>Create New Trinket</h3>
-
+		<form
+			id="create-trinket-form"
+			onSubmit={handleSubmit}>
 			<input
-				value={title}
-				onChange={(e) => setTitle(e.target.value)}
-				placeholder="Title"
+				className={formStyles.textInput}
+				value={create.title}
+				onChange={(e) => create.setTitle(e.target.value)}
+				placeholder="Give your trinket a name..."
 				required
 			/>
 
 			<textarea
-				value={description}
-				onChange={(e) => setDescription(e.target.value)}
-				placeholder="Description"
+				className={formStyles.textArea}
+				value={create.description}
+				onChange={(e) => create.setDescription(e.target.value)}
+				placeholder="Description..."
+				rows={4}
 			/>
 
-			<select
-				value={visibility}
-				onChange={(e) => setVisibility(e.target.value as TrinketVisibility)}>
-				<option value="world">Public</option>
-				<option value="friends">Friends</option>
-				<option value="self">Private</option>
-			</select>
+			<div className={formStyles.trinketOptions}>
+				<div className={formStyles.optionRow}>
+					<TrinketVisibilityToggle
+						visibility={create.visibility}
+						setVisibility={create.setVisibility}
+					/>
 
-			<select
-				value={type}
-				onChange={(e) => setType(e.target.value as TrinketType)}>
-				<option value="collection">Collection</option>
-				<option value="playlist">Collection</option>
-				<option value="gallery">Collection</option>
-			</select>
+					<FileUploadButton
+						selectedFile={create.coverFile}
+						onFileSelect={(file) => create.setCoverFile(file)}
+					/>
+				</div>
 
-			<input
-				type="file"
-				accept="image/*"
-				onChange={(e) => setCoverFile(e.target.files?.[0] ?? null)}
-			/>
-
-			<div>
-				<button
-					type="submit"
-					disabled={isLoading || isUploading}>
-					{isLoading || isUploading ? "Creating..." : "Create"}
-				</button>
-				{onCancel && (
-					<button
-						type="button"
-						onClick={onCancel}>
-						Cancel
-					</button>
-				)}
+				<TrinketTypeToggle
+					type={create.type}
+					setType={create.setType}
+				/>
 			</div>
-
-			{error && <p>Failed to create trinket.</p>}
 		</form>
 	);
 }

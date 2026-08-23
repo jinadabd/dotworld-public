@@ -38,7 +38,7 @@ export function TrinketTabBar({ activeTab, setActiveTab }: Props) {
 			id: "communityTab",
 			col: 5,
 			row: 1,
-			colSpan: 2,
+			colSpan: 3,
 			keycapProps: {
 				colour: "green",
 				legend: "3",

@@ -1,9 +1,8 @@
-import type { PostVisibility } from "@shared/types";
-import { useComposePost, type UseComposePostReturn } from "../../hooks/useComposePost";
-import { TactileButton } from "../../components/buttons/TactileButton";
-import formStyles from "../../styles/Form.module.css";
+import { type UseComposePostReturn } from "../../hooks/useComposePost";
 import { PostVisibilityToggle } from "./PostVisibilityToggle";
 import { FileUploadButton } from "../../components/buttons/FileUploadButton";
+
+import formStyles from "../../styles/Form.module.css";
 
 interface Props {
 	compose: UseComposePostReturn;

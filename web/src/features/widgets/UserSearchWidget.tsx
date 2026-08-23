@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLazySearchUsersQuery } from "../users/userApi";
 import styles from "./Widgets.module.css";
-import badgeStyle from "./WidgetUserBadge.module.css";
 import { UserBadgeKeycap } from "../../components/buttons/KeycapUserBadge";
 
 export function UserSearchWidget() {

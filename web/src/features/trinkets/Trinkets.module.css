@@ -1,62 +1,294 @@
 @import "../../styles/palette.css";
 
-.trinketsView {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
 .headerRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
+    width: 65%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .sectionTitle {
+        font-family: "Bitcount";
+        font-size: 2rem;
+        color: var(--dark);
+    }
+
+    .toolbarWrapper {
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.25s cubic-bezier(0.2, 0, 0.2, 1);
+
+        .toggleIcon {
+            display: inline-block;
+            transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1);
+            font-weight: bold;
+            font-size: 2rem;
+            line-height: 1;
+            font-family: "Bitcount";
+            text-align: center;
+        }
+
+        .toggleIcon[data-active="true"] {
+            transform: rotate(45deg);
+        }
+    }
 }
 
-.sectionTitle {
-  font-family: 'Bitcount', sans-serif;
-  font-size: 1.75rem;
-  margin: 0;
-  color: var(--dark, #281c14);
+.createDrawer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+    width: 65%;
+
+    &[data-expanded="true"] {
+        grid-template-rows: 1fr;
+    }
+
+    .drawerInner {
+        overflow: hidden;
+    }
 }
 
-/* Grid Layout for Trinket Cards */
-.trinketGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.25rem;
-  width: 100%;
-}
+.trinketView {
+    width: 65%;
+    padding: 1rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    gap: 1.5rem;
 
-/* 3D Scroll Extrusion for Trinket Cards */
-@keyframes extrudeTrinket {
-  0%, 30% {
-    transform: translateY(0);
-    box-shadow: 0 0 0 transparent;
-  }
-  50%, 70% {
-    transform: translateY(-8px);
-    box-shadow: 
-      0 5px 0 rgb(131, 112, 76),
-      0 10px 14px -4px rgb(185, 172, 147);
-  }
-  100% {
-    transform: translateY(0);
-    box-shadow: 0 0 0 transparent;
-  }
-}
+    .interactionBar,
+    .userBadge {
+        zoom: 0.85;
+    }
 
-.trinketCard {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  background-color: var(--white);
-  border: 1pt solid var(--dark, #281c14);
-  border-radius: 10px;
-  padding: 1rem;
+    .trinketCard {
+        width: 1fr;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        min-height: 10rem;
+        background-color: var(--offwhite);
+        border-radius: 0.75rem;
+        padding: 1rem;
 
-  animation: extrudeTrinket linear both;
-  animation-timeline: view();
-  animation-range: entry 0% exit 100%;
+        box-shadow:
+            0 0 0 var(--beige),
+            0 0 0 var(--brown),
+            0 0 0.25rem var(--brown) inset,
+            0 0 0 var(--beige) inset,
+            0 0 0 var(--white) inset;
+
+        transition:
+            transform 0.2s cubic-bezier(0.2, 0, 0.2, 1),
+            box-shadow 0.2s cubic-bezier(0.2, 0, 0.2, 1);
+
+        .coverWindow {
+            position: relative;
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1pt solid var(--brown);
+            overflow: hidden;
+
+            &::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                /* border-radius: inherit; */
+                box-shadow:
+                    inset 0 0 0.25rem var(--brown),
+                    inset 0 0 1rem 0.25rem var(--dark);
+                pointer-events: none;
+
+                transition: 0.2s ease;
+            }
+
+            .trinketCover {
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                object-fit: cover;
+                display: block;
+            }
+        }
+
+        .trinketCoverContainer {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem;
+            box-sizing: border-box;
+
+
+            .trinketCoverEmbossed {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+
+        .trinketBadge {
+            zoom: 0.85;
+        }
+
+        & {
+            .postDetails {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+                align-items: center;
+                justify-content: space-between;
+
+                .timestamp {
+                    font-family: "Bitcount";
+                    font-size: 1.5rem;
+                    text-align: right;
+                    padding-right: 0.25rem;
+                    color: var(--dark);
+                }
+            }
+
+            .postContent {
+                width: 100%;
+                padding: 0.25rem;
+                margin-bottom: 0.5rem;
+
+                .postBody {
+                    font-size: 1rem;
+                    font-family: "Helvetica";
+                }
+            }
+
+            .postFooter {
+                width: 100%;
+                height: fit-content;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                box-sizing: border-box;
+            }
+        }
+
+        &:hover {
+            transform: translateY(-0.5rem);
+            box-shadow:
+                0 0.5rem 0 var(--beige),
+                0 0.55rem 0 var(--brown),
+                0 0 0.25rem var(--brown) inset,
+                0 -0.25rem 0.5rem var(--beige) inset,
+                0 0.75rem 0.25rem var(--white) inset;
+        }
+    }
+
+    .postCard[data-type="image"] {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 10rem;
+        border-radius: 0.75rem;
+        padding: 1rem 1rem 1rem 0;
+
+        & {
+            .polaroidFrame {
+                max-width: 65%;
+                background-color: var(--offwhite);
+                padding: 0.75rem 0.75rem 0;
+                border-radius: 1rem;
+                transform: scale(0.8) rotate(var(--rotation, -10deg));
+                box-shadow:
+                    0 4px 12px -2px var(--brown),
+                    0 1px 3px 0 var(--brown),
+                    0 0 2px 0 var(--dark);
+                transition: 0.2s ease;
+
+                .polaroidWindow {
+                    position: relative;
+                    width: 100%;
+                    border-radius: 0.5rem;
+                    border: 1pt solid var(--brown);
+                    overflow: hidden;
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        border-radius: inherit;
+                        box-shadow:
+                            inset 0 0 0.25rem var(--brown),
+                            inset 0 0 2rem 0.25rem var(--dark);
+                        pointer-events: none;
+
+                        transition: 0.2s ease;
+                    }
+
+                    .postMedia {
+                        width: 100%;
+                        max-height: 70vh;
+                        object-fit: contain;
+                        display: block;
+                    }
+                }
+
+                .postBody {
+                    padding: 1rem 0.25rem;
+                    min-height: 4rem;
+                    font-family: "Helvetica";
+                    font-size: 1rem;
+                }
+            }
+
+            .postInfo {
+                height: 80%;
+                display: flex;
+                flex-direction: column;
+                align-items: end;
+                justify-content: space-between;
+                min-width: 20%;
+                transition: 0.2s ease;
+
+                .postDetails {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                    align-items: flex-end;
+
+                    .timestamp {
+                        max-width: 70%;
+                        font-family: "Bitcount";
+                        font-size: 1.5rem;
+                        text-align: right;
+                    }
+                }
+            }
+        }
+
+        &:hover {
+            .polaroidWindow {
+                &::after {
+                    box-shadow:
+                        inset 0 0 0.25rem var(--dark),
+                        inset 0 0 0.5rem 0 var(--dark);
+                    pointer-events: none;
+                }
+            }
+
+            .postInfo {
+                height: 100%;
+            }
+
+            .polaroidFrame {
+                transform: scale(1) rotate(0);
+            }
+        }
+    }
+
+    .paginationBar {
+        margin-top: 2rem;
+    }
 }
