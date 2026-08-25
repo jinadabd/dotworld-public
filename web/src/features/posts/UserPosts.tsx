@@ -31,7 +31,7 @@ export function UserPosts({ username }: Props) {
 
 	const { data, isLoading, error } = useGetUserPostsQuery({ username, page, limit: 25 });
 
-	if (isLoading) return <p>Loading psots...</p>;
+	if (isLoading) return <p>Loading posts...</p>;
 	if (error || !data) return <p>Failed to load posts.</p>;
 
 	const { posts, pagination } = data;

@@ -2,25 +2,34 @@ import { useState } from "react";
 import { useGetChatterQuery } from "../posts/postsApi";
 import { PostCard } from "../posts/PostCard"; // Replace with your Post component
 import { useSetSidebar } from "../../hooks/useSetSidebar";
-import { ComposeWidget } from "../widgets/ComposeWidget";
 import { ChatterTabBar } from "./ChatterTabBar";
 import { PaginationBar } from "../../components/buttons/PaginationBar";
 import { PostPolaroid } from "../posts/PostPolaroid";
 
 import pageStyles from "../../styles/MainPage.module.css";
 import postStyles from "../posts/Posts.module.css";
+import { useComposePost } from "../../hooks/useComposePost";
+import { ComposeToolbar } from "../posts/ComposeToolbar";
+import { ComposePostForm } from "../posts/ComposePostForm";
+import { MarkAsReadWidget } from "../widgets/MarkAsReadWidget";
 
 const LOCAL_STORAGE_KEY = "chatter_last_read_time";
 
 export function ChatterPage() {
-	useSetSidebar(<ComposeWidget />);
-
 	const [page, setPage] = useState(1);
-	const [activeTab, setActiveTab] = useState<"unread" | "read" | "all">("unread");
+	const [activeTab, setActiveTab] = useState<"unread" | "read">("unread");
 
 	const [lastReadTime, setLastReadTime] = useState<string>(() => {
 		return localStorage.getItem(LOCAL_STORAGE_KEY) || new Date(0).toISOString();
 	});
+
+	const [isComposing, setIsComposing] = useState(false);
+	const compose = useComposePost();
+
+	async function handleSubmit() {
+		const success = await compose.submit();
+		if (success) setIsComposing(false);
+	}
 
 	const { data, isLoading, error } = useGetChatterQuery({ page, limit: 10 });
 
@@ -30,21 +39,41 @@ export function ChatterPage() {
 		setLastReadTime(now);
 	};
 
+	useSetSidebar(<MarkAsReadWidget markAsRead={markAsRead} />);
+
 	if (isLoading)
 		return (
 			<div className={pageStyles.pageContainer}>
 				<div className={pageStyles.pageHeader}>
 					<h1 className={pageStyles.pageTitle}>Chatter</h1>
-					<ChatterTabBar
-						className={pageStyles.viewBar}
-						activeTab={activeTab}
-						setActiveTab={setActiveTab}
-						markAsRead={markAsRead}
-					/>
+					<div className={pageStyles.viewBar}>
+						<ChatterTabBar
+							activeTab={activeTab}
+							setActiveTab={setActiveTab}
+						/>
+					</div>
 				</div>
 
 				<div className={pageStyles.pageMain}>
-					<p className={pageStyles.statusMessage}>Loading chatter feed...</p>
+					<div className={postStyles.headerRow}>
+						<h2 className={postStyles.sectionTitle}>Compose</h2>
+						<ComposeToolbar
+							isComposing={isComposing}
+							onToggleCompose={() => setIsComposing((prev) => !prev)}
+							onSubmit={handleSubmit}
+							hasContent={compose.hasContent}
+							isBusy={compose.isBusy}
+						/>
+					</div>
+					<p className={pageStyles.statusMessage}>Loading Friends' Chatter...</p>
+				</div>
+
+				<div
+					className={postStyles.composeDrawer}
+					data-expanded={isComposing}>
+					<div className={postStyles.drawerInner}>
+						<ComposePostForm compose={compose} />
+					</div>
 				</div>
 			</div>
 		);
@@ -54,15 +83,34 @@ export function ChatterPage() {
 			<div className={pageStyles.pageContainer}>
 				<div className={pageStyles.pageHeader}>
 					<h1 className={pageStyles.pageTitle}>Chatter</h1>
-					<ChatterTabBar
-						activeTab={activeTab}
-						setActiveTab={setActiveTab}
-						markAsRead={markAsRead}
-					/>
+					<div className={pageStyles.viewBar}>
+						<ChatterTabBar
+							activeTab={activeTab}
+							setActiveTab={setActiveTab}
+						/>
+					</div>
 				</div>
 
 				<div className={pageStyles.pageMain}>
+					<div className={postStyles.headerRow}>
+						<h2 className={postStyles.sectionTitle}>Compose</h2>
+						<ComposeToolbar
+							isComposing={isComposing}
+							onToggleCompose={() => setIsComposing((prev) => !prev)}
+							onSubmit={handleSubmit}
+							hasContent={compose.hasContent}
+							isBusy={compose.isBusy}
+						/>
+					</div>
 					<p className={pageStyles.statusMessage}>Failed to load Chatter.</p>
+				</div>
+
+				<div
+					className={postStyles.composeDrawer}
+					data-expanded={isComposing}>
+					<div className={postStyles.drawerInner}>
+						<ComposePostForm compose={compose} />
+					</div>
 				</div>
 			</div>
 		);
@@ -81,17 +129,36 @@ export function ChatterPage() {
 		<div className={pageStyles.pageContainer}>
 			<div className={pageStyles.pageHeader}>
 				<h1 className={pageStyles.pageTitle}>Chatter</h1>
-				<ChatterTabBar
-					className={pageStyles.viewBar}
-					activeTab={activeTab}
-					setActiveTab={setActiveTab}
-					markAsRead={markAsRead}
-				/>
+				<div className={pageStyles.viewBar}>
+					<ChatterTabBar
+						activeTab={activeTab}
+						setActiveTab={setActiveTab}
+					/>
+				</div>
 			</div>
 
 			<div className={pageStyles.pageMain}>
+				<div className={postStyles.headerRow}>
+					<h2 className={postStyles.sectionTitle}>Compose</h2>
+					<ComposeToolbar
+						isComposing={isComposing}
+						onToggleCompose={() => setIsComposing((prev) => !prev)}
+						onSubmit={handleSubmit}
+						hasContent={compose.hasContent}
+						isBusy={compose.isBusy}
+					/>
+				</div>
+
+				<div
+					className={postStyles.composeDrawer}
+					data-expanded={isComposing}>
+					<div className={postStyles.drawerInner}>
+						<ComposePostForm compose={compose} />
+					</div>
+				</div>
+
 				{isLoading ? (
-					<p className={pageStyles.statusMessage}>Loading chatter feed...</p>
+					<p className={pageStyles.statusMessage}>Loading Friends' Chatter...</p>
 				) : error || !data ? (
 					<p className={pageStyles.statusMessage}>Failed to load Chatter.</p>
 				) : filteredPosts.length === 0 ? (

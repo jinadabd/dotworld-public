@@ -9,10 +9,10 @@ export function RequestsView({ providedStyle }: { providedStyle?: CSSModuleClass
 
 	return (
 		<>
-			<div className={friendStyles.headerRow}>
+			{/* <div className={friendStyles.headerRow}>
 				<h2 className={friendStyles.sectionTitle}>Incoming Requests</h2>
 				{isLoading && <p className={friendStyles.statusMessage}>Loading...</p>}
-			</div>
+			</div> */}
 
 			<div className={friendStyles.friendsView}>
 				{(!requests || requests.length === 0) && (
@@ -23,7 +23,7 @@ export function RequestsView({ providedStyle }: { providedStyle?: CSSModuleClass
 				{requests &&
 					requests.map((req) => (
 						<div
-							key={req.user_id}
+							key={req.id}
 							className={friendStyles.friendRow}>
 							<FetchedUserBadge userId={req.user_id} />
 							<IncomingRequestButtons friendId={req.user_id} />

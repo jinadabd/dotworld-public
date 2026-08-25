@@ -1,11 +1,7 @@
-import { useState } from "react";
 import { useGetUserTrinketsQuery } from "./trinketApi";
 import { TrinketCard } from "./TrinketCard";
-import { CreateTrinketForm } from "./CreateTrinketForm";
-import { CreateTrinketToolbar } from "./CreateTrinketToolbar";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
-import { useCreateTrinket } from "../../hooks/useCreateTrinket";
 import type { TrinketType } from "@shared/types";
 
 import trinketStyles from "./Trinkets.module.css";
@@ -17,15 +13,6 @@ interface Props {
 
 export function UserTrinkets({ username, filter }: Props) {
 	const user = useSelector((state: RootState) => state.auth.user!);
-	const isOwnIsland = username === user.username;
-
-	const [isCreating, setIsCreating] = useState(false);
-	const create = useCreateTrinket();
-
-	async function handleSubmit() {
-		const success = await create.submit();
-		if (success) setIsCreating(false);
-	}
 
 	const { data: trinkets, isLoading, error } = useGetUserTrinketsQuery({ username });
 
@@ -37,29 +24,6 @@ export function UserTrinkets({ username, filter }: Props) {
 
 	return (
 		<>
-			<div className={trinketStyles.headerRow}>
-				<h2 className={trinketStyles.sectionTitle}>
-					{isOwnIsland ? "My Trinkets" : `${username}'s Trinkets`}
-				</h2>
-				{isOwnIsland && (
-					<CreateTrinketToolbar
-						isCreating={isCreating}
-						onToggleCreate={() => setIsCreating((prev) => !prev)}
-						onSubmit={handleSubmit}
-						hasTitle={create.hasTitle}
-						isBusy={create.isBusy}
-					/>
-				)}
-			</div>
-
-			<div
-				className={trinketStyles.createDrawer}
-				data-expanded={isCreating}>
-				<div className={trinketStyles.drawerInner}>
-					<CreateTrinketForm create={create} />
-				</div>
-			</div>
-
 			{isLoading ? (
 				<p>Loading your trinkets...</p>
 			) : error || !filteredTrinkets || filteredTrinkets.length === 0 ? (

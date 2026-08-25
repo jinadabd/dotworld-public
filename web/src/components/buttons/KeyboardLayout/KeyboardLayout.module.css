@@ -1,4 +1,7 @@
 .plate {
+	/* Standard size = 60px desktop, shrinks dynamically down to 38px on small screens */
+	--unit: clamp(40px, 15vw, 60px);
+
 	border-radius: 10px;
 	box-shadow:
 		0 2px 20px oklch(0 0 0 / 0.4),

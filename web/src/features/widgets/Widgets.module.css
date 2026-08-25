@@ -148,3 +148,19 @@ body:has(.dotworld:hover) .dotworld::before {
     color: transparent;
     stroke: 1pt black solid;
 } */
+
+/* =======================================
+   					MOBILE 						
+	====================================== */
+
+@media (max-width: 768px) {
+	.widget {
+		.widgetTitle {
+			margin: 0;
+		}
+
+		.widgetView {
+			zoom: 0.85;
+		}
+	}
+}

@@ -1,0 +1,268 @@
+.trinketContainer[data-type="gallery"] {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Helvetica";
+
+    .pageHeader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 1.5rem 0 0.5rem 0;
+
+        .pageTitle {
+            font-family: "Bitcount";
+            font-size: 3.5rem;
+        }
+
+        .pageDescription {
+            margin-top: 0.25rem;
+            font-size: 1rem;
+            color: var(--dark);
+            opacity: 0.85;
+        }
+    }
+
+    .boxStage {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        position: relative;
+        padding-right: 8vw;
+        box-sizing: border-box;
+
+        .photoBox {
+            position: relative;
+            width: 50vh;
+            height: 50vh;
+            cursor: pointer;
+
+            .boxTray {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                inset: 0;
+                background: var(--brown);
+                border-radius: 0.75rem;
+                z-index: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: visible;
+
+                box-shadow:
+                    0 0.4rem 0 var(--dark),
+                    0 -0.25rem 0.5rem var(--dark) inset;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0.75rem;
+                    border-radius: 0.35rem;
+                    pointer-events: none;
+                    z-index: 0;
+
+                    background:
+                        linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, transparent 10%),
+                        linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0%, transparent 8%),
+                        linear-gradient(90deg, rgba(0, 0, 0, 0.15) 0%, transparent 8%),
+                        linear-gradient(270deg, rgba(0, 0, 0, 0.15) 0%, transparent 8%),
+                        var(--brown);
+
+                    box-shadow:
+                        0 0 0 1px rgba(0, 0, 0, 0.15),
+                        inset 0 0.25rem 0.5rem rgba(0, 0, 0, 0.25),
+                        inset 0 -0.15rem 0.3rem rgba(0, 0, 0, 0.15);
+                }
+
+                .polaroidCard {
+                    position: absolute;
+                    width: 20vh;
+                    background-color: var(--offwhite);
+                    padding: 0.4rem 0.4rem 0.25rem;
+                    border-radius: 0.5rem;
+                    box-shadow:
+                        0 3px 8px -2px rgba(0, 0, 0, 0.4),
+                        0 1px 2px 0 var(--brown);
+
+                    opacity: 0;
+                    pointer-events: none;
+
+                    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6);
+                    will-change: transform, opacity, width;
+
+                    transition:
+                        transform 0.55s cubic-bezier(0.34, 1.25, 0.64, 1),
+                        width 0.55s cubic-bezier(0.34, 1.25, 0.64, 1),
+                        opacity 0.25s ease,
+                        box-shadow 0.3s ease;
+
+                    .polaroidWindow {
+                        position: relative;
+                        width: 100%;
+                        border-radius: 0.25rem;
+                        border: 1pt solid var(--brown);
+                        overflow: hidden;
+
+                        &::after {
+                            content: "";
+                            position: absolute;
+                            inset: 0;
+                            border-radius: inherit;
+                            box-shadow:
+                                inset 0 0 0.25rem var(--brown),
+                                inset 0 0 1rem 0.25rem var(--dark);
+                            pointer-events: none;
+                            transition: box-shadow 0.2s ease;
+                        }
+
+                        img {
+                            width: 100%;
+                            /* aspect-ratio: 1 / 1; */
+                            object-fit: contain;
+                            display: block;
+                        }
+
+                        .placeholderPhoto {
+                            width: 100%;
+                            aspect-ratio: 1 / 1;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: var(--beige);
+                            color: var(--dark);
+                            font-size: 0.75rem;
+                        }
+                    }
+
+                    .polaroidCaption {
+                        display: block;
+                        padding: 0.3rem 0.1rem;
+                        font-family: "Helvetica";
+                        font-size: 0.75rem;
+                        color: var(--dark);
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    &:hover:not(.stackedCard) {
+                        transform: translate3d(var(--box-tx), var(--box-ty), 0) rotate(0deg) scale(1.1);
+                    }
+                }
+            }
+
+            .boxLid {
+                position: absolute;
+                inset: 0;
+                z-index: 2;
+                background-color: var(--offwhite);
+                border-radius: 0.75rem;
+                padding: 0.75rem;
+                box-sizing: border-box;
+
+                box-shadow:
+                    0 0.5rem 0 var(--beige),
+                    0 0.45rem 0 var(--brown),
+                    0 0 0.25rem var(--brown) inset,
+                    0 -0.25rem 0.5rem var(--beige) inset,
+                    0 0.75rem 0.25rem var(--white) inset;
+
+                transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+
+                .lidInlay {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 0.4rem;
+                    border: 1pt solid var(--brown);
+                    overflow: hidden;
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        box-shadow:
+                            inset 0 0 0.25rem var(--brown),
+                            inset 0 0 1rem 0.25rem var(--dark);
+                        pointer-events: none;
+                    }
+
+                    .trinketCover {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .trinketCoverEmbossed {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+
+                &:hover {
+                    transform: scale(1.05) rotate(-1deg);
+                }
+            }
+
+            /* OPEN STATE */
+            &.boxOpen {
+                .boxLid {
+                    transform: translate3d(0, 52vh, 0) rotate(-10deg);
+                    z-index: 5;
+
+                    &:hover {
+                        transform: translate3d(0, 50vh, 0) rotate(-8deg);
+                    }
+                }
+
+                .boxTray .polaroidCard {
+                    opacity: 1;
+                    pointer-events: auto;
+
+                    /* MATCHING TRANSFORM ORDER: translate -> rotate -> scale */
+                    transform: translate3d(var(--box-tx), var(--box-ty), 0) rotate(var(--box-rot)) scale(1);
+
+                    /* EXPANDED LEFT STACK STATE */
+                    &.stackedCard {
+                        width: 42vh;
+                        padding: 0.75rem 0.75rem 0.5rem;
+                        border-radius: 0.75rem;
+
+                        /* MATCHING TRANSFORM ORDER */
+                        transform: translate3d(calc(-55vh + var(--stack-tx)), var(--stack-ty), 0) rotate(var(--stack-rot)) scale(1);
+                        box-shadow:
+                            0 8px 25px -4px rgba(0, 0, 0, 0.4),
+                            0 2px 5px 0 var(--brown);
+
+                        .polaroidCaption {
+                            font-size: 1rem;
+                            padding: 0.5rem 0.2rem;
+                        }
+
+                        .polaroidWindow::after {
+                            box-shadow:
+                                inset 0 0 0.25rem var(--dark),
+                                inset 0 0 0.5rem 0 var(--dark);
+                        }
+
+                        &:hover {
+                            transform: translate3d(-55vh, -8px, 0) rotate(0deg) scale(1.02);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

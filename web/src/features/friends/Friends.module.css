@@ -1,4 +1,5 @@
 @import "../../styles/palette.css";
+
 .headerRow {
 	width: 65%;
 	display: flex;
@@ -11,12 +12,41 @@
 		font-size: 2rem;
 		color: var(--dark);
 	}
+
+	.toolbarWrapper {
+		display: inline-flex;
+		align-items: center;
+		transition: all 0.25s cubic-bezier(0.2, 0, 0.2, 1);
+
+		.toggleIcon {
+			display: inline-block;
+			transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1);
+			font-weight: bold;
+			font-size: 2rem;
+			line-height: 1;
+			font-family: "Bitcount";
+			text-align: center;
+		}
+
+		.toggleIcon[data-active="true"] {
+			transform: rotate(45deg);
+		}
+	}
 }
 
-.textArea {
-	min-height: 7em;
-	max-height: 10rem;
-	resize: none;
+.composeDrawer {
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+	width: 65%;
+
+	&[data-expanded="true"] {
+		grid-template-rows: 1fr;
+	}
+
+	.drawerInner {
+		overflow: hidden;
+	}
 }
 
 .friendsView {
@@ -26,6 +56,11 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 1.5rem;
+
+	.statusMessage {
+		font-family: "Helvetica";
+		font-size: 1rem;
+	}
 
 	.interactionBar,
 	.userBadge {
@@ -53,7 +88,7 @@
 			transform 0.2s cubic-bezier(0.2, 0, 0.2, 1),
 			box-shadow 0.2s cubic-bezier(0.2, 0, 0.2, 1);
 
-		& > * {
+		&>* {
 			zoom: 0.85;
 		}
 
@@ -65,6 +100,61 @@
 				0 0 0.25rem var(--brown) inset,
 				0 -0.25rem 0.5rem var(--beige) inset,
 				0 0.75rem 0.25rem var(--white) inset;
+		}
+	}
+}
+
+/* ====================== MOBILE ============================ */
+
+@media (max-width: 768px) {
+	.headerRow {
+		width: 100%;
+		padding-left: 0.75rem;
+		padding-right: 0.5rem;
+		box-sizing: border-box;
+
+		.toolbarWrapper {
+			transform: scale(0.8);
+			transform-origin: right;
+		}
+	}
+
+	.composeDrawer,
+	.friendsView {
+		width: 100%;
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		box-sizing: border-box;
+	}
+
+	.headerRow .sectionTitle {
+		font-size: 1.5rem;
+	}
+
+	.friendsView {
+		gap: 1rem;
+
+		.statusMessage {
+			font-size: 0.75rem;
+		}
+
+		.friendRow {
+			gap: 0;
+			height: fit-content;
+			padding-top: 0.25rem;
+			padding-bottom: 0.25rem;
+
+			.userBadge {
+				transform: scale(0.6);
+				transform-origin: center left;
+				margin-right: -30%;
+			}
+
+			.removeButton {
+				transform: scale(0.6);
+				transform-origin: center right;
+				margin-left: -30%;
+			}
 		}
 	}
 }

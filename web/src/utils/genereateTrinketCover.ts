@@ -1,5 +1,5 @@
 export interface TrinketSeal {
-	grid: boolean[][]; // 13x13 matrix
+	grid: boolean[][];
 	color: string;
 }
 
@@ -23,23 +23,50 @@ function mulberry32(a: number) {
 	};
 }
 
+// Helper to construct a horizontally mirrored grid
+function generateGrid(size: number, rng: () => number): boolean[][] {
+	const halfWidth = Math.ceil(size / 2);
+	const grid: boolean[][] = Array.from({ length: size }, () => Array(size).fill(false));
+
+	for (let row = 0; row < size; row++) {
+		for (let col = 0; col < halfWidth; col++) {
+			// ~45% active dots
+			const isFilled = rng() > 0.55;
+			grid[row][col] = isFilled;
+			grid[row][size - 1 - col] = isFilled; // Mirror horizontally
+		}
+	}
+
+	return grid;
+}
+
+/**
+ * Generates a 9x9 Trinket Seal matrix
+ */
 export function generateTrinketCover(identifier: string): TrinketSeal {
 	const cleanId = identifier.toLowerCase().trim();
 	const seed = fnv1a(cleanId);
 	const rng = mulberry32(seed);
 
-	const SIZE = 13;
-	const HALF_WIDTH = Math.ceil(SIZE / 2); // 7 columns
-	const grid: boolean[][] = Array.from({ length: SIZE }, () => Array(SIZE).fill(false));
+	const SIZE = 9;
+	const grid = generateGrid(SIZE, rng);
 
-	for (let row = 0; row < SIZE; row++) {
-		for (let col = 0; col < HALF_WIDTH; col++) {
-			// Threshold controls density (~45% active dots for balanced visuals)
-			const isFilled = rng() > 0.55;
-			grid[row][col] = isFilled;
-			grid[row][SIZE - 1 - col] = isFilled; // Mirror horizontally
-		}
-	}
+	const hue = Math.floor(rng() * 360);
+	const color = `oklch(0.65 0.18 ${hue})`;
+
+	return { grid, color };
+}
+
+/**
+ * Generates a high-density 21x21 Dot Matrix for image loading states
+ */
+export function generateImageSeal(src: string): TrinketSeal {
+	const cleanSrc = src.trim();
+	const seed = fnv1a(cleanSrc);
+	const rng = mulberry32(seed);
+
+	const SIZE = 21;
+	const grid = generateGrid(SIZE, rng);
 
 	const hue = Math.floor(rng() * 360);
 	const color = `oklch(0.65 0.18 ${hue})`;

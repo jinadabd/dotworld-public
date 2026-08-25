@@ -37,21 +37,27 @@ export function CreateTrinketForm({ create }: Props) {
 
 			<div className={formStyles.trinketOptions}>
 				<div className={formStyles.optionRow}>
-					<TrinketVisibilityToggle
-						visibility={create.visibility}
-						setVisibility={create.setVisibility}
-					/>
+					<div className={formStyles.visibilityToggle}>
+						<TrinketVisibilityToggle
+							visibility={create.visibility}
+							setVisibility={create.setVisibility}
+						/>
+					</div>
 
-					<FileUploadButton
-						selectedFile={create.coverFile}
-						onFileSelect={(file) => create.setCoverFile(file)}
-					/>
+					<div className={formStyles.uploadButton}>
+						<FileUploadButton
+							selectedFile={create.coverFile}
+							onFileSelect={(file) => create.setCoverFile(file)}
+						/>
+					</div>
 				</div>
 
-				<TrinketTypeToggle
-					type={create.type}
-					setType={create.setType}
-				/>
+				<div className={formStyles.typeToggles}>
+					<TrinketTypeToggle
+						type={create.type}
+						setType={create.setType}
+					/>
+				</div>
 			</div>
 		</form>
 	);

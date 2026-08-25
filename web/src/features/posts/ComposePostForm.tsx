@@ -27,15 +27,18 @@ export function ComposePostForm({ compose }: Props) {
 			/>
 
 			<div className={formStyles.postOptions}>
-				<PostVisibilityToggle
-					visibility={compose.visibility}
-					setVisibility={compose.setVisibility}
-				/>
-
-				<FileUploadButton
-					selectedFile={compose.mediaFile}
-					onFileSelect={(file) => compose.setMediaFile(file)}
-				/>
+				<div className={formStyles.visibilityToggle}>
+					<PostVisibilityToggle
+						visibility={compose.visibility}
+						setVisibility={compose.setVisibility}
+					/>
+				</div>
+				<div className={formStyles.uploadButton}>
+					<FileUploadButton
+						selectedFile={compose.mediaFile}
+						onFileSelect={(file) => compose.setMediaFile(file)}
+					/>
+				</div>
 			</div>
 		</form>
 	);

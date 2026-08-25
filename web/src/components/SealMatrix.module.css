@@ -1,0 +1,24 @@
+.matrixGrid {
+    display: grid;
+    grid-template-columns: repeat(var(--matrix-size), 1fr);
+    grid-template-rows: repeat(var(--matrix-size), 1fr);
+    gap: 2px;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 1;
+    /* Ensures the grid container maintains dimensions */
+    box-sizing: border-box;
+}
+
+.dot {
+    width: 100%;
+    aspect-ratio: 1;
+    /* Forces dots to maintain height even if grid rows collapse */
+    border-radius: 50%;
+    background-color: transparent;
+    display: block;
+}
+
+.activeDot {
+    background-color: var(--dot-color);
+}

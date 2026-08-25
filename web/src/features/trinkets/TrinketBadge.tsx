@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { UserSealIcon } from "../../components/buttons/icons";
 import { generateUserSeal, type UserSeal } from "../../utils/generateSeal";
 import { KeyboardLayout, type KeyPosition } from "../../components/buttons/KeyboardLayout";
-import type { PublicUser, TrinketRow } from "@shared/types";
+import type { PublicUser, TrinketRow, TrinketWithAuthor } from "@shared/types";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
 	user: PublicUser;
-	trinket: TrinketRow;
+	trinket: TrinketRow | TrinketWithAuthor;
 }
 
 export function TrinketBadge({ user, trinket }: Props) {

@@ -1,8 +1,8 @@
 .keycap {
 	--text: oklch(0.3 0.01 260);
-	--inset-x: 9px;
-	--inset-top: 7px;
-	--inset-bottom: 11px;
+	--inset-x: calc(var(--unit, 60px) * 0.15);
+	--inset-top: calc(var(--unit, 60px) * 0.11);
+	--inset-bottom: calc(var(--unit, 60px) * 0.18);
 
 	position: relative;
 	width: var(--w);
@@ -58,7 +58,7 @@
 	color: var(--text);
 	font-family: "Helvetica";
 	font-weight: bold;
-	font-size: 1.125rem;
+	font-size: calc(var(--unit, 60px) * 0.3);
 	user-select: none;
 	pointer-events: none;
 	gap: 5px;
@@ -81,27 +81,29 @@
 .keycap[data-color="yellow"] {
 	--legend-hover: var(--yellow);
 }
+
 .keycap[data-color="green"] {
 	--legend-hover: var(--green);
 }
+
 .keycap[data-color="blue"] {
 	--legend-hover: var(--blue);
 }
+
 .keycap[data-color="red"] {
 	--legend-hover: var(--red);
 }
+
 .keycap[data-color="cream"] {
 	--legend-hover: oklch(0.2 0.01 260);
 }
+
 .keycap[data-color="charcoal"] {
 	--legend-hover: oklch(1 0 0);
 }
 
 /* Universal legend hover rule */
-.keycap:hover:not(:active):not([data-pressed="true"]):not([data-active="true"]):not(
-		[data-disabled="true"]
-	)
-	.legend {
+.keycap:hover:not(:active):not([data-pressed="true"]):not([data-active="true"]):not([data-disabled="true"]) .legend {
 	color: var(--legend-hover, var(--text));
 	opacity: 1;
 }
@@ -132,29 +134,35 @@
 
 /* === SIZE VARIANTS === */
 .keycap[data-size="1u"] {
-	--w: 3.75rem;
-	--h: 3.75rem;
+	--w: var(--unit, 3.75rem);
+	--h: var(--unit, 3.75rem);
 }
+
 .keycap[data-size="1.25u"] {
-	--w: 4.6875rem;
-	--h: 3.75rem;
+	--w: calc(var(--unit, 3.75rem) * 1.25);
+	--h: var(--unit, 3.75rem);
 }
+
 .keycap[data-size="1.5u"] {
-	--w: 5.625rem;
-	--h: 3.75rem;
+	--w: calc(var(--unit, 3.75rem) * 1.5);
+	--h: var(--unit, 3.75rem);
 }
+
 .keycap[data-size="2u"] {
-	--w: calc(7.5rem + var(--gap, 0.375rem));
-	--h: 3.75rem;
+	--w: calc(var(--unit, 3.75rem) * 2 + var(--gap, 0.375rem));
+	--h: var(--unit, 3.75rem);
 }
+
 .keycap[data-size="2u-v"] {
-	--w: 3.75rem;
-	--h: calc(7.5rem + var(--gap, 0.375rem));
+	--w: var(--unit, 3.75rem);
+	--h: calc(var(--unit, 3.75rem) * 2 + var(--gap, 0.375rem));
 }
+
 .keycap[data-size="3u"] {
-	--w: calc(11.25rem + 2 * var(--gap, 0.375rem));
-	--h: 3.75rem;
+	--w: calc(var(--unit, 3.75rem) * 3 + 2 * var(--gap, 0.375rem));
+	--h: var(--unit, 3.75rem);
 }
+
 
 /* === COLOR VARIANTS ===
  * These style the TOP FACE (::before) only. The bezel/sides are the
@@ -167,6 +175,7 @@
 .keycap[data-variant="cream"] {
 	--text: oklch(0.3 0.01 260);
 }
+
 .keycap[data-variant="cream"]::before {
 	background: linear-gradient(to right, #e2ddd2, #e8e4da 16.3%, #eee9e0);
 	border-color: rgba(255, 255, 255, 0.25);
@@ -176,6 +185,7 @@
 .keycap[data-variant="charcoal"] {
 	--text: oklch(0.85 0 0);
 }
+
 .keycap[data-variant="charcoal"]::before {
 	background: linear-gradient(to right, #3a3a3e, #444448 16.3%, #4a4a50);
 	border-color: rgba(255, 255, 255, 0.08);
@@ -185,13 +195,12 @@
 .keycap[data-variant="yellow"] {
 	--text: oklch(0.28 0.02 95);
 }
+
 .keycap[data-variant="yellow"]::before {
-	background: linear-gradient(
-		to right,
-		color-mix(in oklch, var(--yellow) 85%, black),
-		var(--yellow) 16.3%,
-		color-mix(in oklch, var(--yellow) 88%, white)
-	);
+	background: linear-gradient(to right,
+			color-mix(in oklch, var(--yellow) 85%, black),
+			var(--yellow) 16.3%,
+			color-mix(in oklch, var(--yellow) 88%, white));
 	border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -199,13 +208,12 @@
 .keycap[data-variant="green"] {
 	--text: oklch(0.28 0.03 145);
 }
+
 .keycap[data-variant="green"]::before {
-	background: linear-gradient(
-		to right,
-		color-mix(in oklch, var(--green) 85%, black),
-		var(--green) 16.3%,
-		color-mix(in oklch, var(--green) 88%, white)
-	);
+	background: linear-gradient(to right,
+			color-mix(in oklch, var(--green) 85%, black),
+			var(--green) 16.3%,
+			color-mix(in oklch, var(--green) 88%, white));
 	border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -213,13 +221,12 @@
 .keycap[data-variant="blue"] {
 	--text: oklch(0.28 0.02 250);
 }
+
 .keycap[data-variant="blue"]::before {
-	background: linear-gradient(
-		to right,
-		color-mix(in oklch, var(--blue) 85%, black),
-		var(--blue) 16.3%,
-		color-mix(in oklch, var(--blue) 88%, white)
-	);
+	background: linear-gradient(to right,
+			color-mix(in oklch, var(--blue) 85%, black),
+			var(--blue) 16.3%,
+			color-mix(in oklch, var(--blue) 88%, white));
 	border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -227,13 +234,12 @@
 .keycap[data-variant="red"] {
 	--text: oklch(0.28 0.02 250);
 }
+
 .keycap[data-variant="red"]::before {
-	background: linear-gradient(
-		to right,
-		color-mix(in oklch, var(--red) 85%, black),
-		var(--red) 16.3%,
-		color-mix(in oklch, var(--red) 88%, white)
-	);
+	background: linear-gradient(to right,
+			color-mix(in oklch, var(--red) 85%, black),
+			var(--red) 16.3%,
+			color-mix(in oklch, var(--red) 88%, white));
 	border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -251,9 +257,7 @@
 	height: calc(100% - 5px) !important;
 }
 
-.keycap:hover:not(:active):not([data-pressed="true"]):not([data-active="true"]):not(
-		[data-disabled="true"]
-	):not([data-highlighted="true"]):not([data-size="3u"]) {
+.keycap:hover:not(:active):not([data-pressed="true"]):not([data-active="true"]):not([data-disabled="true"]):not([data-highlighted="true"]):not([data-size="3u"]) {
 	transform: translateY(1px) scale(0.995);
 	filter: brightness(0.94);
 	height: calc(100% - 1px) !important;
@@ -283,9 +287,7 @@
 }
 
 /* 3u specific hover adjustment */
-.keycap[data-size="3u"]:hover:not(:active):not([data-pressed="true"]):not([data-active="true"]):not(
-		[data-disabled="true"]
-	):not([data-highlighted="true"]) {
+.keycap[data-size="3u"]:hover:not(:active):not([data-pressed="true"]):not([data-active="true"]):not([data-disabled="true"]):not([data-highlighted="true"]) {
 	transform: translateY(1px) scaleX(0.998) scaleY(0.995);
 	filter: brightness(0.95);
 }

@@ -15,9 +15,7 @@ export function TrinketCard({
 	author: PublicUser;
 }) {
 	const seal = useMemo(() => {
-		return generateTrinketCover(
-			trinket.id.toString() || trinket.title || author.username || author.id.toString(),
-		);
+		return generateTrinketCover(trinket.id.toString() || trinket.title || author.id.toString());
 	}, [trinket.id, trinket.title, author.username, author.id]);
 
 	return (
@@ -41,7 +39,7 @@ export function TrinketCard({
 				</div>
 			)}
 			{/* <h3 className={trinketStyles.trinketTitle}>{trinket.title}</h3> */}
-
+			{/* <div className={trinketStyles.divide} /> */}
 			<div className={trinketStyles.trinketBadge}>
 				<TrinketBadge
 					trinket={trinket}

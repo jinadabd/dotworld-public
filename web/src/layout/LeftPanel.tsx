@@ -1,14 +1,33 @@
+import { useState } from "react";
 import { useSidebarSlot } from "../context/SidebarSlotContext";
 import { KeycapNav } from "../components/buttons/KeycapNav";
 import styles from "./AppLayout.module.css";
 
 export function LeftPanel() {
-	const slot = useSidebarSlot();
+	const { content } = useSidebarSlot();
+	const [isExpanded, setIsExpanded] = useState(false);
+
+	const toggleExpand = () => setIsExpanded((prev) => !prev);
+	const hasContent = Boolean(content);
+
 	return (
 		<>
-			<KeycapNav />
+			{hasContent && (
+				<div className={`${styles.mobileDrawer} ${isExpanded ? styles.expanded : ""}`}>
+					{content}
+				</div>
+			)}
+
+			<KeycapNav
+				isExpanded={isExpanded}
+				onToggleExpand={toggleExpand}
+				hasSlotContent={hasContent}
+			/>
+
 			<div className={styles.divide} />
-			{slot?.content}
+
+			{/* Desktop inline slot */}
+			<div className={styles.desktopSlot}>{content}</div>
 		</>
 	);
 }

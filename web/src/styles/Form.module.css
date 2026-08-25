@@ -63,4 +63,90 @@ form {
 			justify-content: space-between;
 		}
 	}
+
+	.resultsList {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		padding: 2rem 0;
+
+		.resultItem {
+			zoom: 0.80;
+		}
+	}
+
+	.statusText {
+		text-align: center;
+		font-family: "Bitcount";
+		padding: 0.5rem;
+	}
+}
+
+/* ======================= MOBILE =========================== */
+
+/* ======================= MOBILE =========================== */
+
+@media (max-width: 768px) {
+
+	.postOptions {
+		align-items: center;
+
+		.visibilityToggle,
+		.uploadButton {
+			/* Force the layout box to shrink down to match the 0.65 scale */
+			width: max-content;
+			display: flex;
+			align-items: center;
+		}
+
+		.visibilityToggle {
+			transform: scale(0.65);
+			transform-origin: left center;
+			margin-right: -25%;
+		}
+
+		.uploadButton {
+			transform: scale(0.65);
+			transform-origin: right center;
+			margin-left: -25%;
+		}
+	}
+
+	.trinketOptions {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		align-items: center;
+
+		.optionRow {
+
+			.visibilityToggle,
+			.uploadButton {
+				/* Force the layout box to shrink down to match the 0.65 scale */
+				width: max-content;
+				display: flex;
+				align-items: center;
+			}
+
+			.visibilityToggle {
+				transform: scale(0.65);
+				transform-origin: left center;
+				margin-right: -25%;
+			}
+
+			.uploadButton {
+				transform: scale(0.65);
+				transform-origin: right center;
+				margin-left: -25%;
+			}
+		}
+	}
+
+	.typeToggles {
+		transform: scale(0.65);
+		transform-origin: center center;
+	}
 }

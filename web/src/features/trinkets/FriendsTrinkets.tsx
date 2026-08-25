@@ -22,14 +22,10 @@ export function FriendsTrinkets({ filter }: Props) {
 
 	return (
 		<>
-			<div className={trinketStyles.headerRow}>
-				<h2 className={trinketStyles.sectionTitle}>Friends' Trinkets</h2>
-			</div>
-
 			{isLoading ? (
-				<p>Loading friends' trinkets...</p>
+				<p>Loading Friends' Trinkets...</p>
 			) : error || !filteredTrinkets || filteredTrinkets.length === 0 ? (
-				<p>{`No trinkets found from friends. :(`}</p>
+				<p>{`No Trinkets found from Friends. :(`}</p>
 			) : (
 				<div className={trinketStyles.trinketView}>
 					{filteredTrinkets.map((trinket) => (

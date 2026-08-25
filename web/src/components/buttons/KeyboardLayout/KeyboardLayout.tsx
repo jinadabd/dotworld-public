@@ -19,8 +19,6 @@ export function KeyboardLayout({
 	padding = 4,
 	className,
 }: KeyboardLayoutProps) {
-	const unit = 60;
-
 	return (
 		<div
 			className={`${styles.plate}${className ? ` ${className}` : ""}`}
@@ -28,8 +26,8 @@ export function KeyboardLayout({
 				{
 					display: "grid",
 					width: "fit-content",
-					gridTemplateColumns: `repeat(${columns}, ${unit}px)`,
-					gridTemplateRows: `repeat(${rows}, ${unit}px)`,
+					gridTemplateColumns: `repeat(${columns}, var(--unit, 60px))`,
+					gridTemplateRows: `repeat(${rows}, var(--unit, 60px))`,
 					gap: `${gap}px`,
 					padding: `${padding}px`,
 					background: plateColor,

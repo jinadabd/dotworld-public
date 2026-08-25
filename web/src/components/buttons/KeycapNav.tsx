@@ -1,17 +1,26 @@
-// KeycapNav.tsx
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { KeyboardLayout } from "./KeyboardLayout";
 import type { KeyPosition } from "./KeyboardLayout";
 import { IslandIcon, TrinketsIcon, FriendsIcon, ChatterIcon } from "./icons";
 import type { RootState } from "../../app/store";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
+import { useState } from "react";
+import { ArrowIcon } from "./icons/ArrowIcon";
 
-export function KeycapNav() {
+interface KeycapNavProps {
+	isExpanded?: boolean;
+	onToggleExpand?: () => void;
+	hasSlotContent?: boolean;
+}
+
+export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: KeycapNavProps) {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const username = useSelector((state: RootState) => state.auth.user!.username);
+	const isMobile = useMediaQuery("(max-width: 768px)");
 
-	const navKeys: KeyPosition[] = [
+	const desktopKeys: KeyPosition[] = [
 		{
 			id: "islandIcon",
 			col: 1,
@@ -114,11 +123,78 @@ export function KeycapNav() {
 		},
 	];
 
+	const mobileKeys: KeyPosition[] = [
+		{
+			id: "islandIcon",
+			col: 1,
+			row: 1,
+			colSpan: 1,
+			keycapProps: {
+				colour: "yellow",
+				isActive: location.pathname === `/${username}`,
+				onPress: () => navigate(`/${username}`),
+				children: <IslandIcon size={22} />,
+			},
+		},
+		{
+			id: "trinketsIcon",
+			col: 2,
+			row: 1,
+			colSpan: 1,
+			keycapProps: {
+				colour: "green",
+				isActive: location.pathname === "/trinkets",
+				onPress: () => navigate("/trinkets"),
+				children: <TrinketsIcon size={22} />,
+			},
+		},
+		{
+			id: "friendsIcon",
+			col: 3,
+			row: 1,
+			colSpan: 1,
+			keycapProps: {
+				colour: "blue",
+				isActive: location.pathname === "/friends",
+				onPress: () => navigate("/friends"),
+				children: <FriendsIcon size={22} />,
+			},
+		},
+		{
+			id: "chatterIcon",
+			col: 4,
+			row: 1,
+			colSpan: 1,
+			keycapProps: {
+				colour: "red",
+				isActive: location.pathname === "/chatter",
+				onPress: () => navigate("/chatter"),
+				children: <ChatterIcon size={22} />,
+			},
+		},
+		{
+			id: "widgetToggle",
+			col: 5,
+			row: 1,
+			keycapProps: {
+				colour: "charcoal",
+				isActive: isExpanded,
+				disabled: !hasSlotContent,
+				onRelease: onToggleExpand,
+				children: (
+					<div style={{ transform: isExpanded ? "rotate(180deg)" : "none" }}>
+						<ArrowIcon size={22} />
+					</div>
+				),
+			},
+		},
+	];
+
 	return (
 		<KeyboardLayout
-			keys={navKeys}
-			columns={2}
-			rows={4}
+			keys={isMobile ? mobileKeys : desktopKeys}
+			columns={isMobile ? 5 : 3}
+			rows={isMobile ? 1 : 4}
 			plateColor="var(--dark)"
 		/>
 	);

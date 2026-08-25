@@ -1,13 +1,14 @@
-@import "../styles/palette.css";
-
 .pageContainer {
 	height: 100%;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 1rem;
 	font-family: "Helvetica";
+	/* Guarantees long content scrolls inside main instead of expanding main */
 	overflow-y: auto;
+	box-sizing: border-box;
 
 	.pageHeader {
 		display: flex;
@@ -35,8 +36,26 @@
 			font-family: "Helvetica";
 		}
 	}
-}
 
-::-webkit-scrollbar {
-	display: none;
+	/* Mobile adjustments for header size */
+	@media (max-width: 768px) {
+		.pageHeader {
+			padding: 2rem 0 0.5rem 0;
+
+			.pageTitle {
+				font-size: 2rem;
+			}
+
+			.viewBar {
+				transform: scale(0.8);
+				transform-origin: center;
+			}
+		}
+
+		.pageMain {
+			gap: 0.25rem;
+		}
+	}
+
+
 }

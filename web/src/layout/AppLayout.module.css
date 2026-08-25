@@ -52,7 +52,6 @@ aside {
         inset 3px 0 4px 0px rgba(60, 40, 25, 0.35);
 }
 
-
 main {
     flex: 1;
     min-width: 0;
@@ -61,21 +60,93 @@ main {
     height: 100%;
     display: flex;
     flex-direction: column;
-    /* no overflow property here */
 }
 
-/* .rightPanel::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 100%;    
-    width: 15px; 
-    height: 100%;    
-    
-    background: linear-gradient(
-        to right,
-        rgba(220, 215, 205, 1) 0%,
-        rgba(200, 195, 185, 1) 100%
-    );
-    
-} */
+.mobileDrawer {
+    display: none;
+}
+
+.desktopSlot {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================
+ * MOBILE RESPONSIVE OVERRIDES
+ * ========================================== */
+
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+        /* Ensure layout stays locked to screen height */
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    main {
+        padding: 0 16px;
+        /* Allow main to shrink so pageContainer scrolls internally */
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .leftPanel {
+        order: 2;
+        width: 100%;
+        height: auto;
+        flex-shrink: 0;
+        padding: 1.5rem 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+
+        box-shadow:
+            0 -10px 16px -4px rgba(80, 58, 42, 0.38),
+            0 -4px 8px -2px rgba(40, 28, 20, 0.48),
+            inset 0 3px 4px 0px rgba(60, 40, 25, 0.35);
+
+        .mobileDrawer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: 250ms ease-in-out;
+
+            &.expanded {
+                max-height: 30vh;
+                opacity: 1;
+                /* padding-bottom: 8px; */
+                overflow-y: auto;
+                padding-bottom: 2rem;
+            }
+        }
+
+        .divide {
+            display: none;
+        }
+
+
+
+    }
+
+
+    .rightPanel {
+        display: none;
+    }
+
+    .desktopSlot {
+        display: none;
+    }
+
+
+    /* Slide-up Widget Panel */
+
+
+
+}

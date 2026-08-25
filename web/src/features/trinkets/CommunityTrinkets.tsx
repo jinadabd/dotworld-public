@@ -19,10 +19,6 @@ export function CommunityTrinkets({ filter }: Props) {
 
 	return (
 		<>
-			<div className={trinketStyles.headerRow}>
-				<h2 className={trinketStyles.sectionTitle}>Community Trinkets</h2>
-			</div>
-
 			{isLoading ? (
 				<p>Loading Community Trinkets...</p>
 			) : error || !filteredTrinkets || filteredTrinkets.length === 0 ? (

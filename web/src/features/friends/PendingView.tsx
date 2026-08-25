@@ -5,16 +5,16 @@ import { useFriendshipActions } from "./useFriendshipActions";
 
 import friendStyles from "./Friends.module.css";
 
-export function PendingView({ providedStyle }: { providedStyle?: CSSModuleClasses }) {
+export function PendingView() {
 	const { data: pending, isLoading } = useGetFriendshipPendingQuery();
 	const { cancelFriendRequest } = useFriendshipActions();
 
 	return (
 		<>
-			<div className={friendStyles.headerRow}>
+			{/* <div className={friendStyles.headerRow}>
 				<h2 className={friendStyles.sectionTitle}>Pending Requests</h2>
 				{isLoading && <p className={friendStyles.statusMessage}>Loading...</p>}
-			</div>
+			</div> */}
 
 			<div className={friendStyles.friendsView}>
 				{(!pending || pending.length === 0) && (
@@ -24,11 +24,10 @@ export function PendingView({ providedStyle }: { providedStyle?: CSSModuleClasse
 				)}
 				{pending &&
 					pending.map((req) => (
-						<div className={friendStyles.friendRow}>
-							<FetchedUserBadge
-								key={req.friend_id}
-								userId={req.friend_id}
-							/>
+						<div
+							className={friendStyles.friendRow}
+							key={req.id}>
+							<FetchedUserBadge userId={req.friend_id} />
 							<TactileButton onRelease={() => cancelFriendRequest(req.friend_id)}>
 								Cancel
 							</TactileButton>

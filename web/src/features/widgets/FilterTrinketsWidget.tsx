@@ -1,6 +1,7 @@
 import type { TrinketType } from "@shared/types";
 import { KeyboardLayout, type KeyPosition } from "../../components/buttons/KeyboardLayout";
 import widgetStyles from "./Widgets.module.css";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 interface Props {
 	filter: TrinketType | "all";
@@ -8,6 +9,8 @@ interface Props {
 }
 
 export function FilterTrinketsWidget({ filter, setFilter }: Props) {
+	const isMobile = useMediaQuery("(max-width: 768px)");
+
 	const keys: KeyPosition[] = [
 		{
 			id: "allButton",
@@ -32,8 +35,8 @@ export function FilterTrinketsWidget({ filter, setFilter }: Props) {
 		},
 		{
 			id: "collectionButton",
-			col: 1,
-			row: 2,
+			col: isMobile ? 3 : 1,
+			row: isMobile ? 1 : 2,
 			colSpan: 2,
 			keycapProps: {
 				className: `${"green"}`.trim(),
@@ -54,7 +57,7 @@ export function FilterTrinketsWidget({ filter, setFilter }: Props) {
 		{
 			id: "playlistButton",
 			col: 1,
-			row: 3,
+			row: isMobile ? 2 : 3,
 			colSpan: 2,
 			keycapProps: {
 				className: `${"green"}`.trim(),
@@ -74,8 +77,8 @@ export function FilterTrinketsWidget({ filter, setFilter }: Props) {
 		},
 		{
 			id: "galleryButton",
-			col: 1,
-			row: 4,
+			col: isMobile ? 3 : 1,
+			row: isMobile ? 2 : 4,
 			colSpan: 2,
 			keycapProps: {
 				className: `${"green"}`.trim(),
@@ -98,12 +101,14 @@ export function FilterTrinketsWidget({ filter, setFilter }: Props) {
 	return (
 		<div className={widgetStyles.widget}>
 			<h3 className={widgetStyles.widgetTitle}>Filter</h3>
-			<KeyboardLayout
-				keys={keys}
-				columns={1}
-				rows={4}
-				plateColor="#272727"
-			/>
+			<div className={widgetStyles.widgetView}>
+				<KeyboardLayout
+					keys={keys}
+					columns={isMobile ? 2 : 1}
+					rows={isMobile ? 2 : 4}
+					plateColor="#272727"
+				/>
+			</div>
 		</div>
 	);
 }
