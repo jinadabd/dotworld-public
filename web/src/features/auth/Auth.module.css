@@ -13,3 +13,9 @@
         align-self: flex-end;
     }
 }
+
+@media (max-width: 768px) {
+    .authView {
+        width: 80%;
+    }
+}
