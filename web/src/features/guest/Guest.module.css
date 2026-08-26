@@ -1,0 +1,398 @@
+/* ==========================================================================
+   ABOUT SECTION
+   ========================================================================== */
+
+.aboutSection {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 6rem 4rem;
+    box-sizing: border-box;
+
+    .aboutText {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .pageTitle {
+            font-family: "Bitcount";
+            font-size: 4rem;
+            color: var(--dark);
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .sectionHeadline {
+            font-family: "Bitcount";
+            font-size: 1.5rem;
+            color: var(--brown);
+            margin: 0;
+            line-height: 1.25;
+        }
+
+        .sectionBody {
+            width: 90%;
+            font-family: "Helvetica";
+            font-size: 1.125rem;
+            line-height: 1.4;
+            color: var(--dark);
+            margin: 0;
+            margin-top: 0.5rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            text-align: justify;
+        }
+    }
+
+    .valueGrid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+
+        .valueChip {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 1.25rem;
+            min-height: 4.5rem;
+            box-sizing: border-box;
+
+            background-color: var(--offwhite);
+            border-radius: 0.75rem;
+
+            font-family: "Bitcount";
+            font-size: 1.125rem;
+            text-align: center;
+            color: var(--dark);
+
+            box-shadow:
+                0 0 0 var(--beige),
+                0 0 0 var(--brown),
+                0 0 0.25rem var(--brown) inset,
+                0 0 0 var(--beige) inset,
+                0 0 0 var(--white) inset;
+
+            transition:
+                transform 0.2s cubic-bezier(0.2, 0, 0.2, 1),
+                box-shadow 0.2s cubic-bezier(0.2, 0, 0.2, 1);
+            will-change: transform;
+
+            &:hover {
+                transform: translateY(-0.25rem);
+                box-shadow:
+                    0 0.35rem 0 var(--beige),
+                    0 0.4rem 0 var(--brown),
+                    0 0 0.25rem var(--brown) inset,
+                    0 -0.25rem 0.5rem var(--beige) inset,
+                    0 0.75rem 0.25rem var(--white) inset;
+            }
+
+            &[data-colour="yellow"]:hover {
+                box-shadow:
+                    0 0.35rem 0 var(--yellow),
+                    0 0.4rem 0 var(--yellow),
+                    0 0 0.25rem var(--yellow) inset,
+                    0 -0.25rem 0.5rem var(--yellow) inset,
+                    0 0.75rem 0.25rem var(--white) inset;
+            }
+
+            &[data-colour="green"]:hover {
+                box-shadow:
+                    0 0.35rem 0 var(--green),
+                    0 0.4rem 0 var(--green),
+                    0 0 0.25rem var(--green) inset,
+                    0 -0.25rem 0.5rem var(--green) inset,
+                    0 0.75rem 0.25rem var(--white) inset;
+            }
+
+            &[data-colour="blue"]:hover {
+                box-shadow:
+                    0 0.35rem 0 var(--blue),
+                    0 0.4rem 0 var(--blue),
+                    0 0 0.25rem var(--blue) inset,
+                    0 -0.25rem 0.5rem var(--blue) inset,
+                    0 0.75rem 0.25rem var(--white) inset;
+            }
+
+            &[data-colour="red"]:hover {
+                box-shadow:
+                    0 0.35rem 0 var(--red),
+                    0 0.4rem 0 var(--red),
+                    0 0 0.25rem var(--red) inset,
+                    0 -0.25rem 0.5rem var(--red) inset,
+                    0 0.75rem 0.25rem var(--white) inset;
+            }
+        }
+    }
+}
+
+
+/* ==========================================================================
+   WHY WE BUILT THIS SECTION
+   ========================================================================== */
+
+.whySection {
+    width: 100%;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+
+    .sectionHeadline {
+        font-family: "Bitcount";
+        font-size: 3rem;
+        color: var(--dark);
+        margin: 0;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .cardBoard {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        margin: 1.5rem 0;
+
+        .indexCard {
+            width: 100%;
+            min-height: 7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem 1.5rem;
+            box-sizing: border-box;
+            background-color: var(--offwhite);
+            border-radius: 0.75rem;
+
+            box-shadow:
+                0 0 0 var(--beige),
+                0 0 0 var(--brown),
+                0 0 0.25rem var(--brown) inset,
+                0 0 0 var(--beige) inset,
+                0 0 0 var(--white) inset;
+
+            transition: 0.2s ease;
+            will-change: transform;
+
+            p {
+                font-family: "Helvetica";
+                font-size: 1.1rem;
+                line-height: 1.5;
+                color: var(--dark);
+                text-align: center;
+                margin: 0;
+            }
+
+            &:hover {
+                transform: translateY(-0.5rem);
+                box-shadow:
+                    0 0.5rem 0 var(--beige),
+                    0 0.55rem 0 var(--brown),
+                    0 0 0.25rem var(--brown) inset,
+                    0 -0.25rem 0.5rem var(--beige) inset,
+                    0 0.75rem 0.25rem var(--white) inset;
+            }
+        }
+    }
+}
+
+
+/* ==========================================================================
+   HOW IT WORKS SECTION
+   ========================================================================== */
+
+.howSection {
+    width: 100%;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    box-sizing: border-box;
+
+    .sectionHeadline {
+        font-family: "Bitcount";
+        font-size: 3rem;
+        color: var(--dark);
+        margin: 0;
+        line-height: 1.1;
+        text-align: center;
+    }
+
+    .pageCard {
+        margin-top: 1rem;
+        width: 60%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 2rem;
+        padding: 1.5rem;
+        box-sizing: border-box;
+        background-color: var(--offwhite);
+        border-radius: 0.75rem;
+
+        box-shadow:
+            0 0 0 var(--beige),
+            0 0 0 var(--brown),
+            0 0 0.25rem var(--brown) inset,
+            0 0 0 var(--beige) inset,
+            0 0 0 var(--white) inset;
+
+        transition:
+            transform 0.2s cubic-bezier(0.2, 0, 0.2, 1),
+            box-shadow 0.2s cubic-bezier(0.2, 0, 0.2, 1);
+        will-change: transform;
+
+        .pageIcon {
+            transform: scale(1.3);
+            transform-origin: center center;
+            flex-shrink: 0;
+        }
+
+        .pageInfo {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+
+            .pageTitle {
+                font-family: "Bitcount";
+                font-size: 1.5rem;
+                color: var(--dark);
+                margin: 0;
+            }
+
+            .pageDesc {
+                font-family: "Helvetica";
+                font-size: 1rem;
+                line-height: 1.5;
+                color: var(--dark);
+                margin: 0;
+            }
+        }
+
+        &:hover {
+            transform: translateY(-0.35rem);
+            box-shadow:
+                0 0.5rem 0 var(--beige),
+                0 0.55rem 0 var(--brown),
+                0 0 0.25rem var(--brown) inset,
+                0 -0.25rem 0.5rem var(--beige) inset,
+                0 0.75rem 0.25rem var(--white) inset;
+        }
+    }
+}
+
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS (Below 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .aboutSection {
+        flex-direction: column;
+        padding: 2.5rem 1.25rem;
+        gap: 2rem;
+
+        .aboutText {
+            .pageTitle {
+                font-size: 2.25rem;
+                text-align: center;
+            }
+
+            .sectionHeadline {
+                font-size: 1.25rem;
+                text-align: center;
+            }
+
+            .sectionBody {
+                width: 100%;
+                font-size: 1rem;
+                text-align: left;
+                /* Eliminates weird gaps from justified text on mobile */
+            }
+        }
+
+        .valueGrid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+
+            .valueChip {
+                padding: 0.875rem 1rem;
+                min-height: 3.75rem;
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .whySection {
+        padding: 2.5rem 1.25rem;
+
+        .sectionHeadline {
+            font-size: 2rem;
+        }
+
+        .cardBoard {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+
+            .indexCard {
+                min-height: 5.5rem;
+
+                p {
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+
+    .howSection {
+        padding: 2.5rem 1.25rem;
+
+        .sectionHeadline {
+            font-size: 2rem;
+            line-height: 1.2;
+        }
+
+        .tabBar {
+            zoom: 0.65;
+        }
+
+        .pageCard {
+            width: 100%;
+            /* Expands card to fit mobile screens comfortably */
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1rem;
+            padding: 1.25rem;
+
+            .pageIcon {
+                transform: scale(1);
+            }
+
+            .pageInfo {
+                align-items: center;
+
+                .pageTitle {
+                    font-size: 1.25rem;
+                    text-align: center;
+                }
+
+                .pageDesc {
+                    font-size: 0.95rem;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}

@@ -110,10 +110,12 @@ export function SetUpIslandForm({ username, userId }: Props) {
 							<div className={formStyles.postOptions}>
 								<div className={formStyles.formGroup}>
 									<label className={formStyles.tooltip}>Visibility</label>
-									<IslandVisibilityToggle
-										visibility={visibility}
-										setVisibility={setVisibility}
-									/>
+									<div className={formStyles.visibilityToggle}>
+										<IslandVisibilityToggle
+											visibility={visibility}
+											setVisibility={setVisibility}
+										/>
+									</div>
 								</div>
 								<div className={formStyles.formGroup}>
 									<label className={formStyles.tooltip}>Cover</label>

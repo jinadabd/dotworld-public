@@ -6,7 +6,15 @@ import { LockIcon } from "../../components/buttons/icons";
 import { TactileButton } from "../../components/buttons/TactileButton";
 import { FriendshipButton } from "../../components/buttons/FriendshipButton";
 
-export function LockedIsland({ user, isIncoming }: { user: PublicUser; isIncoming: boolean }) {
+export function LockedIsland({
+	user,
+	status,
+	isIncoming,
+}: {
+	user: PublicUser;
+	status: FriendshipStatus | null;
+	isIncoming: boolean;
+}) {
 	return (
 		<div className={pageStyles.pageContainer}>
 			<div className={pageStyles.pageHeader}>
@@ -32,7 +40,7 @@ export function LockedIsland({ user, isIncoming }: { user: PublicUser; isIncomin
 
 					<FriendshipButton
 						userId={user.id}
-						status={null}
+						status={status}
 						isIncoming={isIncoming}
 					/>
 				</div>

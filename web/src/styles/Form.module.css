@@ -228,6 +228,22 @@ form {
 			transform-origin: right center;
 			margin-left: -25%;
 		}
+
+		.formGroup {
+			align-items: center;
+
+			.tooltip {
+				display: none;
+			}
+
+			.visibilityToggle,
+			.uploadButton {
+				margin: 0 !important;
+				transform: none !important;
+				zoom: 0.65;
+				width: fit-content;
+			}
+		}
 	}
 
 	.trinketOptions {
@@ -261,8 +277,42 @@ form {
 		}
 	}
 
+	.submitButton {
+		zoom: 0.65;
+	}
+
 	.typeToggles {
 		transform: scale(0.65);
 		transform-origin: center center;
+	}
+
+	.welcomeCard {
+		/* Expand card width so it doesn't get squeezed on small screens */
+		width: 100%;
+		padding: 1.25rem 1rem;
+		gap: 1rem;
+		box-sizing: border-box;
+	}
+
+	.welcomeCard .sealContainer {
+		/* Scale down the seal slightly for narrower screens */
+		zoom: normal;
+		transform: scale(1.2);
+	}
+
+	.welcomeCard .welcomeTitle {
+		font-size: 1.5rem;
+		text-align: center;
+	}
+
+	.welcomeCard .welcomeText {
+		/* Allow text to take up full available width on mobile */
+		width: 100%;
+		font-size: 1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.islandView {
+		width: 100%;
 	}
 }

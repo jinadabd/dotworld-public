@@ -266,3 +266,88 @@
         }
     }
 }
+
+/* ==========================================
+   UPDATED MOBILE RESPONSIVE OVERRIDES
+   ========================================== */
+
+@media (max-width: 640px) {
+    .trinketContainer[data-type="gallery"] {
+        height: auto;
+        min-height: 100vh;
+        max-height: none;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 22vh;
+
+        margin-left: -16px !important;
+        margin-right: -16px !important;
+        width: calc(100% + 32px) !important;
+        overflow-x: visible !important;
+
+        .pageHeader {
+            padding: 0.75rem 1rem 0.25rem 1rem;
+            text-align: center;
+            position: relative;
+            z-index: 100;
+
+            .pageTitle {
+                font-size: 1.75rem;
+            }
+
+            .pageDescription {
+                font-size: 0.8rem;
+            }
+        }
+
+        .boxStage {
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 2rem;
+            padding-right: 0;
+        }
+
+        .photoBox {
+            width: 50vw;
+            height: 50vw;
+            max-width: 220px;
+            max-height: 220px;
+            position: relative;
+
+            .boxTray .polaroidCard {
+                width: 20vw;
+                max-width: 100px;
+
+                /* SMALLER & LOWER LIFTED CARDS */
+                &.stackedCard {
+                    width: 48vw;
+                    max-width: 190px;
+                    padding: 0.35rem 0.35rem 0.25rem;
+
+                    transform: translate3d(var(--stack-tx), calc(-150px + var(--stack-ty)), 0) rotate(var(--stack-rot)) scale(1) !important;
+
+                    .polaroidCaption {
+                        font-size: 0.75rem;
+                        padding: 0.2rem 0.1rem;
+                    }
+
+                    &:hover {
+                        transform: translate3d(0, -150px, 0) rotate(0deg) scale(1.02) !important;
+                    }
+                }
+            }
+
+            /* CONTROLLED LID DROP ABOVE BOTTOM NAVBAR */
+            &.boxOpen {
+                .boxLid {
+                    transform: translate3d(-65vw, 0, 0) rotate(-12deg) !important;
+                    z-index: 90;
+
+                    &:hover {
+                        transform: translate3d(-65vw, 0, 0) rotate(-10deg) !important;
+                    }
+                }
+            }
+        }
+    }
+}

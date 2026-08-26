@@ -3,7 +3,7 @@ import { useCreateIslandMutation } from "./islandApi";
 import { useNavigate } from "react-router-dom";
 import { extractErrorMessage } from "../../utils/errors";
 import { type IslandRow, type IslandVisibility } from "@shared/types";
-import { VisibilityToggle } from "./IslandVisibilityToggle";
+import { IslandVisibilityToggle } from "./IslandVisibilityToggle";
 import { useFileUpload } from "../../hooks/useFileUpload";
 
 // export interface EditIslandInput {
@@ -53,7 +53,7 @@ export function EditIslandForm({ island }: { island: IslandRow }) {
 		<div>
 			<h1>Create Island</h1>
 			<form onSubmit={handleSubmit}>
-				<VisibilityToggle
+				<IslandVisibilityToggle
 					value={visibility}
 					onChange={setVisibility}
 				/>

@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { TactileButton } from "./TactileButton";
 import { KeyboardLayout, type KeyPosition } from "./KeyboardLayout";
 
 interface FileUploadButtonProps {

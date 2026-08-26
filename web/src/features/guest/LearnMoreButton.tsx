@@ -3,6 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { KeyboardLayout, type KeyPosition } from "../../components/buttons/KeyboardLayout";
 
 export function LandingButtons() {
+	const handleAboutScroll = () => {
+		const aboutSection = document.getElementById("about");
+		if (aboutSection) {
+			aboutSection.scrollIntoView({ behavior: "smooth" });
+		}
+	};
+
 	const navigate = useNavigate();
 	const buttonKey: KeyPosition[] = [
 		{
@@ -13,7 +20,7 @@ export function LandingButtons() {
 			keycapProps: {
 				colour: "cream",
 				legend: "⬤",
-				onRelease: () => navigate("/login"),
+				onRelease: handleAboutScroll,
 				children: "About",
 			},
 		},

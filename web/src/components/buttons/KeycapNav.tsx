@@ -5,7 +5,6 @@ import type { KeyPosition } from "./KeyboardLayout";
 import { IslandIcon, TrinketsIcon, FriendsIcon, ChatterIcon } from "./icons";
 import type { RootState } from "../../app/store";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { useState } from "react";
 import { ArrowIcon } from "./icons/ArrowIcon";
 
 interface KeycapNavProps {

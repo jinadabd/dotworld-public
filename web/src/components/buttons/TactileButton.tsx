@@ -37,7 +37,7 @@ export function TactileButton({
 			keycapProps: {
 				type,
 				colour: colour,
-				legend: "⬤",
+				legend: isMini ? undefined : "⬤",
 				isActive: active,
 				isHighlighted,
 				disabled,

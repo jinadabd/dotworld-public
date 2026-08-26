@@ -9,6 +9,7 @@ import { useSetSidebar } from "../../hooks/useSetSidebar";
 import { FriendshipButton } from "../../components/buttons/FriendshipButton";
 import { useGetFriendshipQuery } from "../friends/friendsApi";
 import { BlankIsland } from "./BlankIsland";
+import { LogoutButton } from "../auth/LogoutButton";
 
 export function IslandPage() {
 	const { username } = useParams<{ username: string }>();
@@ -30,7 +31,9 @@ export function IslandPage() {
 	const status = friendship?.friendship_status ?? null;
 	const isIncoming = friendship?.friend_id === myId;
 
-	const sidebarNode = isOwnIsland ? null : data?.user && !isFriendshipLoading ? (
+	const sidebarNode = isOwnIsland ? (
+		<LogoutButton />
+	) : data?.user && !isFriendshipLoading ? (
 		<FriendshipButton
 			userId={data.user.id}
 			status={status}
@@ -75,6 +78,7 @@ export function IslandPage() {
 		return (
 			<LockedIsland
 				user={data.user}
+				status={status}
 				isIncoming={isIncoming}
 			/>
 		);

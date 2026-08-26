@@ -150,3 +150,44 @@
   height: 6px;
   background-color: var(--brown);
 }
+
+/* ==========================================
+   MOBILE RESPONSIVE OVERRIDES
+   ========================================== */
+
+@media (max-width: 640px) {
+  .islandPage {
+    padding: 1rem 0.75rem 0;
+    gap: 1rem;
+  }
+
+  .headerCard {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .islandTitle {
+    font-size: 1.75rem;
+    text-align: center;
+  }
+
+  .islandUsername,
+  .islandDescription {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .coverImage {
+    height: 140px;
+  }
+
+  .featuredGrid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .contentArea {
+    /* Reduced horizontal padding so content fits naturally on phone screens */
+    padding: 0 12px 1.5rem;
+  }
+}
