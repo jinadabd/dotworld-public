@@ -4,8 +4,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node dist/src/server.js",
-    "build": "tsc"
+    "start": "tsx src/server.ts",
+    "build": "echo 'Build skipped'"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +21,8 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.6.2",
     "jsonwebtoken": "^9.0.3",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "tsx": "^4.23.12"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
