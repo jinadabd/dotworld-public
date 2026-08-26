@@ -6,11 +6,12 @@ import { generateUserSeal } from "../../utils/generateSeal";
 import styles from "./LandingGrid.module.css";
 import { LandingButtons } from "./LearnMoreButton";
 
-function getWeightedRandomColour() {
-	const rand = Math.random();
-	if (rand < 0.3) return "yellow";
-	if (rand < 0.5) return "green";
-	if (rand < 0.8) return "blue";
+// Deterministic pseudo-random color based on cell coordinates
+function getDeterministicColour(r: number, c: number): "yellow" | "green" | "blue" | "red" {
+	const hash = (r * 37 + c * 17) % 100;
+	if (hash < 30) return "yellow";
+	if (hash < 50) return "green";
+	if (hash < 80) return "blue";
 	return "red";
 }
 
@@ -32,7 +33,7 @@ export function LandingGrid() {
 	const [scale, setScale] = useState(1);
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	// Matrix grid cells calculation using exact bounds
+	// Grid cell calculation using stable seeds
 	const gridCells = useMemo(() => {
 		if (!cols || !rows) return [];
 		const cells: GridCellData[] = [];
@@ -46,29 +47,29 @@ export function LandingGrid() {
 					r < centerBox.rowEnd - 1;
 
 				if (!isCenter) {
-					const seed = `cell_${r}_${c}_${Math.random()}`;
+					const seed = `cell_${r}_${c}`;
 					cells.push({
 						key: `${r}-${c}`,
 						row: r,
 						col: c,
-						colour: getWeightedRandomColour(),
+						colour: getDeterministicColour(r, c),
 						seal: generateUserSeal(seed),
 					});
 				}
 			}
 		}
 		return cells;
-	}, [cols, rows, centerBox]);
+	}, [cols, rows, centerBox.colStart, centerBox.colEnd, centerBox.rowStart, centerBox.rowEnd]);
 
-	const containerWidth = cols * STEP - GAP_SIZE;
-	const containerHeight = rows * STEP - GAP_SIZE;
+	const containerWidth = cols ? cols * STEP - GAP_SIZE : 0;
+	const containerHeight = rows ? rows * STEP - GAP_SIZE : 0;
 
-	// Scale precisely so the grid edge hits the 1rem margin without leaving dead space
+	// Scaling calculation
 	useEffect(() => {
 		function updateScale() {
 			if (!containerWidth || !containerHeight) return;
 
-			const marginInPixels = 32; // 1rem padding per side
+			const marginInPixels = 32;
 			const targetWidth = window.innerWidth - marginInPixels;
 			const targetHeight = window.innerHeight - marginInPixels;
 
@@ -83,28 +84,31 @@ export function LandingGrid() {
 		return () => window.removeEventListener("resize", updateScale);
 	}, [containerWidth, containerHeight]);
 
-	// Random pulse interval
+	// Random pulse animation interval
 	useEffect(() => {
 		if (gridCells.length === 0) return;
 
 		const interval = setInterval(() => {
 			const countToActivate = Math.floor(Math.random() * 3) + 2;
-			const newActiveState: Record<string, boolean> = {};
+			const keysToActivate: string[] = [];
 
 			for (let i = 0; i < countToActivate; i++) {
 				const randomCell = gridCells[Math.floor(Math.random() * gridCells.length)];
 				if (randomCell) {
-					newActiveState[randomCell.key] = true;
+					keysToActivate.push(randomCell.key);
 				}
 			}
 
-			setActiveKeys((prev) => ({ ...prev, ...newActiveState }));
+			setActiveKeys((prev) => {
+				const next = { ...prev };
+				keysToActivate.forEach((k) => (next[k] = true));
+				return next;
+			});
 
-			// Release the pressed keys after 400ms
 			setTimeout(() => {
 				setActiveKeys((prev) => {
 					const next = { ...prev };
-					Object.keys(newActiveState).forEach((k) => delete next[k]);
+					keysToActivate.forEach((k) => delete next[k]);
 					return next;
 				});
 			}, 1300);
@@ -134,25 +138,21 @@ export function LandingGrid() {
 					height: `${containerHeight}px`,
 					transform: `scale(${scale})`,
 				}}>
-				{gridCells.map((cell) => {
-					const isActive = !!activeKeys[cell.key];
-
-					return (
-						<div
-							key={cell.key}
-							className={styles.absoluteKeycapSlot}
-							style={{
-								left: `${cell.col * STEP}px`,
-								top: `${cell.row * STEP}px`,
-							}}>
-							<Keycap
-								colour={cell.colour}
-								isActive={isActive}>
-								<UserSealIcon seal={cell.seal} />
-							</Keycap>
-						</div>
-					);
-				})}
+				{gridCells.map((cell) => (
+					<div
+						key={cell.key}
+						className={styles.absoluteKeycapSlot}
+						style={{
+							left: `${cell.col * STEP}px`,
+							top: `${cell.row * STEP}px`,
+						}}>
+						<Keycap
+							colour={cell.colour}
+							isActive={!!activeKeys[cell.key]}>
+							<UserSealIcon seal={cell.seal} />
+						</Keycap>
+					</div>
+				))}
 
 				<div
 					className={styles.centerCard}
@@ -161,6 +161,7 @@ export function LandingGrid() {
 						top: `${centerTop}px`,
 						width: `${centerWidth}px`,
 						height: `${centerHeight}px`,
+						zIndex: 10,
 					}}>
 					<h1 className={styles.brandTitle}>dotworld</h1>
 					<div className={styles.buttonGroup}>
