@@ -18,8 +18,8 @@ import path from "path";
 const server = express();
 const PORT = process.env.PORT || 3000;
 
-const allowedOrigins = ["http://localhost:5173"];
-const allowedOrigins = [process.env.FRONTEND_URL];
+const allowedOrigins = ["http://localhost:5173", process.env.FRONTEND_URL];
+// const allowedOrigins = [process.env.FRONTEND_URL];
 
 server.use(cors({ origin: allowedOrigins, credentials: false }));
 server.use(express.json());
