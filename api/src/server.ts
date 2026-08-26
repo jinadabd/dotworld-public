@@ -18,17 +18,23 @@ import path from "path";
 const server = express();
 const PORT = process.env.PORT || 3000;
 
-const frontendDistPath = path.resolve(process.cwd(), "../web/dist");
+const allowedOrigins = ["http://localhost:5173", process.env.FRONTEND_URL].filter(
+	Boolean,
+) as string[];
 
+server.use(cors({ origin: allowedOrigins, credentials: false }));
+
+// Resolve path relative to project root
+const frontendDistPath = path.resolve(process.cwd(), "../frontend/dist");
+
+// 1. Serve static built React assets
 server.use(express.static(frontendDistPath));
-server.get("*", (req, res) => {
+
+// 2. Catch-all route for Express 5 compatibility
+server.get("{*path}", (req, res) => {
 	res.sendFile(path.join(frontendDistPath, "index.html"));
 });
 
-const allowedOrigins = ["http://localhost:5173", process.env.FRONTEND_URL];
-// const allowedOrigins = [process.env.FRONTEND_URL];
-
-server.use(cors({ origin: allowedOrigins, credentials: false }));
 server.use(express.json());
 server.use("/auth", authRouter);
 
