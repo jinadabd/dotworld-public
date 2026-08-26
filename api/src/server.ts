@@ -18,6 +18,13 @@ import path from "path";
 const server = express();
 const PORT = process.env.PORT || 3000;
 
+const frontendDistPath = path.resolve(process.cwd(), "../web/dist");
+
+server.use(express.static(frontendDistPath));
+server.get("*", (req, res) => {
+	res.sendFile(path.join(frontendDistPath, "index.html"));
+});
+
 const allowedOrigins = ["http://localhost:5173", process.env.FRONTEND_URL];
 // const allowedOrigins = [process.env.FRONTEND_URL];
 
