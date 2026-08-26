@@ -13,6 +13,7 @@ const ErrorMessages: Record<ServerErrorCode, string> = {
 
 	[ServerErrorCode.ACCESS_DENIED]: "Nuh-uh. You do not have permission to do that.",
 	[ServerErrorCode.NOT_FOUND]: "We tried our best, but couldn't find that. Sorry :(",
+	[ServerErrorCode.PAYLOAD_TOO_LARGE]: "File way too big. Try another one.",
 
 	[ServerErrorCode.EMAIL_IN_USE]: "That email is already registered.",
 	[ServerErrorCode.USERNAME_IN_USE]: "That username is taken. Try another one.",
@@ -25,7 +26,7 @@ const ErrorMessages: Record<ServerErrorCode, string> = {
 		"This isn't Google Drive, bro. No more storage for you.",
 };
 
-export function extractErrorMessage(error: unknown): string {
+export function extractErrorMessage(error: unknown) {
 	if (error && typeof error === "object" && "data" in error) {
 		const code = (error as any).data?.code as ServerErrorCode;
 		if (code && ErrorMessages[code]) return ErrorMessages[code];
