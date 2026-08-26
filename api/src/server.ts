@@ -25,7 +25,7 @@ const allowedOrigins = ["http://localhost:5173", process.env.FRONTEND_URL].filte
 server.use(cors({ origin: allowedOrigins, credentials: false }));
 
 // Resolve path relative to project root
-const frontendDistPath = path.resolve(process.cwd(), "../frontend/dist");
+const frontendDistPath = path.resolve(process.cwd(), "../web/dist");
 
 // 1. Serve static built React assets
 server.use(express.static(frontendDistPath));
