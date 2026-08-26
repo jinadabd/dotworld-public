@@ -4,7 +4,6 @@ import type {
 	TrinketItemRow,
 	EditTrinketInput,
 	CreateTrinketItemInput,
-	PaginatedTrinkets,
 	TrinketWithAuthor,
 } from "@shared/types";
 import { api } from "../../services/api";

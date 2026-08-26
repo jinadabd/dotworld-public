@@ -5,7 +5,7 @@ import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 interface Props {
 	filter: TrinketType | "all";
-	setFilter: React.Dispatch<React.SetStateAction<TrinketType | "all">>;
+	setFilter: (next: TrinketType | "all") => void;
 }
 
 export function FilterTrinketsWidget({ filter, setFilter }: Props) {

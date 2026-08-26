@@ -1,4 +1,4 @@
-import { useState, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { useEffect, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { type Colours } from "./TactileButton";
 import { KeyboardLayout, type KeyPosition } from "./KeyboardLayout";
 import { LockIcon } from "./icons";
@@ -7,6 +7,8 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	colour?: Colours;
 	icon?: ReactNode;
 	onRelease?: () => void;
+	resetTrigger?: unknown;
+	isMini?: boolean;
 }
 
 export function TactileButtonWithConfirm({
@@ -14,9 +16,15 @@ export function TactileButtonWithConfirm({
 	icon,
 	children,
 	onRelease,
+	resetTrigger,
+	isMini = false,
 	...rest
 }: Props) {
 	const [unlocked, setUnlocked] = useState(false);
+
+	useEffect(() => {
+		setUnlocked(false);
+	}, [resetTrigger]);
 
 	const buttonKeys: KeyPosition[] = [
 		{
@@ -34,7 +42,7 @@ export function TactileButtonWithConfirm({
 			id: `${rest.id}tactileButton`,
 			col: 2,
 			row: 1,
-			colSpan: 2,
+			colSpan: isMini ? 1 : 2,
 			keycapProps: {
 				colour: colour,
 				legend: "⬤",

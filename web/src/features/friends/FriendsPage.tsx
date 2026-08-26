@@ -10,6 +10,7 @@ import friendStyles from "./Friends.module.css";
 import { SearchToolbar } from "./SearchToolbar";
 import { useSearchUsers } from "../../hooks/useSearchUsers";
 import { SearchUsersForm } from "./SearchUsersForm";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type FriendsView = "friends" | "requests" | "pending";
 
@@ -20,7 +21,11 @@ export function FriendsPage() {
 		return () => setContent(null);
 	}, [setContent]);
 
-	const [view, setView] = useState<FriendsView>("friends");
+	const navigate = useNavigate();
+	const location = useLocation();
+	const segments = location.pathname.split("/").filter(Boolean);
+	const rawView = segments[1];
+	const view: FriendsView = rawView === "requests" || rawView === "pending" ? rawView : "friends";
 
 	const [isSearching, setIsSearching] = useState(false);
 	const search = useSearchUsers();
@@ -28,7 +33,6 @@ export function FriendsPage() {
 	function handleToggleSearch() {
 		setIsSearching((prev) => {
 			const nextState = !prev;
-			// If we are toggling it CLOSED, clear the search state
 			if (!nextState) {
 				search.resetSearch();
 			}
@@ -48,7 +52,11 @@ export function FriendsPage() {
 					<FriendsTabBar
 						className={pageStyles.viewBar}
 						activeTab={view}
-						setActiveTab={setView}
+						setActiveTab={(nextView) =>
+							nextView === "friends"
+								? navigate(`/friends`)
+								: navigate(`/friends/${nextView}`)
+						}
 					/>
 				</div>
 			</div>

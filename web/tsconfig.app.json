@@ -24,7 +24,8 @@
 
     "paths": {
       "@shared/types": ["../api/src/types/types.ts"],
-      "@shared/ServerErrorCode": ["../api/src/errors/ServerError.ts"]
+      "@shared/ServerErrorCode": ["../api/src/errors/ServerError.ts"],
+      "@shared/businessLogic": ["../api/src/constants/businessLogic.ts"]
     }
   },
   "include": ["src"]

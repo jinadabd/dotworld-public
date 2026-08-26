@@ -37,7 +37,6 @@ export function TrinketCoverIcon({
 	const maxY = Math.max(...activeCoords.map((c) => c.y));
 
 	const Step = 29.97;
-	// Reduced radius creates space between adjacent circles (Step - 2*Radius = gap)
 	const Radius = 12.5;
 
 	const vx = minX * Step;
@@ -67,6 +66,16 @@ export function TrinketCoverIcon({
 			aria-hidden="true"
 			className={className}>
 			<defs>
+				{/* Soft Gaussian Blur for the Bottom Lip Highlight */}
+				<filter
+					id="trinket-highlight-blur"
+					x="-20%"
+					y="-20%"
+					width="140%"
+					height="140%">
+					<feGaussianBlur stdDeviation="0.6" />
+				</filter>
+
 				{/* Deep Top-Down Inner Shadow Filter */}
 				<filter
 					id="top-inner-shadow"
@@ -123,6 +132,7 @@ export function TrinketCoverIcon({
 			<g
 				fill="var(--white, #ffffff)"
 				opacity="0.8"
+				filter="url(#trinket-highlight-blur)"
 				transform="translate(0, 1.8)">
 				{renderCircles()}
 			</g>

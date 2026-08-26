@@ -12,6 +12,10 @@ export default defineConfig({
 				import.meta.dirname,
 				"../api/src/errors/ServerError.ts",
 			),
+			"@shared/businessLogic": path.resolve(
+				import.meta.dirname,
+				"../api/src/constants/businessLogic.ts",
+			),
 		},
 	},
 	plugins: [react(), babel({ presets: [reactCompilerPreset()] })],

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useGetTrinketQuery } from "../trinketApi";
-import { CreateTrinketItemForm } from "../CreateTrinketItemForm";
+import { CreateTrinketItemForm } from "./CreateTrinketItemForm";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../app/store";
 import { TrinketCoverIcon } from "../../../components/buttons/icons/TrinketCoverIcon";

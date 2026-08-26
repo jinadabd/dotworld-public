@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useGetChatterQuery } from "../posts/postsApi";
-import { PostCard } from "../posts/PostCard"; // Replace with your Post component
+import { PostCard } from "../posts/PostCard";
 import { useSetSidebar } from "../../hooks/useSetSidebar";
 import { ChatterTabBar } from "./ChatterTabBar";
 import { PaginationBar } from "../../components/buttons/PaginationBar";
@@ -14,11 +15,17 @@ import { ComposePostForm } from "../posts/ComposePostForm";
 import { MarkAsReadWidget } from "../widgets/MarkAsReadWidget";
 
 const LOCAL_STORAGE_KEY = "chatter_last_read_time";
+type ChatterTab = "unread" | "read";
 
 export function ChatterPage() {
-	const [page, setPage] = useState(1);
-	const [activeTab, setActiveTab] = useState<"unread" | "read">("unread");
+	const navigate = useNavigate();
+	const location = useLocation();
 
+	const segments = location.pathname.split("/").filter(Boolean);
+	const rawTab = segments[1];
+	const activeTab: ChatterTab = rawTab === "read" ? "read" : "unread";
+
+	const [page, setPage] = useState(1);
 	const [lastReadTime, setLastReadTime] = useState<string>(() => {
 		return localStorage.getItem(LOCAL_STORAGE_KEY) || new Date(0).toISOString();
 	});
@@ -49,7 +56,7 @@ export function ChatterPage() {
 					<div className={pageStyles.viewBar}>
 						<ChatterTabBar
 							activeTab={activeTab}
-							setActiveTab={setActiveTab}
+							setActiveTab={(nextTab) => navigate(`/chatter/${nextTab}`)}
 						/>
 					</div>
 				</div>
@@ -86,7 +93,7 @@ export function ChatterPage() {
 					<div className={pageStyles.viewBar}>
 						<ChatterTabBar
 							activeTab={activeTab}
-							setActiveTab={setActiveTab}
+							setActiveTab={(nextTab) => navigate(`/chatter/${nextTab}`)}
 						/>
 					</div>
 				</div>
@@ -132,7 +139,7 @@ export function ChatterPage() {
 				<div className={pageStyles.viewBar}>
 					<ChatterTabBar
 						activeTab={activeTab}
-						setActiveTab={setActiveTab}
+						setActiveTab={(nextTab) => navigate(`/chatter/${nextTab}`)}
 					/>
 				</div>
 			</div>
@@ -157,11 +164,7 @@ export function ChatterPage() {
 					</div>
 				</div>
 
-				{isLoading ? (
-					<p className={pageStyles.statusMessage}>Loading Friends' Chatter...</p>
-				) : error || !data ? (
-					<p className={pageStyles.statusMessage}>Failed to load Chatter.</p>
-				) : filteredPosts.length === 0 ? (
+				{filteredPosts.length === 0 ? (
 					<p className={pageStyles.statusMessage}>No posts to display in this view.</p>
 				) : (
 					<div className={postStyles.postView}>

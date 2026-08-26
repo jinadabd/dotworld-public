@@ -7,7 +7,6 @@ export function RightPanel() {
 	return (
 		<>
 			<DotworldWidget />
-			{/* <PlaylistWdiget /> */}
 			<LogoutButton />
 		</>
 	);

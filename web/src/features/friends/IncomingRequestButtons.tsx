@@ -11,6 +11,7 @@ export function IncomingRequestButtons({ friendId }: { friendId: number }) {
 			row: 1,
 			colSpan: 2,
 			keycapProps: {
+				type: "button",
 				colour: "blue",
 				onRelease: () => acceptFriendRequest(friendId),
 				children: "Accept",
@@ -22,6 +23,7 @@ export function IncomingRequestButtons({ friendId }: { friendId: number }) {
 			row: 1,
 			colSpan: 2,
 			keycapProps: {
+				type: "button",
 				colour: "cream",
 				onRelease: () => rejectFriendRequest(friendId),
 				children: "Reject",

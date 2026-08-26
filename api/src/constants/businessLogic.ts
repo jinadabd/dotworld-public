@@ -1,5 +1,7 @@
 export const RESERVED_USERNAMES = new Set([
 	"auth",
+	"admin",
+	"dotworld",
 	"island",
 	"islands",
 	"trinket",
@@ -20,10 +22,10 @@ export const RESERVED_USERNAMES = new Set([
 ]);
 
 export const FieldLengths = {
-	NAME: 50,
-	USERNAME: 255,
-	EMAIL: 255,
-	PASSWORD: 255,
+	NAME: 25,
+	USERNAME: 15,
+	EMAIL: 100,
+	PASSWORD: 30,
 } as const;
 
 export type FieldLengths = (typeof FieldLengths)[keyof typeof FieldLengths];

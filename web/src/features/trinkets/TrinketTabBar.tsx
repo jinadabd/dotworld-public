@@ -1,9 +1,10 @@
 import type { ButtonHTMLAttributes } from "react";
 import { KeyboardLayout, type KeyPosition } from "../../components/buttons/KeyboardLayout";
+import type { TrinketView } from "./TrinketsPage";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	activeTab: string;
-	setActiveTab: React.Dispatch<React.SetStateAction<"self" | "friends" | "community">>;
+	setActiveTab: (view: TrinketView) => void;
 }
 
 export function TrinketTabBar({ activeTab, setActiveTab }: Props) {

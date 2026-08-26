@@ -2,7 +2,11 @@ import { useRef, useState } from "react";
 import { StarIcon } from "./icons";
 import { KeyboardLayout, type KeyPosition } from "./KeyboardLayout";
 
-export function InteractionBar() {
+interface Props {
+	disabled?: boolean;
+}
+
+export function InteractionBar({ disabled = false }: Props) {
 	const [isStarred, setIsStarred] = useState(false);
 	const isStarredRef = useRef(isStarred);
 	isStarredRef.current = isStarred;
@@ -29,6 +33,7 @@ export function InteractionBar() {
 			colSpan: 1,
 			keycapProps: {
 				colour: "blue",
+				disabled,
 				isActive: isStarred,
 				onPress: handleStarToggle,
 				onRelease: handleStarToggle,
@@ -42,6 +47,7 @@ export function InteractionBar() {
 			colSpan: 1,
 			keycapProps: {
 				colour: "red",
+				disabled,
 				isActive: isReplying,
 				onPress: handleReplyToggle,
 				onRelease: handleReplyToggle,

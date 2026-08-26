@@ -5,7 +5,6 @@ import {
 	useSendFriendRequestMutation,
 } from "../../features/friends/friendsApi";
 import { TactileButton } from "./TactileButton";
-// import { TactileButtonWithCap } from "./TactileButtonWithCap";
 
 interface Props {
 	userId: number;

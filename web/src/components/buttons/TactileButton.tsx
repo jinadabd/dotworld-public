@@ -11,6 +11,8 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	disabled?: boolean;
 	isHighlighted?: boolean;
 	onRelease?: () => void;
+	isMini?: boolean;
+	type?: "submit" | "reset" | "button";
 }
 
 export function TactileButton({
@@ -22,6 +24,8 @@ export function TactileButton({
 	onRelease,
 	disabled,
 	isHighlighted = false,
+	isMini = false,
+	type = "button",
 	...rest
 }: Props) {
 	const buttonKey: KeyPosition[] = [
@@ -29,10 +33,9 @@ export function TactileButton({
 			id: `${rest.id}${colour}`,
 			col: 1,
 			row: 1,
-			colSpan: 2,
+			colSpan: isMini ? 1 : 2,
 			keycapProps: {
-				// className:
-				// 	`${styles.tactile} ${styles[colour]} ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${className ?? ""}`.trim(),
+				type,
 				colour: colour,
 				legend: "⬤",
 				isActive: active,

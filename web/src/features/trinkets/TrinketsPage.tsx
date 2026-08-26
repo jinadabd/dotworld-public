@@ -3,7 +3,6 @@ import type { RootState } from "../../app/store";
 import { useState } from "react";
 import { UserTrinkets } from "./UserTrinkets";
 import { CommunityTrinkets } from "./CommunityTrinkets";
-import { CreateTrinketWidget } from "../widgets/CreateTrinketWidget";
 import { useSetSidebar } from "../../hooks/useSetSidebar";
 import { FriendsTrinkets } from "./FriendsTrinkets";
 import { TrinketTabBar } from "./TrinketTabBar";
@@ -15,11 +14,24 @@ import trinketStyles from "./Trinkets.module.css";
 import { useCreateTrinket } from "../../hooks/useCreateTrinket";
 import { CreateTrinketToolbar } from "./CreateTrinketToolbar";
 import { CreateTrinketForm } from "./CreateTrinketForm";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
-type TrinketView = "self" | "friends" | "community";
+export type TrinketView = "self" | "friends" | "community";
 
 export function TrinketsPage() {
-	const [filter, setFilter] = useState<TrinketType | "all">("all");
+	const navigate = useNavigate();
+	const location = useLocation();
+	const segments = location.pathname.split("/").filter(Boolean);
+	const rawView = segments[1];
+	const view: TrinketView = rawView === "friends" || rawView === "community" ? rawView : "self";
+	const username = useSelector((state: RootState) => state.auth.user!.username);
+
+	const [searchParams, setSearchParams] = useSearchParams();
+	const filter = (searchParams.get("type") as TrinketType | null) ?? "all";
+
+	function setFilter(next: TrinketType | "all") {
+		setSearchParams(next === "all" ? {} : { type: next });
+	}
 
 	useSetSidebar(
 		<FilterTrinketsWidget
@@ -27,9 +39,6 @@ export function TrinketsPage() {
 			setFilter={setFilter}
 		/>,
 	);
-
-	const username = useSelector((state: RootState) => state.auth.user!.username);
-	const [view, setView] = useState<TrinketView>("self");
 
 	const [isCreating, setIsCreating] = useState(false);
 	const create = useCreateTrinket();
@@ -45,8 +54,8 @@ export function TrinketsPage() {
 				<h1 className={pageStyles.pageTitle}>Trinkets</h1>
 				<div className={pageStyles.viewBar}>
 					<TrinketTabBar
-						activeTab={view}
-						setActiveTab={setView}
+						activeTab={view ?? "self"}
+						setActiveTab={(nextView) => navigate(`/trinkets/${nextView}`)}
 					/>
 				</div>
 			</div>

@@ -28,8 +28,8 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			colSpan: 1,
 			keycapProps: {
 				colour: "yellow",
-				isActive: location.pathname === `/${username}`,
-				onPress: () => navigate(`/${username}`),
+				isActive: location.pathname.startsWith(`/${username}`),
+				onPress: () => navigate(`/${username}/chatter`),
 				children: <IslandIcon size={25} />,
 			},
 		},
@@ -41,8 +41,8 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			keycapProps: {
 				colour: "yellow",
 				legend: "⬤",
-				isHighlighted: location.pathname === `/${username}`,
-				onPress: () => navigate(`/${username}`),
+				isHighlighted: location.pathname.startsWith(`/${username}`),
+				onPress: () => navigate(`/${username}/chatter`),
 				children: "Island",
 			},
 		},
@@ -53,8 +53,8 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			colSpan: 1,
 			keycapProps: {
 				colour: "green",
-				isActive: location.pathname === "/trinkets",
-				onPress: () => navigate("/trinkets"),
+				isActive: location.pathname.startsWith("/trinkets"),
+				onPress: () => navigate("/trinkets/self"),
 				children: <TrinketsIcon size={25} />,
 			},
 		},
@@ -66,8 +66,8 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			keycapProps: {
 				colour: "green",
 				legend: "⬤",
-				isHighlighted: location.pathname === "/trinkets",
-				onPress: () => navigate("/trinkets"),
+				isHighlighted: location.pathname.startsWith("/trinkets"),
+				onPress: () => navigate("/trinkets/self"),
 				children: "Trinkets",
 			},
 		},
@@ -78,7 +78,7 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			colSpan: 1,
 			keycapProps: {
 				colour: "blue",
-				isActive: location.pathname === "/friends",
+				isActive: location.pathname.startsWith("/friends"),
 				onPress: () => navigate("/friends"),
 				children: <FriendsIcon size={25} />,
 			},
@@ -91,7 +91,7 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			keycapProps: {
 				colour: "blue",
 				legend: "⬤",
-				isHighlighted: location.pathname === "/friends",
+				isHighlighted: location.pathname.startsWith("/friends"),
 				onPress: () => navigate("/friends"),
 				children: "Friends",
 			},
@@ -103,8 +103,8 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			colSpan: 1,
 			keycapProps: {
 				colour: "red",
-				isActive: location.pathname === "/chatter",
-				onPress: () => navigate("/chatter"),
+				isActive: location.pathname.startsWith("/chatter"),
+				onPress: () => navigate("/chatter/unread"),
 				children: <ChatterIcon size={25} />,
 			},
 		},
@@ -116,8 +116,8 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			keycapProps: {
 				colour: "red",
 				legend: "⬤",
-				isHighlighted: location.pathname === "/chatter",
-				onPress: () => navigate("/chatter"),
+				isHighlighted: location.pathname.startsWith("/chatter"),
+				onPress: () => navigate("/chatter/unread"),
 				children: "Chatter",
 			},
 		},
@@ -131,8 +131,8 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			colSpan: 1,
 			keycapProps: {
 				colour: "yellow",
-				isActive: location.pathname === `/${username}`,
-				onPress: () => navigate(`/${username}`),
+				isActive: location.pathname.startsWith(`/${username}`),
+				onPress: () => navigate(`/${username}/chatter`),
 				children: <IslandIcon size={22} />,
 			},
 		},
@@ -143,8 +143,8 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			colSpan: 1,
 			keycapProps: {
 				colour: "green",
-				isActive: location.pathname === "/trinkets",
-				onPress: () => navigate("/trinkets"),
+				isActive: location.pathname.startsWith("/trinkets"),
+				onPress: () => navigate("/trinkets/self"),
 				children: <TrinketsIcon size={22} />,
 			},
 		},
@@ -155,7 +155,7 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			colSpan: 1,
 			keycapProps: {
 				colour: "blue",
-				isActive: location.pathname === "/friends",
+				isActive: location.pathname.startsWith("/friends"),
 				onPress: () => navigate("/friends"),
 				children: <FriendsIcon size={22} />,
 			},
@@ -167,7 +167,7 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			colSpan: 1,
 			keycapProps: {
 				colour: "red",
-				isActive: location.pathname === "/chatter",
+				isActive: location.pathname.startsWith("/chatter"),
 				onPress: () => navigate("/chatter"),
 				children: <ChatterIcon size={22} />,
 			},
@@ -178,11 +178,14 @@ export function KeycapNav({ isExpanded, onToggleExpand, hasSlotContent }: Keycap
 			row: 1,
 			keycapProps: {
 				colour: "charcoal",
-				isActive: isExpanded,
+				isActive: isExpanded && hasSlotContent,
 				disabled: !hasSlotContent,
 				onRelease: onToggleExpand,
 				children: (
-					<div style={{ transform: isExpanded ? "rotate(180deg)" : "none" }}>
+					<div
+						style={{
+							transform: isExpanded && hasSlotContent ? "rotate(180deg)" : "none",
+						}}>
 						<ArrowIcon size={22} />
 					</div>
 				),

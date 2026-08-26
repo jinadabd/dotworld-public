@@ -3,13 +3,13 @@ import { KeyboardLayout, type KeyPosition } from "../../components/buttons/Keybo
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	activeTab: string;
-	setActiveTab: React.Dispatch<React.SetStateAction<"posts" | "trinkets">>;
+	setActiveTab: React.Dispatch<React.SetStateAction<"chatter" | "trinkets">>;
 }
 
 export function IslandTabBar({ activeTab, setActiveTab }: Props) {
 	const keys: KeyPosition[] = [
 		{
-			id: "postsTab",
+			id: "chatterTab",
 			col: 1,
 			row: 1,
 			colSpan: 2,
@@ -17,9 +17,9 @@ export function IslandTabBar({ activeTab, setActiveTab }: Props) {
 				className: `${"red"}`.trim(),
 				colour: "red",
 				legend: "1",
-				isActive: activeTab === "posts",
-				onPress: () => setActiveTab("posts"),
-				children: "Posts",
+				isActive: activeTab === "chatter",
+				onPress: () => setActiveTab("chatter"),
+				children: "Chatter",
 			},
 		},
 		{

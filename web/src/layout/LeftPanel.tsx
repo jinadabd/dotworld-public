@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useSidebarSlot } from "../context/SidebarSlotContext";
 import { KeycapNav } from "../components/buttons/KeycapNav";
 import styles from "./AppLayout.module.css";
 
 export function LeftPanel() {
 	const { content } = useSidebarSlot();
+	const location = useLocation();
 	const [isExpanded, setIsExpanded] = useState(false);
+
+	useEffect(() => {
+		setIsExpanded(false);
+	}, [location.pathname]);
 
 	const toggleExpand = () => setIsExpanded((prev) => !prev);
 	const hasContent = Boolean(content);

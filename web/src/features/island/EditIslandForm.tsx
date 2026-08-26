@@ -3,7 +3,7 @@ import { useCreateIslandMutation } from "./islandApi";
 import { useNavigate } from "react-router-dom";
 import { extractErrorMessage } from "../../utils/errors";
 import { type IslandRow, type IslandVisibility } from "@shared/types";
-import { VisibilityToggle } from "./VisibilityToggle";
+import { VisibilityToggle } from "./IslandVisibilityToggle";
 import { useFileUpload } from "../../hooks/useFileUpload";
 
 // export interface EditIslandInput {

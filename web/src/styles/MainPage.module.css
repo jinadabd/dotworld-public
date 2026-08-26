@@ -16,6 +16,7 @@
 		align-items: center;
 		gap: 0.25rem;
 		padding: 2rem 0 1rem 0;
+		z-index: 10;
 
 		.pageTitle {
 			font-family: "Bitcount";

@@ -39,9 +39,7 @@ export function UserPosts({ username }: Props) {
 	return (
 		<>
 			<div className={postStyles.headerRow}>
-				<h2 className={postStyles.sectionTitle}>
-					{isOwnIsland ? "My Posts" : `${username}'s Posts`}
-				</h2>
+				<h2 className={postStyles.sectionTitle}>{isOwnIsland ? "My Posts" : `Posts`}</h2>
 				{isOwnIsland && (
 					<ComposeToolbar
 						isComposing={isComposing}

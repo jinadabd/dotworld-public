@@ -1,14 +1,14 @@
-import type { UseCreateTrinketItemReturn } from "../../hooks/useCreateTrinketItem";
-import { FileUploadButton } from "../../components/buttons/FileUploadButton";
+import type { UseCreateTrinketItemReturn } from "../../../hooks/useCreateTrinketItem";
+import { FileUploadButton } from "../../../components/buttons/FileUploadButton";
 
-import formStyles from "../../styles/Form.module.css";
+import formStyles from "../../../styles/Form.module.css";
 
 interface Props {
 	createItem: UseCreateTrinketItemReturn;
 }
 
 export function CreateTrinketItemForm({ createItem }: Props) {
-	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 		await createItem.submit();
 	}
