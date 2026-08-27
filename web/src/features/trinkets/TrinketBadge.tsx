@@ -15,8 +15,8 @@ export function TrinketBadge({ user, trinket }: Props) {
 	const onRelease = () => navigate(`/${user.username}`);
 
 	const seal = useMemo(() => {
-		return generateUserSeal(user.username || user.id.toString());
-	}, [user.username, user.id]);
+		return generateUserSeal(user.id.toString());
+	}, [user.id]);
 
 	const keys: KeyPosition[] = [
 		{

@@ -19,25 +19,25 @@ export function TrinketCard({
 	}, [trinket.id, trinket.title, author.username, author.id]);
 
 	return (
-		<Link
-			className={trinketStyles.trinketCard}
-			to={`/trinkets/${trinket.id}`}>
-			{trinket.cover_url ? (
-				<div className={trinketStyles.coverWindow}>
-					<img
-						className={trinketStyles.trinketCover}
-						src={trinket.cover_url}
-						alt={trinket.title}
-					/>
-				</div>
-			) : (
-				<div className={trinketStyles.trinketCoverContainer}>
-					<TrinketCoverIcon
-						className={trinketStyles.trinketCoverEmbossed}
-						seal={seal}
-					/>
-				</div>
-			)}
+		<div className={trinketStyles.trinketCard}>
+			<Link to={`/trinkets/${trinket.id}`}>
+				{trinket.cover_url ? (
+					<div className={trinketStyles.coverWindow}>
+						<img
+							className={trinketStyles.trinketCover}
+							src={trinket.cover_url}
+							alt={trinket.title}
+						/>
+					</div>
+				) : (
+					<div className={trinketStyles.trinketCoverContainer}>
+						<TrinketCoverIcon
+							className={trinketStyles.trinketCoverEmbossed}
+							seal={seal}
+						/>
+					</div>
+				)}
+			</Link>
 			{/* <h3 className={trinketStyles.trinketTitle}>{trinket.title}</h3> */}
 			{/* <div className={trinketStyles.divide} /> */}
 			<div className={trinketStyles.trinketBadge}>
@@ -46,6 +46,6 @@ export function TrinketCard({
 					user={author}
 				/>
 			</div>
-		</Link>
+		</div>
 	);
 }
