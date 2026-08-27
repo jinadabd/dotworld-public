@@ -16,8 +16,8 @@ export function UserBadgeKeycap({ user, mode = "row" }: Props) {
 
 	// Synchronous computation — calculated instantly on the first render frame
 	const seal = useMemo(() => {
-		return generateUserSeal(user.username || user.id.toString());
-	}, [user.username, user.id]);
+		return generateUserSeal(user.id.toString());
+	}, [user.id]);
 
 	const keys: KeyPosition[] = [
 		{

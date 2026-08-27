@@ -324,7 +324,7 @@
                     max-width: 190px;
                     padding: 0.35rem 0.35rem 0.25rem;
 
-                    transform: translate3d(var(--stack-tx), calc(-150px + var(--stack-ty)), 0) rotate(var(--stack-rot)) scale(1) !important;
+                    transform: translate3d(var(--stack-tx), calc(-30vh + var(--stack-ty)), 0) rotate(var(--stack-rot)) scale(1) !important;
 
                     .polaroidCaption {
                         font-size: 0.75rem;

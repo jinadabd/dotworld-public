@@ -463,6 +463,8 @@
 				margin-top: -0.5rem;
 
 				.footerLeft {
+					opacity: 0;
+					pointer-events: none;
 					zoom: 0.65;
 
 					.deleteButton {

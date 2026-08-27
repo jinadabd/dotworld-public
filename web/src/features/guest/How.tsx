@@ -20,7 +20,7 @@ const PAGES: Record<
 		colour: "green",
 		icon: <TrinketsIcon size={26} />,
 		title: "Trinkets",
-		desc: "Build anything you like: laylists, galleries, collections, restaurant reviews, bucket lists. Share it with your Friends and the Community, or keep it yours. Browse your Friends' Trinkets, and check out what other Sailors in the Community have built.",
+		desc: "Build anything you like: playlists, galleries, collections, restaurant reviews, bucket lists. Share it with your Friends and the Community, or keep it yours. Browse your Friends' Trinkets, and check out what other Sailors in the Community have built.",
 	},
 	friends: {
 		colour: "blue",

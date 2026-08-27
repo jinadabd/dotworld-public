@@ -10,6 +10,8 @@ import trinketStyles from "./Gallery.module.css";
 import { CreateTrinketItemToolbar } from "./CreateTrinketItemToolbar";
 import { CreateTrinketItemForm } from "./CreateTrinketItemForm";
 import { useCreateTrinketItem } from "../../../hooks/useCreateTrinketItem";
+import { EditTrinketWidget } from "../../widgets/EditTrinketWidget";
+import { useSetSidebar } from "../../../hooks/useSetSidebar";
 
 export function Gallery() {
 	const { trinketId: trinketParam } = useParams<{ trinketId: string }>();
@@ -44,11 +46,33 @@ export function Gallery() {
 		if (success) setIsCreating(false);
 	}
 
-	if (isLoading) return <p>Loading trinket...</p>;
-	if (error || !data) return <p>Trinket not found.</p>;
+	const { trinket } = data || {};
+	const isOwnTrinket = trinket ? trinket.user_id === myId : false;
 
-	const { trinket } = data;
-	const isOwnTrinket = trinket.user_id === myId;
+	const toggleEditMode = () => {
+		setIsEditing((prev) => {
+			const next = !prev;
+			if (!next) setIsCreating(false);
+			return next;
+		});
+	};
+
+	// Sidebar Node definition
+	const sidebarNode = isOwnTrinket ? (
+		<EditTrinketWidget
+			isEditing={isEditing}
+			onToggleEdit={toggleEditMode}
+			onSave={handleSubmit}
+			isBusy={create.isBusy}
+			isEmpty={!create.hasContent}
+			hasBeenEdited={create.hasContent}
+		/>
+	) : null;
+
+	useSetSidebar(sidebarNode);
+
+	if (isLoading) return <p>Loading trinket...</p>;
+	if (error || !data || !trinket) return <p>Trinket not found.</p>;
 
 	const inBoxOffsets = [
 		{ rot: -6, tx: -20, ty: -20 },
@@ -86,29 +110,12 @@ export function Gallery() {
 		});
 	};
 
-	const toggleEditMode = () => {
-		setIsEditing((prev) => {
-			const next = !prev;
-			if (!next) setIsCreating(false);
-			return next;
-		});
-	};
-
 	return (
 		<div
 			className={trinketStyles.trinketContainer}
 			data-type="gallery">
 			<div className={trinketStyles.pageHeader}>
 				<div className={trinketStyles.headerLeft}>
-					{isOwnTrinket && (
-						<button
-							type="button"
-							className={trinketStyles.editButton}
-							onClick={toggleEditMode}
-							data-active={isEditing}>
-							{isEditing ? "Done" : "Edit"}
-						</button>
-					)}
 					<h1 className={trinketStyles.pageTitle}>{trinket.title}</h1>
 				</div>
 

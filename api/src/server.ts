@@ -40,11 +40,15 @@ server.use("/users", UsersRouter);
 
 server.use("/uploads", UploadRouter);
 
-server.use("/", IslandRouter);
-
 const frontendDistPath = path.resolve(process.cwd(), "../web/dist");
 server.use(express.static(frontendDistPath));
+
+server.use("/", IslandRouter);
+
 server.get("{*path}", (req, res) => {
+	if (req.headers.accept?.includes("application/json")) {
+		return res.status(404).json({ error: "API endpoint not found" });
+	}
 	res.sendFile(path.join(frontendDistPath, "index.html"));
 });
 

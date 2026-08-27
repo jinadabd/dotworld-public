@@ -1,8 +1,8 @@
 import styles from "./Guest.module.css";
 
 const PROBLEMS = [
-	"Social media is too algorithmic and rewards inauthenticity.",
 	"Interests are scattered over various apps and websites.",
+	"Social media is too algorithmic and rewards inauthenticity.",
 	"Nothing you create online is truly yours.",
 	"Digital presence is utilized to sell products instead of create space for connection.",
 ];
